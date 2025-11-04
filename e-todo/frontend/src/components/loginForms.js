@@ -25,22 +25,21 @@ export default function LoginForm() {
   const [password, setPassword] = useState('');
 
 const handleSubmit = (e) => {
-    e.preventDefault();
     console.log('Email:', email, 'Password:', password);
 };
 
   return (
     <div>
-        <h1>Connexion E-ToDo</h1>
-        <TextField id="standard-basic" label="Identifiant" variant="standard">
+        <h1>Login E-ToDo</h1>
+        <TextField label="Identifiant" variant="standard">
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"/>
         </TextField>
         <br></br>
-        <TextField id="standard-basic" label="Password" variant="standard" type="password">
+        <TextField label="Password" variant="standard" type="password">
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Mot de passe"/>
         </TextField>
         <br></br>
-        <button onClick={handleSubmit}>Se connecter</button>
+        <button onClick={handleSubmit}>Login</button>
         
     </div>
   );
