@@ -1,13 +1,13 @@
 const path = require("path");
 const express = require("express");
 const dotenv = require("dotenv");
-const db = require("./config/db");
+
 dotenv.config({path: path.resolve(__dirname,"../../.env")});
 
 
 console.log('MYSQL_USER =', process.env.MYSQL_USER);
 console.log('MYSQL_DATABASE =', process.env.MYSQL_DATABASE);
-
+const db = require("./config/db");
 const app = express();
 app.use(express.json());
 
