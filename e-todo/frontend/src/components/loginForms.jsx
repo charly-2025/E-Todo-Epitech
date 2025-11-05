@@ -34,9 +34,22 @@ export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const login = (e)=>{
+  const login = async (e)=>{
     e.preventDefault();
-    console.log(email, password);
+    const connection = await fetch("https://localhost:3000/login",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({email,password})
+    });
+    const data = await connection.json();
+    if (connection.ok){
+      localStorage.setItem("token",data.token);
+      alert("Connection ok");
+    } else {
+      alert("error connection")
+    }
     
   };
 
