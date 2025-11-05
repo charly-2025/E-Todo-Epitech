@@ -18,8 +18,6 @@ router.post("/register",async(req,res)=>{
 	res.json({token});
 });
 
-module.exports = router;
-
 
 router.post("/login",async(req,res)=>{
 	const { email, password} = req.body;
@@ -27,7 +25,7 @@ router.post("/login",async(req,res)=>{
 
 
 	const [user] = await db.promise().query("SELECT * FROM users WHERE email = ?",[email]);
-	if (existingUser.length <= 0) return res.status(400).json({msg:"Invalid Credentials"});
+	if (user.length <= 0) return res.status(400).json({msg:"Invalid Credentials"});
 	user = user[0]
 	const same = await bcrypt.compare(password,user.password);
 	if(!same) return res.status(400).json({msg:"Invalid Credentials"});
@@ -35,3 +33,5 @@ router.post("/login",async(req,res)=>{
 	const token = jwt.sign({id:user.id},process.env.SECRET,{expiresIn:"1h"});
 	res.json({token});
 });
+
+module.exports = router;
