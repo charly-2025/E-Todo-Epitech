@@ -20,7 +20,6 @@ app.use(cors({
 }));
 app.use("/api/auth",authRouter);
 
-
 app.get("/",(req,res) =>{
 	res.send("Welcome");
 });
