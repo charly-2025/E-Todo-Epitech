@@ -23,7 +23,8 @@ import {
   Email,
   Bluetooth,
   Check,
-  Login
+  Login,
+  EmailTwoTone
 } from '@mui/icons-material';
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { blue } from '@mui/material/colors';
@@ -33,10 +34,12 @@ import { Link as RouterLink } from "react-router-dom";
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  
 
   const login = async (e)=>{
     e.preventDefault();
-    const connection = await fetch("https://localhost:3000/login",{
+    console.log(email, password)
+    const connection = await fetch("./login",{
       method:"POST",
       headers:{
         "Content-Type":"application/json"
@@ -62,11 +65,10 @@ export default function LoginForm() {
           </Avatar>
           <Typography component='h1' sx={{marginTop: 2, textAlign: "center"}}>Login E-ToDo</Typography>
           <Box sx={{mt: 1}}>
-            <TextField placeholder= 'Enter login-name' label="Login-name" id="outlined-input" fullWidth autoFocus sx={{mb: 2}}>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"/>
+            <TextField placeholder= 'Enter login-name' label="Login-name" id="outlined-input" fullWidth autoFocus sx={{mb: 2}} value={email} onChange={(e) => setEmail(e.target.value)}>
+                
             </TextField>
-            <TextField placeholder='Enter password' label="Password" id="outlined-password-input" fullWidth type="password" >
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Mot de passe"/>
+            <TextField placeholder='Enter password' label="Password" id="outlined-password-input" fullWidth type="password" value={password} onChange={(e) => setPassword(e.target.value)} >
             </TextField>
   
             <FormControlLabel  control={<Checkbox value="remember" />}label="Remember me"/>
