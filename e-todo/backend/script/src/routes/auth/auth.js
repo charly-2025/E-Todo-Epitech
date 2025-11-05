@@ -23,13 +23,12 @@ router.post("/login",async(req,res)=>{
 	const { email, password} = req.body;
 	if(!email || !password) return res.status(400).json({msg:"bad parameter"});
 
-
-	const [user] = await db.promise().query("SELECT * FROM users WHERE email = ?",[email]);
-	if (user.length <= 0) return res.status(400).json({msg:"Invalid Credentials"});
+	let [user] = await db.promise().query("SELECT * FROM users WHERE email = ?",[email]);
+	if (user.length <= 0) return res.status(400).json({msg:"Invalid Email Credentials"});
 	user = user[0]
+	
 	const same = await bcrypt.compare(password,user.password);
-	if(!same) return res.status(400).json({msg:"Invalid Credentials"});
-
+	if(!same) return res.status(400).json({msg:"Invalid Password Credentials"});
 	const token = jwt.sign({id:user.id},process.env.SECRET,{expiresIn:"1h"});
 	res.json({token});
 });
