@@ -31,14 +31,14 @@ import { Link as RouterLink } from "react-router-dom";
 
 
 export default function LoginForm() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  function login(e){
+  const login = (e)=>{
     e.preventDefault();
     console.log(email, password);
     
-  }
+  };
 
   return (
     <form onSubmit={login}> 
