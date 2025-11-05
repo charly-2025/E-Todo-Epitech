@@ -42,11 +42,12 @@ export default function LoginForm() {
     const connection = await fetch("",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({email,password})
+      body:JSON.stringify({email:email,password:password})
     });
     const data = await connection.json();
     if (connection.ok){
       localStorage.setItem("token",data.token);
+      console.log(localStorage.getItem("token"));
       alert("Connection ok");
     } else {
       alert("error connection")
