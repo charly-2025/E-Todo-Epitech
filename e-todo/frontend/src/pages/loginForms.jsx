@@ -14,7 +14,7 @@ import {
   Alert,
   Avatar,
   Grid,
-  Link
+
 } from '@mui/material';
 import {
   Lock,
@@ -28,7 +28,7 @@ import {
 } from '@mui/icons-material';
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { blue } from '@mui/material/colors';
-import { Link as RouterLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 export default function LoginForm() {
@@ -42,7 +42,10 @@ export default function LoginForm() {
     const connection = await fetch("",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({email:email,password:password})
+      body:JSON.stringify({
+        email:email,
+        password:password
+      })
     });
     const data = await connection.json();
     if (connection.ok){
@@ -76,13 +79,13 @@ export default function LoginForm() {
           </Box>
           <Grid container justifyContent='space-between' sx={{mt:1}}>
             <Grid>
-              <Link component={Link} to ="/forgot">
+              <Link to="/forgot">
                 Forgot password?
               </Link>
             </Grid>
             <Grid>
-              <Link component={Link} to='/register'>
-                SignUp 
+              <Link to='/register'>
+                Register 
               </Link>
             </Grid>
           </Grid>
@@ -91,4 +94,5 @@ export default function LoginForm() {
     </form>
   );
 }
+
 
