@@ -71,7 +71,6 @@ export default function RegisterForm() {
             </Avatar>
             <Typography component='h1' sx={{marginTop: 2, textAlign: "center"}}>Register E-ToDo</Typography>
                 <Box sx={{mt: 1}}>
-<<<<<<< HEAD
                     <TextField placeholder= 'Enter your firstname' label="Firstname" id="outlined-input" fullWidth autoFocus sx={{mb: 2}} value={firstname} onChange={(e) => setfirstname(e.target.value)} required> 
                     </TextField>
             
@@ -82,18 +81,6 @@ export default function RegisterForm() {
                     </TextField>
 
                     <TextField placeholder='Enter password' label="Password" id="outlined-password-input" fullWidth type="password" value={password} onChange={(e) => setPassword(e.target.value)} required>
-=======
-                    <TextField placeholder= 'Enter your firstname' label="firstname"  fullWidth autoFocus sx={{mb: 2}} value={firstname} onChange={(e) => setfirstname(e.target.value)}> 
-                    </TextField>
-            
-                    <TextField placeholder='Enter your lastname' label="lastname"  fullWidth autoFocus sx={{mb: 2}} value={name} onChange={(e) => setName(e.target.value)} >
-                    </TextField>
-  
-                    <TextField placeholder= 'email' label="email" type="email" fullWidth autoFocus sx={{mb: 2}} value={email} onChange={(e) => setEmail(e.target.value)}>
-                    </TextField>
-
-                    <TextField placeholder='Enter password' label="Password"  fullWidth type="password" value={password} onChange={(e) => setPassword(e.target.value)} >
->>>>>>> e8b3f7a2e52d7583cc4d8ab725e4e4a9a1d95937
                     </TextField>
             
                     <Button type="submit" variant="contained" fullWidth sx={{mt: 1}}>Register</Button>
