@@ -64,8 +64,8 @@ export default function RegisterForm() {
 
   return (
     <form onSubmit={Register} > 
-      <Container maxWidth='xs'sx={{}}>
-        <Paper elevation={20} sx={{marginTop: 8, padding:2, position: "absolute", top: "40%" ,left: "50%", transform: 'translate(-50%, -50%)'}}>
+      <Container maxWidth='s'sx={{}}>
+        <Box sx={{marginTop: 8, padding:2, position: "absolute", top: "40%" ,left: "50%", transform: 'translate(-50%, -50%)'}}>
             <Avatar sx={{mx: 'auto', bgcolor: blue[500]}}>
                 <LockOutlinedIcon/>
             </Avatar>
@@ -92,7 +92,7 @@ export default function RegisterForm() {
                     </Link>
                 </Grid>     
             </Grid>
-        </Paper>
+        </Box>
       </Container>
     </form>
   );

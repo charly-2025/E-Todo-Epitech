@@ -59,8 +59,8 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={login}> 
-      <Container maxWidth='xs'sx={{}}>
-        <Paper elevation={20} sx={{marginTop: 8, padding:2, position: "absolute", top: "40%" ,left: "50%", transform: 'translate(-50%, -50%)'}}>
+      <Container maxWidth='xs'>
+        <Box sx={{marginTop: 8, padding:2, position: "absolute", top: "40%" ,left: "50%", transform: 'translate(-50%, -50%)'}}>
           <Avatar sx={{mx: 'auto', bgcolor: blue[500]}}>
             <LockOutlinedIcon/>
           </Avatar>
@@ -88,7 +88,7 @@ export default function LoginForm() {
               </Link>
             </Grid>
           </Grid>
-        </Paper>
+        </Box>
       </Container>
     </form>
   );

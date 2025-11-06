@@ -9,11 +9,12 @@ import RegisterForm from './pages/registerform';
 function App() {
   return (
     <div className='App'>
+      <div className='cercle1'></div>
       <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/register" element={<RegisterForm />} />
-      </Routes>
+        <Routes>
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/register" element={<RegisterForm />} />
+        </Routes>
       </BrowserRouter>
     </div>
       
