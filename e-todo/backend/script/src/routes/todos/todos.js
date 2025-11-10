@@ -9,3 +9,5 @@ router.get("/",auth,async(req,res)=>{
     if (data.length === 0 ) return res.status(404).json({msg:"Not found"});
     res.json(data[0]);
 })
+
+module.exports = router;
