@@ -53,7 +53,6 @@ export default function LoginForm() {
     const data = await connection.json();
     if (connection.ok){
       localStorage.setItem("token",data.token);
-      const navigate = useNavigate()
       navigate('/user')
     } else {
       alert("error connection")
