@@ -10,6 +10,7 @@ console.log('MYSQL_DATABASE =', process.env.MYSQL_DATABASE);
 const db = require("./config/db");
 const authRouter =require("./routes/auth/auth");
 const userRouter = require("./routes/user/user");
+const todosRouter = require("./routes/todos/todos");
 
 const app = express();
 app.use(express.json());
@@ -27,6 +28,7 @@ app.use((req,res,next)=>{
 });
 app.use("/api/auth",authRouter);
 app.use("/api/users",userRouter);
+app.use("/api/todos",todosRouter);
 
 app.get("/",(req,res) =>{
 	res.send("Welcome");

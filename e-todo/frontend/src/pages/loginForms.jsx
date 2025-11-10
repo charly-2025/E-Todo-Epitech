@@ -53,6 +53,7 @@ export default function LoginForm() {
     const data = await connection.json();
     if (connection.ok){
       localStorage.setItem("token",data.token);
+<<<<<<< HEAD
       const token = localStorage.getItem("token");
       const response = await fetch("http://localhost:3000/api/users/user",{
         method : "GET",
@@ -64,6 +65,9 @@ export default function LoginForm() {
       const userdata = await response.json();
       console.log(userdata);
       user = true;
+=======
+      const navigate = useNavigate()
+>>>>>>> 6ef7817e2ed5339844b2158607c5fde683114ab2
       navigate('/user')
     } else {
       alert("error connection")
