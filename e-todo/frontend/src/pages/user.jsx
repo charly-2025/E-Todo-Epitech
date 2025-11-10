@@ -145,6 +145,7 @@ function DashboardLayoutBasic(props) {
         });
       },
       signOut: () => {
+        localStorage.removeItem("auth");
         localStorage.removeItem("token");
         setSession(null);
         if (session == null ){

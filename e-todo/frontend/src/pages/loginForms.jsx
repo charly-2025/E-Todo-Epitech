@@ -31,7 +31,7 @@ import { blue } from '@mui/material/colors';
 import { Link, useNavigate } from "react-router-dom";
 import '../style/forms.css';
 
-import user from '../utils/protectedpaths';
+
 
 
 
@@ -52,6 +52,7 @@ export default function LoginForm() {
     });
     const data = await connection.json();
     if (connection.ok){
+      localStorage.setItem('auth' , true);
       localStorage.setItem("token",data.token);
       navigate('/user')
     } else {
