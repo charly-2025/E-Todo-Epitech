@@ -3,6 +3,7 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { Stack, Chip } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -12,6 +13,7 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DemoProvider, useDemoRouter } from '@toolpad/core/internal';
+import { useNavigate } from 'react-router-dom';
 
 
   const NAVIGATION = [
@@ -84,7 +86,14 @@ DemoPageContent.propTypes = {
   pathname: PropTypes.string.isRequired,
 };
 
-
+function CustomAppTitle() {
+  return (
+    <Stack direction="row" alignItems="center" spacing={2}>
+      <Typography variant="h6">E-ToDo Charly/Baptiste</Typography>
+      <Chip size="small" label="Test" color="info" />
+    </Stack>
+  );
+}
   
 
 function DashboardLayoutBasic(props) {
@@ -100,16 +109,26 @@ function DashboardLayoutBasic(props) {
   const authentication = React.useMemo(() => {
     return {
       signIn: () => {
+      const token = localStorage.getItem("token");
+      const response = fetch("http://localhost:3000/api/users/user",{
+        method : "GET",
+        headers:{
+          "Authorization":"Bearer "+token,
+          "Content-Type":"application/json"
+        }
+      })
+      const userdata = response.json();
+      console.log(userdata);
         setSession({
           user: {
-            name: '',
-            email: '',
+            name: userdata.name,
+            email: userdata.email,
             image: <AccountCircleIcon />,
           },
         });
       },
       signOut: () => {
-        setSession(null);
+        
       },
     };
   }, []);
@@ -128,7 +147,9 @@ function DashboardLayoutBasic(props) {
         theme={demoTheme}
         window={demoWindow}
       >
-        <DashboardLayout>
+        <DashboardLayout
+          slots={{
+            appTitle: CustomAppTitle,}}>
           <DemoPageContent pathname={router.pathname} />
         </DashboardLayout>
       </AppProvider>

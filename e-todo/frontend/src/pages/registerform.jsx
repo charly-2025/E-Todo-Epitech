@@ -62,7 +62,6 @@ export default function RegisterForm() {
     } else {
       alert("error creation");
     }
-    <Link to="/login"></Link>
     
   };
 

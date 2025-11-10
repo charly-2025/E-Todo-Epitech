@@ -28,7 +28,7 @@ import {
 } from '@mui/icons-material';
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { blue } from '@mui/material/colors';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import '../style/forms.css';
 
 
@@ -60,7 +60,8 @@ export default function LoginForm() {
       })
       const userdata = await response.json();
       console.log(userdata);
-      alert("Connection ok");
+      const navigate = useNavigate()
+      navigate('/user')
     } else {
       alert("error connection")
     }
