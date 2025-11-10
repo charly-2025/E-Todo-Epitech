@@ -49,12 +49,20 @@ export default function LoginForm() {
     const data = await connection.json();
     if (connection.ok){
       localStorage.setItem("token",data.token);
-      console.log(localStorage.getItem("token"));
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:3000/api/users/user",{
+        method : "GET",
+        headers:{
+          "Authorization":"Bearer "+token,
+          "Content-Type":"application/json"
+        }
+      })
+      const userdata = await response.json();
+      console.log(userdata);
       alert("Connection ok");
     } else {
       alert("error connection")
     }
-    
   };
 
   return (
