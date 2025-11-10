@@ -29,6 +29,7 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { blue } from '@mui/material/colors';
 import { Link } from "react-router-dom";
+import '../style/forms.css';
 
 
 export default function LoginForm() {
@@ -58,7 +59,9 @@ export default function LoginForm() {
   };
 
   return (
+
     <form onSubmit={login}> 
+     <div className="cercle1"></div>
       <Container maxWidth='xs'>
         <Box sx={{marginTop: 8, padding:2, position: "absolute", top: "40%" ,left: "50%", transform: 'translate(-50%, -50%)'}}>
           <Avatar sx={{mx: 'auto', bgcolor: blue[500]}}>
@@ -90,6 +93,7 @@ export default function LoginForm() {
           </Grid>
         </Box>
       </Container>
+     
     </form>
   );
 }

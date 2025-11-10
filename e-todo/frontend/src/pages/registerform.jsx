@@ -28,9 +28,12 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { blue } from '@mui/material/colors';
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import '../style/forms.css';
 
 
 export default function RegisterForm() {
+  const navigate = useNavigate();
   const [firstname, setfirstname] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -55,6 +58,7 @@ export default function RegisterForm() {
       localStorage.setItem("token",data.token);
       console.log(localStorage.getItem("token"));
       alert("Creation ok");
+      navigate('/login')
     } else {
       alert("error creation");
     }
@@ -64,6 +68,7 @@ export default function RegisterForm() {
 
   return (
     <form onSubmit={Register} > 
+      <div className="cercle1"></div>
       <Container maxWidth='s'sx={{}}>
         <Box sx={{marginTop: 8, padding:2, position: "absolute", top: "40%" ,left: "50%", transform: 'translate(-50%, -50%)'}}>
             <Avatar sx={{mx: 'auto', bgcolor: blue[500]}}>
@@ -77,7 +82,7 @@ export default function RegisterForm() {
                     <TextField placeholder='Enter your lastname' label="Lastname" id="outlined-password-input" fullWidth autoFocus sx={{mb: 2}} value={name} onChange={(e) => setName(e.target.value)} required>
                     </TextField>
   
-                    <TextField placeholder= 'Enter login-name' label="Login-name" id="outlined-input" fullWidth autoFocus sx={{mb: 2}} value={email} onChange={(e) => setEmail(e.target.value)} required>
+                    <TextField placeholder= 'Email' label="Email" id="outlined-input" fullWidth autoFocus sx={{mb: 2}} value={email} onChange={(e) => setEmail(e.target.value)} required>
                     </TextField>
 
                     <TextField placeholder='Enter password' label="Password" id="outlined-password-input" fullWidth type="password" value={password} onChange={(e) => setPassword(e.target.value)} required>
