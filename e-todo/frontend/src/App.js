@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './style/App.css';
 
 
+import protectedpaths from './utils/protectedpaths';
 import LoginForm from './pages/loginForms';
 import RegisterForm from './pages/registerform';
 import User from './pages/user';
@@ -16,7 +17,10 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
-          <Route path='/user' element={<User/>}/>
+          <Route element={<protectedpaths/>}>
+            <Route path='/user' element={<User/>}/>
+          </Route>
+
         </Routes>
       </BrowserRouter>
     </div>

@@ -31,11 +31,14 @@ import { blue } from '@mui/material/colors';
 import { Link, useNavigate } from "react-router-dom";
 import '../style/forms.css';
 
+import user from '../utils/protectedpaths';
+
+
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
+  const navigate = useNavigate();
 
   const login = async (e)=>{
     e.preventDefault();
@@ -60,7 +63,7 @@ export default function LoginForm() {
       })
       const userdata = await response.json();
       console.log(userdata);
-      const navigate = useNavigate()
+      user = true;
       navigate('/user')
     } else {
       alert("error connection")
@@ -78,10 +81,10 @@ export default function LoginForm() {
           </Avatar>
           <Typography component='h1' sx={{marginTop: 2, textAlign: "center"}}>Login E-ToDo</Typography>
           <Box sx={{mt: 1}}>
-            <TextField placeholder= 'Enter login-name' label="Login-name" id="outlined-input" fullWidth autoFocus sx={{mb: 2}} value={email} onChange={(e) => setEmail(e.target.value)} required>
+            <TextField placeholder= 'Enter login-name' label="Login-name" fullWidth autoFocus sx={{mb: 2}} value={email} onChange={(e) => setEmail(e.target.value)} required>
                 
             </TextField>
-            <TextField placeholder='Enter password' label="Password" id="outlined-password-input" fullWidth type="password" value={password} onChange={(e) => setPassword(e.target.value)} required>
+            <TextField placeholder='Enter password' label="Password"  fullWidth type="password" value={password} onChange={(e) => setPassword(e.target.value)} required>
             </TextField>
   
             <FormControlLabel  control={<Checkbox value="remember" />}label="Remember me"/>

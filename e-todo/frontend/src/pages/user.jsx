@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Stack, Chip } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
+import { useState, useMemo, useEffect } from 'react';
 
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -12,8 +13,9 @@ import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
 import { AppProvider } from '@toolpad/core/AppProvider';
-import { DemoProvider, useDemoRouter } from '@toolpad/core/internal';
+import { DemoProvider, useDemoRouter } from '@toolpad/core/internal'; 
 import { useNavigate } from 'react-router-dom';
+
 
 
   const NAVIGATION = [
@@ -90,48 +92,69 @@ function CustomAppTitle() {
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
       <Typography variant="h6">E-ToDo Charly/Baptiste</Typography>
-      <Chip size="small" label="Test" color="info" />
     </Stack>
   );
 }
   
 
 function DashboardLayoutBasic(props) {
+  const navigate = useNavigate();
   const { window } = props;
-  const [session, setSession] = React.useState({
-    user: {
-      name: '',
-      email: '',
-      image: <AccountCircleIcon />,
-    },
-  });
+  const [session, setSession] = useState(null);
 
-  const authentication = React.useMemo(() => {
-    return {
-      signIn: () => {
+
+  useEffect(() => {
+    const fetchUserData = async () => {
       const token = localStorage.getItem("token");
-      const response = fetch("http://localhost:3000/api/users/user",{
-        method : "GET",
-        headers:{
-          "Authorization":"Bearer "+token,
-          "Content-Type":"application/json"
-        }
-      })
-      const userdata = response.json();
-      console.log(userdata);
+      try {
+        const response = await fetch("http://localhost:3000/api/users/user", {
+          method: "GET",
+          headers: {
+            "Authorization": "Bearer "+ token,
+            "Content-Type": "application/json",
+          },
+        });
+        const userdata = await response.json();
         setSession({
           user: {
-            name: userdata.name,
+            name: userdata.name + ' '+ userdata.firstname,
+            email: userdata.email,
+            image: <AccountCircleIcon />,
+          },
+        });
+        if (userdata <= 0){
+          navigate('/login')
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const authentication = useMemo(() => {
+    return {
+      signIn: (userdata) => {
+        setSession({
+          user: {
+            name: userdata.name + ' '+ userdata.firstname,
             email: userdata.email,
             image: <AccountCircleIcon />,
           },
         });
       },
       signOut: () => {
+        localStorage.removeItem("token");
+        setSession(null);
+        if (session == null ){
+          navigate('/login')
+        };
         
       },
     };
   }, []);
+
   const router = useDemoRouter('/dashboard');
 
   const demoWindow = window !== undefined ? window() : undefined;
