@@ -15,14 +15,14 @@ router.get("/user/todos",auth,async(req,res)=>{
     res.json(data[0]);
 })
 
-router.get("/users/id/:id",auth,async(req,res)=>{
+router.get("/id/:id",auth,async(req,res)=>{
     const user_id = req.params.id;
     const [data] = await db.promise().query("SELECT * FROM users WHERE id = ?",[user_id]);
     if (data.length === 0 ) return res.status(404).json({msg:"Not found"});
     res.json(data[0]);
 })
 
-router.get("/users/email/:email",auth,async(req,res)=>{
+router.get("/email/:email",auth,async(req,res)=>{
     const user_email = req.params.email;
     const [data] = await db.promise().query("SELECT * FROM users WHERE email = ?",[user_email]);
     if (data.length === 0 ) return res.status(404).json({msg:"Not found"});
