@@ -11,25 +11,27 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import AccountCircleSharpIcon from '@mui/icons-material/AccountCircleSharp';
 
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DemoProvider, useDemoRouter } from '@toolpad/core/internal'; 
 import { useNavigate } from 'react-router-dom';
+import '../style/user.css'
 
 
 
   const NAVIGATION = [
   {
     kind: 'header',
-    title: 'E-TODO',
+    title: 'eTodo',
   },
   {
-    segment: 'dashboard',
-    title: 'Dashboard',
+    segment: 'planning',
+    title: 'Schedule',
     icon: <CalendarMonthIcon />,
   },
   {
-    segment: 'Todos',
+    segment: 'todos',
     title: 'Todos',
     icon: <AssignmentLateIcon />,
   },
@@ -38,13 +40,13 @@ import { useNavigate } from 'react-router-dom';
   },
   
   {
-    segment: 'Profile',
+    segment: 'profile',
     title: 'Profile',
     icon: <AccountCircleIcon />,
     children: [
       {
-        segment: 'Datas',
-        title: 'Datas',
+        segment: 'datas',
+        title: 'My datas',
         icon: <ManageAccountsIcon />,
       },
       
@@ -68,7 +70,20 @@ const demoTheme = createTheme({
   },
 });
 
-function DemoPageContent({  }) {
+function DemoPageContent({pathname}) {
+  let content = ''
+  console.log(pathname)
+  switch (pathname) {
+        case '/planning':
+          content = <Typography>calendrier</Typography>
+          break;
+        case '/todos':
+          content = <Typography>todos</Typography>
+          break;
+        case '/profile/datas':
+          content = <Typography>datas</Typography>
+          break;
+        }
   return (
     <Box
       sx={{
@@ -77,9 +92,8 @@ function DemoPageContent({  }) {
         flexDirection: 'column',
         alignItems: 'center',
         textAlign: 'center',
-      }}
-    >
-      <Typography>ok</Typography>
+      }}>
+      {content}
     </Box>
   );
 }
@@ -91,7 +105,7 @@ DemoPageContent.propTypes = {
 function CustomAppTitle() {
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
-      <Typography variant="h6">E-ToDo Charly/Baptiste</Typography>
+      <Typography variant="h6">eTodo Charly/Baptiste</Typography>
     </Stack>
   );
 }
@@ -119,44 +133,28 @@ function DashboardLayoutBasic(props) {
           user: {
             name: userdata.name + ' '+ userdata.firstname,
             email: userdata.email,
-            image: <AccountCircleIcon />,
+            image: <AccountCircleSharpIcon />,
           },
         });
-        if (userdata <= 0){
-          navigate('/login')
-        }
       } catch (error) {
         console.error(error);
       }
     };
-
     fetchUserData();
   }, []);
 
   const authentication = useMemo(() => {
     return {
-      signIn: (userdata) => {
-        setSession({
-          user: {
-            name: userdata.name + ' '+ userdata.firstname,
-            email: userdata.email,
-            image: <AccountCircleIcon />,
-          },
-        });
-      },
       signOut: () => {
         localStorage.removeItem("auth");
         localStorage.removeItem("token");
         setSession(null);
-        if (session == null ){
-          navigate('/login')
-        };
-        
+        navigate('/login')
       },
     };
-  }, []);
+  },);
 
-  const router = useDemoRouter('/dashboard');
+  const router = useDemoRouter('/user');
 
   const demoWindow = window !== undefined ? window() : undefined;
 

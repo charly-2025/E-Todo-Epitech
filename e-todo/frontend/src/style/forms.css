@@ -18,3 +18,9 @@
   border-radius: inherit;
   background-color: purple;
 }
+
+
+.select:hover{
+  transform: scale(1.02);
+  transition: all 0.4s;
+}

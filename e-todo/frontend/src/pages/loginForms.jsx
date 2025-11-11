@@ -14,6 +14,7 @@ import {
   Alert,
   Avatar,
   Grid,
+  Card,
 
 } from '@mui/material';
 import {
@@ -38,6 +39,7 @@ import '../style/forms.css';
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [valide, setinvalide] = useState(false);
   const navigate = useNavigate();
 
   const login = async (e)=>{
@@ -56,7 +58,7 @@ export default function LoginForm() {
       localStorage.setItem("token",data.token);
       navigate('/user')
     } else {
-      alert("error connection")
+      setinvalide(true)
     }
   };
 
@@ -64,22 +66,23 @@ export default function LoginForm() {
 
     <form onSubmit={login}> 
      <div className="cercle1"></div>
-      <Container maxWidth='xs'>
+    <Container maxWidth='xs'>
         <Box sx={{marginTop: 8, padding:2, position: "absolute", top: "40%" ,left: "50%", transform: 'translate(-50%, -50%)'}}>
+          <Paper elevation={15} sx={{marginTop: 8 , padding: 2}}>
           <Avatar sx={{mx: 'auto', bgcolor: blue[500]}}>
             <LockOutlinedIcon/>
           </Avatar>
-          <Typography component='h1' sx={{marginTop: 2, textAlign: "center"}}>Login E-ToDo</Typography>
+          <Typography component='h1' sx={{marginTop: 2, textAlign: "center"}}>Login eTodo</Typography>
           <Box sx={{mt: 1}}>
-            <TextField placeholder= 'Enter login-name' label="Login-name" fullWidth autoFocus sx={{mb: 2}} value={email} onChange={(e) => setEmail(e.target.value)} required>
+            <TextField className="select"  placeholder= 'Enter login-name' label="Login-name" fullWidth autoFocus sx={{mb: 2}} value={email} onChange={(e) => setEmail(e.target.value)} required>
                 
             </TextField>
-            <TextField placeholder='Enter password' label="Password"  fullWidth type="password" value={password} onChange={(e) => setPassword(e.target.value)} required>
+            <TextField className="select" placeholder='Enter password' label="Password"  fullWidth type="password" value={password} onChange={(e) => setPassword(e.target.value)} required>
             </TextField>
-  
-            <FormControlLabel  control={<Checkbox value="remember" />}label="Remember me"/>
-            
-            <Button type="submit" variant="contained" fullWidth sx={{mt: 1}}>Login</Button>
+            {valide && (
+              <Alert severity="warning">Login name or password are incorrect.</Alert>
+            )}
+            <Button className="select" type="submit" variant="contained" fullWidth sx={{mt: 1}}>Login</Button>
           </Box>
           <Grid container justifyContent='space-between' sx={{mt:1}}>
             <Grid>
@@ -93,6 +96,7 @@ export default function LoginForm() {
               </Link>
             </Grid>
           </Grid>
+        </Paper>
         </Box>
       </Container>
      

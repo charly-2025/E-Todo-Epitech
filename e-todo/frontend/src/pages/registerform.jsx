@@ -25,7 +25,7 @@ import {
   Login,
   EmailTwoTone
 } from '@mui/icons-material';
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 import { blue } from '@mui/material/colors';
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
@@ -38,6 +38,7 @@ export default function RegisterForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [registerisinvalid, setregisterinvalid] = useState(false);
 
 
   const Register = async (e)=>{
@@ -57,10 +58,9 @@ export default function RegisterForm() {
     if (connection.ok){
       localStorage.setItem("token",data.token);
       console.log(localStorage.getItem("token"));
-      alert("Creation ok");
       navigate('/login')
     } else {
-      alert("error creation");
+      setregisterinvalid(true)
     }
     
   };
@@ -68,27 +68,32 @@ export default function RegisterForm() {
   return (
     <form onSubmit={Register} > 
       <div className="cercle1"></div>
-      <Container maxWidth='s'sx={{}}>
+      <Container maxWidth='xs'>
         <Box sx={{marginTop: 8, padding:2, position: "absolute", top: "40%" ,left: "50%", transform: 'translate(-50%, -50%)'}}>
+          <Paper elevation={15} sx={{marginTop: 8 , padding: 2}}>
             <Avatar sx={{mx: 'auto', bgcolor: blue[500]}}>
-                <LockOutlinedIcon/>
+                <HowToRegIcon/>
             </Avatar>
-            <Typography component='h1' sx={{marginTop: 2, textAlign: "center"}}>Register E-ToDo</Typography>
+            <Typography component='h1' sx={{marginTop: 2, textAlign: "center"}}>Register eTodo</Typography>
                 <Box sx={{mt: 1}}>
-                    <TextField placeholder= 'Enter your firstname' label="Firstname"  fullWidth autoFocus sx={{mb: 2}} value={firstname} onChange={(e) => setfirstname(e.target.value)} required> 
+                    <TextField className="select" placeholder= 'Enter your firstname' label="Firstname"  fullWidth autoFocus sx={{mb: 2}} value={firstname} onChange={(e) => setfirstname(e.target.value)} required> 
                     </TextField>
             
-                    <TextField placeholder='Enter your lastname' label="Lastname" fullWidth autoFocus sx={{mb: 2}} value={name} onChange={(e) => setName(e.target.value)} required>
+                    <TextField className="select" placeholder='Enter your lastname' label="Lastname" fullWidth autoFocus sx={{mb: 2}} value={name} onChange={(e) => setName(e.target.value)} required>
                     </TextField>
   
-                    <TextField placeholder= 'Email' label="Email" id="outlined-input" fullWidth autoFocus sx={{mb: 2}} value={email} onChange={(e) => setEmail(e.target.value)} required>
+                    <TextField className="select" placeholder= 'Email' label="Email" id="outlined-input" fullWidth autoFocus sx={{mb: 2}} value={email} onChange={(e) => setEmail(e.target.value)} required>
                     </TextField>
 
-                    <TextField placeholder='Enter password' label="Password" fullWidth type="password" value={password} onChange={(e) => setPassword(e.target.value)} required>
+                    <TextField className="select" placeholder='Enter password' label="Password" fullWidth type="password" value={password} onChange={(e) => setPassword(e.target.value)} required>
                     </TextField>
             
-                    <Button type="submit" variant="contained" fullWidth sx={{mt: 1}}>Register</Button>
+                    <Button className="select" type="submit" variant="contained" fullWidth sx={{mt: 1}}>Register</Button>
                 </Box>
+            
+            {registerisinvalid && (
+              <Alert severity="error">Error during your account's creation. Please try again later.</Alert>
+            )}
             <Grid sx={{marginTop: 2, textAlign: "center"}}>
                 <Grid>
                     <Link to="/login">
@@ -96,7 +101,8 @@ export default function RegisterForm() {
                     </Link>
                 </Grid>     
             </Grid>
-        </Box>
+            </Paper>
+          </Box>
       </Container>
     </form>
   );
