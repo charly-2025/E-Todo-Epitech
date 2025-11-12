@@ -1,0 +1,114 @@
+.page {
+    min-height: 100vh;
+    background: white;
+}
+
+.nav {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.8);
+}
+
+.inside-nav{
+    padding: 0 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+}
+
+.name {
+    font-size: 35px;
+    font-weight: bold;
+    color: white;
+}
+
+.buttonsSign {
+    display: none;
+    gap: 16px;
+}
+
+.btn-signin {
+    padding: 8px 16px;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.btn-signin:hover {
+    color: #c08ef5;
+    transform: scale(1.02);
+}
+
+.btn-signup {
+    padding: 8px 16px;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.4s;
+}
+
+.btn-signup:hover {
+    background: #0051ff;
+    transform: scale(1.02);
+}
+
+
+.menubtn {
+    display: block;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.buttonsmenu {
+    margin: 0 10px;
+    padding-top: 16px;
+    border-top: 1px solid #123d9b;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.buttonsmenu .btn-signin {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #c084fc;
+    border-radius: 8px;
+}
+
+
+.buttonsmenu .btn-signup {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+}
+
+
+.content {
+    padding-top: 50px;
+    padding-left: 16px;
+    padding-right: 16px;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .nav-links {
+        display: flex;
+    }
+
+    .buttonsSign {
+        display: flex;
+    }
+
+    .menubtn {
+        display: none;
+    }
+}
