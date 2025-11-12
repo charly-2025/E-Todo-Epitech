@@ -16,8 +16,10 @@ import AccountCircleSharpIcon from '@mui/icons-material/AccountCircleSharp';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DemoProvider, useDemoRouter } from '@toolpad/core/internal'; 
 import { useNavigate } from 'react-router-dom';
-import '../style/user.css'
 
+import '../style/user.css'
+import { ETodoCalendar } from "./calendar"
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
 
   const NAVIGATION = [
@@ -75,7 +77,7 @@ function DemoPageContent({pathname}) {
   console.log(pathname)
   switch (pathname) {
         case '/planning':
-          content = <Typography>calendrier</Typography>
+          content = <ETodoCalendar />
           break;
         case '/todos':
           content = <Typography>todos</Typography>
