@@ -121,7 +121,7 @@ function DashboardLayoutBasic(props) {
     const fetchUserData = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await fetch("http://localhost:3000/api/users/user", {
+        const response = await fetch("http://localhost:3001/user", {
           method: "GET",
           headers: {
             "Authorization": "Bearer "+ token,
