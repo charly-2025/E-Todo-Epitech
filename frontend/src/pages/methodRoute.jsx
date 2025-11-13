@@ -5,6 +5,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import { useState, useEffect } from 'react';
 
 export function MyTable() {
@@ -26,7 +27,7 @@ export function MyTable() {
     fetchUserTodo();
   }, []);
   console.log(data);
-  
+  if(data.length===0) return (<Typography>No todos for you right now</Typography>)
 
   return (
       <TableContainer component={Paper} sx={{}}>
