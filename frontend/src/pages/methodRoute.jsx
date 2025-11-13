@@ -27,9 +27,13 @@ export function MyTable() {
     fetchUserTodo();
   }, []);
   console.log(data);
+<<<<<<< HEAD
   if(data.length==0) return (<Typography>No todos for you right now</Typography>)
 
   return (
+=======
+  if (data.length > 0 && Array.isArray(data)) return (
+>>>>>>> 82190a5bd50e1131ec0602747df59627d49fa32e
       <TableContainer component={Paper} sx={{}}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -55,4 +59,5 @@ export function MyTable() {
       </Table>
     </TableContainer>
   );
+  return (<Typography>No todos for you right now</Typography>)
 }   
