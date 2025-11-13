@@ -28,6 +28,7 @@ export function MyTable() {
   }, []);
   console.log(data);
   if (data.length > 0 && Array.isArray(data)) return (
+      
       <TableContainer component={Paper} sx={{}}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
