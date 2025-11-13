@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import '../style/user.css'
 import { ETodoCalendar } from "./calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { MyTable } from './methodRoute';
 
 
   const NAVIGATION = [
@@ -80,7 +81,7 @@ function DemoPageContent({pathname}) {
           content= <ETodoCalendar />
           break;
         case '/todos':
-          content = <Typography>todos</Typography>
+          content = <MyTable />
           break;
         case '/profile/datas':
           content = <Typography>datas</Typography>
