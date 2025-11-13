@@ -27,7 +27,7 @@ export function MyTable() {
     fetchUserTodo();
   }, []);
   console.log(data);
-  if(data.length===0) return (<Typography>No todos for you right now</Typography>)
+  if(data.length==0) return (<Typography>No todos for you right now</Typography>)
 
   return (
       <TableContainer component={Paper} sx={{}}>
