@@ -43,7 +43,7 @@ export function MyTable() {
   if (data.length > 0 && Array.isArray(data)) return (
       
       <TableContainer component={Paper} sx={{}}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 450 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Title</TableCell>
@@ -69,3 +69,7 @@ export function MyTable() {
   );
   return (<Typography>No todos for you right now</Typography>)
 }   
+
+export function createTodo(){
+  
+}

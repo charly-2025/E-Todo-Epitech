@@ -3,7 +3,7 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Stack, Chip } from '@mui/material';
+import { Stack, Chip, createChainedFunction } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { useState, useMemo, useEffect } from 'react';
 
@@ -12,7 +12,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import AccountCircleSharpIcon from '@mui/icons-material/AccountCircleSharp';
-
+import Button from '@mui/material/Button';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DemoProvider, useDemoRouter } from '@toolpad/core/internal'; 
 import { useNavigate } from 'react-router-dom';
@@ -20,8 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import '../style/user.css'
 import { ETodoCalendar } from "./calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { MyTable } from './methodRoute';
-
+import { MyTable,createTodo } from './methodRoute';
 
   const NAVIGATION = [
   {
@@ -83,7 +82,8 @@ function DemoPageContent({pathname}) {
         case '/todos':
           content = (
               <>
-              <Typography>Todos</Typography>
+              <Typography>Your Todos</Typography>
+              <Button variant="contained" onClick={createTodo} sx={{backgroundColor:"#147375",color:"white",margin:"10px",float:'left'}}>Create a New Todo +</Button>
               <MyTable />
               </>
             )
