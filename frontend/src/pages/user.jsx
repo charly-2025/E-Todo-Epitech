@@ -77,7 +77,7 @@ function DemoPageContent({pathname}) {
   console.log(pathname)
   switch (pathname) {
         case '/planning':
-          content = <ETodoCalendar />
+          content= <ETodoCalendar />
           break;
         case '/todos':
           content = <MyTable/>
@@ -157,7 +157,7 @@ function DashboardLayoutBasic(props) {
     };
   },);
 
-  const router = useDemoRouter('/user');
+  const router = useDemoRouter('/planning');
 
   const demoWindow = window !== undefined ? window() : undefined;
 
