@@ -35,14 +35,15 @@ router.put("/:id",auth,async(req,res)=>{
         newPassword = await bcrypt.hash(password,10);
     }
     await db.promise().query("UPDATE user SET email = ?,password = ?,name = ?,firstname = ? WHERE id = ?;",[email,newPassword,name,firstname,user_id]);
-    return res.json({msg:"update ok"});
+    const [data] = await db.promise().query("SELECT * FROM user WHERE id = ?",[user_id]);
+    res.json(data[0]);
 })
 
 router.delete("/:id",auth,async(req,res)=>{
     const user_id = req.params.id;
     if(req.user.id!=user_id) return res.status(401).json({msg:"No good user, authorization denied"});
     await db.promise().query("DELETE FROM user WHERE id = ?",[user_id]);
-    return res.json({msg:"delete ok"});
+    return res.json({msg:"Successfully deleted record number: "+user_id});
 })
 
 

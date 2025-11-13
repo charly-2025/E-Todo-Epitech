@@ -10,7 +10,7 @@ router.get("/",auth,async(req,res)=>{
     res.json(data);
 })
 
-router.get("/id/:id",auth,async(req,res)=>{
+router.get("/:id",auth,async(req,res)=>{
     const todo_id = req.params.id;
     const [data] = await db.promise().query("SELECT * FROM todo WHERE id = ?",[todo_id]);
     if (data.length === 0 ) return res.status(404).json({msg:"Not found"});
@@ -18,25 +18,29 @@ router.get("/id/:id",auth,async(req,res)=>{
 })
 
 router.post("/",auth,async(req,res)=>{
-    const {title,description,due_time } = req.body;
-    await db.promise().query("INSERT INTO todo (user_id,title,description,due_time) VALUES (?,?,?,?);",[req.user.id,title,description,due_time]);
-    return res.json({msg:"create todo ok"});
+    const {title,description,due_time,user_id,status} = req.body;
+    await db.promise().query("INSERT INTO todo (user_id,title,description,due_time,status) VALUES (?,?,?,?,?);",[user_id,title,description,due_time,status]);
+    const [data] = await db.promise().query("SELECT * FROM todo ORDER BY id LIMIT 1;",[todo_id])
+    return res.json(data[0]);
 })
 
-router.put("/id/:id",auth,async(req,res)=>{
+router.put("/:id",auth,async(req,res)=>{
     const todo_id = req.params.id;
-    const { title, description, due_time, status} = req.body;
+    const { title, description, due_time,user_id, status} = req.body;
     if(!title||!description||!due_time||!status) return res.status(400).json({msg:"bad parameter"});
     const [todo] = await db.promise().query("SELECT * FROM todo WHERE id = ?;",[todo_id]);
     if (todo.length <= 0) return res.status(404).json({msg:"Not found"});
-    await db.promise().query("UPDATE todo SET title = ?,description = ?,due_time = ?,status = ? WHERE id = ? AND user_id = ?;",[title,description,due_time,status,todo_id,req.user.id]);
-    return res.json({msg:"update ok"});
+    await db.promise().query("UPDATE todo SET title = ?,description = ?,due_time = ?,user_id = ?,status = ? WHERE id = ?;",[title,description,due_time,user_id,status,todo_id]);
+    const [data] = await db.promise().query("SELECT * FROM todo WHERE id = ?;",[todo_id])
+    return res.json(data[0]);
 });
 
-router.delete("/id/:id",auth,async(req,res)=>{
+router.delete("/:id",auth,async(req,res)=>{
     const todo_id = req.params.id;
-    await db.promise().query("DELETE FROM todo WHERE id = ? and user_id = ?;",[todo_id,req.user.id]);
-    return res.json({msg:"delete ok"});
+    const [todo] = await db.promise().query("SELECT * FROM todo WHERE id = ?;",[todo_id]);
+    if (todo.length <= 0) return res.status(404).json({msg:"Not found"});
+    await db.promise().query("DELETE FROM todo WHERE id = ?;",[todo_id]);
+    return res.json({msg:"Succesfully deleted record number: "+todo_id});
 })
 
 module.exports = router;
