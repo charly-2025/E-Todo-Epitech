@@ -157,7 +157,7 @@ function DashboardLayoutBasic(props) {
     };
   },);
 
-  const router = useDemoRouter('/planningk');
+  const router = useDemoRouter('/planning');
 
   const demoWindow = window !== undefined ? window() : undefined;
 
