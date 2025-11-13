@@ -1,7 +1,7 @@
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { useState, useEffect, formattedEvents } from 'react';
+import { useState, useEffect } from 'react';
 
 const localizer = momentLocalizer(moment);
 
@@ -19,11 +19,10 @@ export function ETodoCalendar() {
             const todos = data.map(event => ({
                 id: event.id,
                 title: event.title,
-                start: moment.utc(event.start).toDate(), 
-                end: moment.utc(event.end).toDate(),
+                start: new Date(event.created_at),
+                end: new Date(event.due_time),
             }));
-
-        setEvents(formattedEvents);
+        setEvents(todos);
         } catch (error) {
             console.error('Error :', error);
         }
