@@ -28,14 +28,16 @@ export function ETodoCalendar() {
             }
             const data = await response.json();
             const event = Array.isArray(data) ? data : [];
-            const Events = event.map(todos => ({
-                id: todos.id,
-                title: todos.title,
-                start: new Date(todos.created_at),
-                end: new Date(todos.due_time)
-                
-            }));
+            const Events = event.map(todos => {
+                return {
+                    id: todos.id,
+                    title: todos.title,
+                    start: new Date(todos.created_at),
+                    end: new Date(todos.due_time)
+                };
+            });
             setEvents(Events);
+
             console.log(Events)
             } catch (error) {
                 console.error(error);
