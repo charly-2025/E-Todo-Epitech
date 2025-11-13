@@ -60,7 +60,25 @@ const demoTheme = createTheme({
   cssVariables: {
     colorSchemeSelector: 'data-toolpad-color-scheme',
   },
-  colorSchemes: { light: true, dark: true },
+  colorSchemes: {
+    light: true,
+    dark: {
+      palette: {
+        background: {
+          default: '#0a192f',
+          paper: '#112240',
+        },
+        primary: {
+          main: '#64ffda', 
+          contrastText: '#ffffff',
+        },
+        text: {
+          primary: '#e6f1ff',
+          secondary: '#8892b0',
+        },
+      },
+    }
+  },
   breakpoints: {
     values: {
       xs: 0,
