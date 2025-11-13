@@ -81,7 +81,12 @@ function DemoPageContent({pathname}) {
           content= <ETodoCalendar />
           break;
         case '/todos':
-          content = <MyTable />
+          content = (
+              <>
+              <Typography>Todos</Typography>
+              <MyTable />
+              </>
+            )
           break;
         case '/profile/datas':
           content = <Typography>datas</Typography>

@@ -8,6 +8,18 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { useState, useEffect } from 'react';
 
+
+function formatTimestamp(timestamp) {
+  if (!timestamp) return "—";
+  const date = new Date(timestamp);
+  return date.toLocaleString("fr-FR", {
+    timeZone:"Europe/Paris", 
+    dateStyle: "short",
+    timeStyle: "short",
+  });
+}
+
+
 export function MyTable() {
   const [data, setData] = useState([]);
 
@@ -42,11 +54,11 @@ export function MyTable() {
         <TableBody>
           {data.map((row) => (
             <TableRow
-              key={row.name}
+              key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
               <TableCell component="th" scope="row">{row.title}</TableCell>
               <TableCell align="right">{row.description}</TableCell>
-              <TableCell align="right">{row.due_time}</TableCell>
+              <TableCell align="right">{formatTimestamp(row.due_time)}</TableCell>
               <TableCell align="right">{row.status}</TableCell>
             </TableRow>
           ))}
