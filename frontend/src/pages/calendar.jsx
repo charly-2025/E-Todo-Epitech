@@ -12,24 +12,39 @@ export function ETodoCalendar() {
     const [events, setEvents] = useState([])
   
     useEffect(() => {
-    const fetchEvents = async () => {
+        const fetchUserTodo = async () => {
+        const token = localStorage.getItem("token");
         try {
-            const response = await fetch('http://localhost:3001/user/todos'); 
+            const response = await fetch("http://localhost:3001/user/todos", {
+                method: "GET",
+                headers: {
+                    "Authorization": "Bearer " +token,
+                    "Content-Type": "application/json",
+                }
+            });
+            if (!response.ok) {
+                console.error("Error:", response.status, response.statusText);
+                return;
+            }
             const data = await response.json();
-            const todos = data.map(event => ({
-                id: event.id,
-                title: event.title,
-                start: new Date(event.created_at),
-                end: new Date(event.due_time),
-            }));
-        setEvents(todos);
-        } catch (error) {
-            console.error('Error :', error);
-        }
-        };
+            const event = Array.isArray(data) ? data : [];
+            const Events = event.map(todos => {
+                return {
+                    id: todos.id,
+                    title: todos.title,
+                    start: new Date(todos.created_at),
+                    end: new Date(todos.due_time)
+                };
+            });
+            setEvents(Events);
 
-        fetchEvents();
-    }, []);
+            console.log(Events)
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchUserTodo();
+    }, []);   
 
     return (
         <div style={{ height: '80vh', width: '80vw' }}>
@@ -42,7 +57,7 @@ export function ETodoCalendar() {
                 date={currentDate}
                 onView={setCurrentView}
                 onNavigate={setCurrentDate}
-                views={['month', 'week', 'day', 'agenda']} // Use strings, not Views enum
+                views={['month', 'week', 'day', 'agenda']} 
                 style={{ height: '100%', width: '100%' }}
             />
         </div>
