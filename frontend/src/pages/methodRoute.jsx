@@ -11,6 +11,11 @@ import { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import * as React from 'react';
 
 import {
   Box,
@@ -100,6 +105,10 @@ export function MyTable() {
 
 export function PopperPopupState() {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [status, setStatus] = useState('not started');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+
   const getMinDate = (selectedDate) => {
     const now = new Date();
     const isToday = selectedDate.toDateString() === now.toDateString();
@@ -110,6 +119,12 @@ export function PopperPopupState() {
       newDate.setHours(0,0,0,0);
       return newDate;
     }
+  }
+
+  const update = async(e) =>{
+    e.preventDefault();
+    console.log(selectedDate,status,title,description);
+
   }
 
   return (
@@ -124,15 +139,15 @@ export function PopperPopupState() {
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
                 <Paper>
-                 <form > 
+                 <form onSubmit={update} > 
                      <Container maxWidth='xs'>
                          <Box sx={{width:"300px", marginTop: 8, padding:2, position: "absolute", top: "40%" ,left: "50%", transform: 'translate(-50%, -50%)'}}>
                            <Paper elevation={15} sx={{marginTop: 8 , padding: 2}}>
                            <Typography component='h1' sx={{marginTop: 2, textAlign: "center"}}>Create a New Todo</Typography>
                            <Box sx={{mt: 1}}>
-                             <TextField className="select"  placeholder= 'Enter Title' label="Title" fullWidth autoFocus sx={{mb: 2}}required>  
+                             <TextField className="select"  placeholder= 'Enter Title' label="Title"  value={title} onChange={(e) => setTitle(e.target.value)} fullWidth autoFocus sx={{mb: 2}}required>  
                              </TextField>
-                             <TextField className="select" placeholder='Enter password' label="Description"  fullWidth type="password" required>
+                             <TextField className="select" placeholder='Enter Description' label="Description" value={description} onChange={(e) => setDescription(e.target.value)}  sx={{mb: 2}} fullWidth required>
                              </TextField>
                               <DatePicker
                                   selected={selectedDate}
@@ -143,11 +158,25 @@ export function PopperPopupState() {
                                   minDate={new Date()}
                                   minTime={getMinDate(selectedDate)}
                                   maxTime={new Date().setHours(23, 59)}
-                                  dateFormat="yyyy-MM-dd HH:mm"
+                                  dateFormat="dd/MM/yyyy HH:mm"
                                   placeholderText="Choose Due Time"
-                                  className="MuiInputBase-input MuiInput-input"
+                                  customInput={<TextField label="Due Time" fullWidth sx={{mb: 2}} disabled />}
                                 />
-                             <Button className="select" type="submit" variant="contained" fullWidth sx={{mt: 1}}>Login</Button>
+                                <InputLabel id="demo-simple-select-label">Status : </InputLabel>
+                                  <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={status}
+                                    onChange={(e) => setStatus(e.target.value)}
+                                    fullWidth
+                                    sx={{mb: 2}}
+                                  >
+                                    <MenuItem value={"not started"}>Not Started</MenuItem>
+                                    <MenuItem value={"todo"}>To Do</MenuItem>
+                                    <MenuItem value={"in progress"}>In Progress</MenuItem>
+                                    <MenuItem value={"done"}>Done</MenuItem>
+                                  </Select>
+                             <Button className="select" type="submit" variant="contained" fullWidth sx={{mt: 1}}>Create New Todo</Button>
                            </Box>
                          </Paper>
                          </Box>
@@ -163,3 +192,4 @@ export function PopperPopupState() {
     </PopupState>
   );
 }
+
