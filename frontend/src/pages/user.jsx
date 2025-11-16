@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import '../style/user.css'
 import { ETodoCalendar } from "./calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { MyTable,createTodo } from './methodRoute';
+import { MyTable,PopperPopupState } from './methodRoute';
 
   const NAVIGATION = [
   {
@@ -83,7 +83,7 @@ function DemoPageContent({pathname}) {
           content = (
               <>
               <Typography>Your Todos</Typography>
-              <Button variant="contained" onClick={createTodo} sx={{backgroundColor:"#147375",color:"white",margin:"10px",float:'left'}}>Create a New Todo +</Button>
+              <PopperPopupState/>
               <MyTable />
               </>
             )

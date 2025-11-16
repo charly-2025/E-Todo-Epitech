@@ -4,9 +4,37 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
+import Popper from '@mui/material/Popper';
+import PopupState, { bindToggle, bindPopper } from 'material-ui-popup-state';
+import Fade from '@mui/material/Fade';
 import { useState, useEffect } from 'react';
+import { styled } from '@mui/material/styles';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+import {
+  Box,
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Paper,
+  InputAdornment,
+  IconButton,
+  Checkbox,
+  FormControlLabel,
+  Alert,
+  Avatar,
+  Grid,
+  Card,
+
+} from '@mui/material';
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  marginLeft: theme.spacing(1),
+  marginRight: theme.spacing(1),
+  width: 200,
+}));
 
 
 function formatTimestamp(timestamp) {
@@ -70,6 +98,68 @@ export function MyTable() {
   return (<Typography>No todos for you right now</Typography>)
 }   
 
-export function createTodo(){
-  
+export function PopperPopupState() {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const getMinDate = (selectedDate) => {
+    const now = new Date();
+    const isToday = selectedDate.toDateString() === now.toDateString();
+    if(isToday){
+      return now;
+    } else {
+      const newDate = new Date(selectedDate);
+      newDate.setHours(0,0,0,0);
+      return newDate;
+    }
+  }
+
+  return (
+    <PopupState variant="popper" popupId="demo-popup-popper">
+      {(popupState) => (
+        <div>
+          <Button variant="contained" sx={{backgroundColor:"#147375",color:"white",margin:"10px",float:'left'}} 
+          {...bindToggle(popupState)}>
+            Create a New Todo +
+          </Button>
+          <Popper {...bindPopper(popupState)} transition>
+            {({ TransitionProps }) => (
+              <Fade {...TransitionProps} timeout={350}>
+                <Paper>
+                 <form > 
+                     <Container maxWidth='xs'>
+                         <Box sx={{width:"300px", marginTop: 8, padding:2, position: "absolute", top: "40%" ,left: "50%", transform: 'translate(-50%, -50%)'}}>
+                           <Paper elevation={15} sx={{marginTop: 8 , padding: 2}}>
+                           <Typography component='h1' sx={{marginTop: 2, textAlign: "center"}}>Create a New Todo</Typography>
+                           <Box sx={{mt: 1}}>
+                             <TextField className="select"  placeholder= 'Enter Title' label="Title" fullWidth autoFocus sx={{mb: 2}}required>  
+                             </TextField>
+                             <TextField className="select" placeholder='Enter password' label="Description"  fullWidth type="password" required>
+                             </TextField>
+                              <DatePicker
+                                  selected={selectedDate}
+                                  onChange={(date) => setSelectedDate(date)}
+                                  showTimeSelect
+                                  timeFormat="HH:mm"
+                                  timeIntervals={1}
+                                  minDate={new Date()}
+                                  minTime={getMinDate(selectedDate)}
+                                  maxTime={new Date().setHours(23, 59)}
+                                  dateFormat="yyyy-MM-dd HH:mm"
+                                  placeholderText="Choose Due Time"
+                                  className="MuiInputBase-input MuiInput-input"
+                                />
+                             <Button className="select" type="submit" variant="contained" fullWidth sx={{mt: 1}}>Login</Button>
+                           </Box>
+                         </Paper>
+                         </Box>
+                       </Container>
+                      
+                     </form>
+                </Paper>
+              </Fade>
+            )}
+          </Popper>
+        </div>
+      )}
+    </PopupState>
+  );
 }
