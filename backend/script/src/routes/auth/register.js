@@ -14,7 +14,7 @@ router.post("/",async(req,res)=>{
 	const hashedPassword = await bcrypt.hash(password,10);
 
 	const [result] = await db.promise().query("INSERT INTO user (email,password,name,firstname) VALUES (?,?,?,?)",[email,hashedPassword,name,firstname]);
-	const token = jwt.sign({id:result.insertId},process.env.SECRET,{expiresIn:"1h"});
+	const token = jwt.sign({id:result.insertId},process.env.SECRET,{expiresIn:"360h"});
 	res.json({token});
 });
 
