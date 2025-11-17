@@ -1,3 +1,4 @@
+
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -5,14 +6,56 @@ import { useState, useEffect } from 'react';
 
 import getRandomInt from '../utils/randomint';
 import { colors } from '@mui/material';
+import PopupEvents from '../utils/popupevents';
+
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+
 
 const localizer = momentLocalizer(moment);
 
 
 export function ETodoCalendar() {
+    
     const [currentView, setCurrentView] = useState('month');
     const [currentDate, setCurrentDate] = useState(new Date());
     const [events, setEvents] = useState([])
+
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [isOpenEvent, setIsOpenEvent] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState(null);
+    
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 450,
+        bgcolor: 'background.paper',
+        boxShadow: 24,
+        p: 3,
+        borderRadius: 2,
+        maxHeight: '90vh'
+    };
+
+    const handleSelectSlot = (infos) => {
+        console.log(infos)
+        setSelectedDate(infos.start);
+        setSelectedEvent(null);
+    
+    }
+
+    const handleSelectEvent = (event) => {
+        console.log(event)
+        setSelectedDate(null);
+        setSelectedEvent(event);
+        setIsOpenEvent(true);
+    }
 
     const getcolor = (id) => {
         let colors = [ '#EF4444', '#F97316','#F59E0B', '#EAB308',   '#84CC16',
@@ -50,8 +93,10 @@ export function ETodoCalendar() {
                 return {
                     id: todos.id,
                     title: todos.title,
+                    description: todos.description,
                     start: new Date(todos.created_at),
                     end: new Date(todos.due_time),
+                    progress: todos.status,
                     colorEvento: getcolor(todos.id),
                     color: 'white'
                 };
@@ -66,13 +111,17 @@ export function ETodoCalendar() {
         fetchUserTodo();
     }, []);   
 
+    
     return (
         <div style={{ height: '80vh', width: '80vw'}}>
             <Calendar
+                selectable
                 localizer={localizer}
                 events={events}
                 startAccessor="start"
                 endAccessor="end"
+                onSelectSlot={handleSelectSlot}
+                onSelectEvent={handleSelectEvent}
                 view={currentView}
                 date={currentDate}
                 onView={setCurrentView}
@@ -86,6 +135,19 @@ export function ETodoCalendar() {
                     return { style: { backgroundColor ,color} }
                 }}
             />
+            {selectedEvent && (
+                <Modal open={isOpenEvent} onClose={() => setIsOpenEvent(false)}>
+                    <Box sx={style}>
+                        <Typography variant="h3" sx={{textAlign: "center"}}>{selectedEvent.title}</Typography>
+                        <Typography variant="h6" sx={{textAlign: "center"}}>{selectedEvent.description}</Typography>
+                        <hr></hr>
+                        <Typography>Start : {selectedEvent.start.toLocaleString()}</Typography>
+                        <Typography>End : {selectedEvent.end.toLocaleString()}</Typography>
+                        <hr></hr>
+                        <Typography variant="h6" sx={{textAlign: "center"}}>Status : {selectedEvent.progress}</Typography>
+                    </Box>   
+                </Modal>
+            )}
         </div>
     );
 }

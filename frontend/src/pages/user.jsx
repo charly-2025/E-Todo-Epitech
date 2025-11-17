@@ -13,7 +13,7 @@ import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import AccountCircleSharpIcon from '@mui/icons-material/AccountCircleSharp';
 import Button from '@mui/material/Button';
-import { AppProvider } from '@toolpad/core/AppProvider';
+import { AppProvider , useLocation} from '@toolpad/core/AppProvider';
 import { DemoProvider, useDemoRouter } from '@toolpad/core/internal'; 
 import { useNavigate } from 'react-router-dom';
 
@@ -21,6 +21,8 @@ import '../style/user.css'
 import { ETodoCalendar } from "./calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { MyTable,PopperPopupState } from './methodRoute';
+
+
 
   const NAVIGATION = [
   {
@@ -180,9 +182,11 @@ function DashboardLayoutBasic(props) {
     };
   },);
 
+  const demoWindow = window !== undefined ? window : undefined;
   const router = useDemoRouter('/planning');
 
-  const demoWindow = window !== undefined ? window() : undefined;
+
+
 
   return (
 
