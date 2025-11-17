@@ -16,8 +16,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { AccessAlarm, ThreeDRotation } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
-
-
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import {
   Box,
@@ -74,7 +74,29 @@ export function MyTable() {
     fetchUserTodo();
   }, []);
   console.log(data);
-  
+
+  const update = (todo_id)=>{
+    return console.log("update todo_id : "+todo_id)
+  }
+
+  const delet = async(todo_id)=>{
+    const token = localStorage.getItem("token");
+      const connection = await fetch("http://localhost:3001/todos/"+todo_id,{
+                  method:"DELETE",
+                  headers: {
+                    "Authorization": "Bearer "+ token,
+                    "Content-Type": "application/json",
+                  },
+                });
+                const data = await connection.json();
+                console.log(data);
+                if (connection.ok){
+                  window.location.reload();
+                } else {
+                  alert("not delete")
+                }
+  }
+
   if (data.length > 0 && Array.isArray(data)) return (
       
       <TableContainer component={Paper} sx={{}}>
@@ -85,6 +107,7 @@ export function MyTable() {
             <TableCell align="right">Description</TableCell>
             <TableCell align="right">Due Time</TableCell>
             <TableCell align="right">Status</TableCell>
+            <TableCell align="right">Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -96,6 +119,10 @@ export function MyTable() {
               <TableCell align="right">{row.description}</TableCell>
               <TableCell align="right">{formatTimestamp(row.due_time)}</TableCell>
               <TableCell align="right">{row.status}</TableCell>
+              <TableCell align="right">
+                <Button onClick={()=>update(row.id)}><EditIcon></EditIcon></Button>
+                <Button onClick={()=>delet(row.id)}><DeleteIcon></DeleteIcon></Button>
+                </TableCell>
             </TableRow>
           ))}
         </TableBody>
