@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const db = require("../../config/db");
 
@@ -13,7 +13,7 @@ router.post("/",async(req,res)=>{
 	if (user.length <= 0) return res.status(400).json({msg:"Invalid Credentials"});
 	user = user[0]
 	
-	const same = await bcrypt.compare(password,user.password);
+	const same = await bcrypt.compareSync(password,user.password);
 	if(!same) return res.status(400).json({msg:"Invalid Credentials"});
 	const token = jwt.sign({id:user.id},process.env.SECRET,{expiresIn:"360h"});
 	res.json({token});
