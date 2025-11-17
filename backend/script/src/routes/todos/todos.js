@@ -20,7 +20,7 @@ router.get("/:id",auth,async(req,res)=>{
 router.post("/",auth,async(req,res)=>{
     const {title,description,due_time,user_id,status} = req.body;
     await db.promise().query("INSERT INTO todo (user_id,title,description,due_time,status) VALUES (?,?,?,?,?);",[user_id,title,description,due_time,status]);
-    const [data] = await db.promise().query("SELECT * FROM todo ORDER BY id LIMIT 1;",[todo_id])
+    const [data] = await db.promise().query("SELECT * FROM todo ORDER BY id LIMIT 1;")
     return res.json(data[0]);
 })
 
