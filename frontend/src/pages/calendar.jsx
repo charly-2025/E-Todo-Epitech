@@ -3,8 +3,10 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useState, useEffect } from 'react';
 
-const localizer = momentLocalizer(moment);
+import Randomhex from '../utils/randomhex';
+import { colors } from '@mui/material';
 
+const localizer = momentLocalizer(moment);
 
 export function ETodoCalendar() {
     const [currentView, setCurrentView] = useState('month');
@@ -33,7 +35,9 @@ export function ETodoCalendar() {
                     id: todos.id,
                     title: todos.title,
                     start: new Date(todos.created_at),
-                    end: new Date(todos.due_time)
+                    end: new Date(todos.due_time),
+                    colorEvento: Randomhex(),
+                    color: 'white'
                 };
             });
             setEvents(Events);
@@ -47,7 +51,7 @@ export function ETodoCalendar() {
     }, []);   
 
     return (
-        <div style={{ height: '80vh', width: '80vw' }}>
+        <div style={{ height: '80vh', width: '80vw'}}>
             <Calendar
                 localizer={localizer}
                 events={events}
@@ -59,7 +63,15 @@ export function ETodoCalendar() {
                 onNavigate={setCurrentDate}
                 views={['month', 'week', 'day', 'agenda']} 
                 style={{ height: '100%', width: '100%' }}
+                BackgroundWrapper = "red"
+                eventPropGetter={(events) => {
+                    const backgroundColor = events.colorEvento ;
+                    const color = events.color;
+                    return { style: { backgroundColor ,color} }
+                }}
             />
         </div>
     );
-}   
+}
+
+
