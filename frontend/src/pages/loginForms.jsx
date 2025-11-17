@@ -28,6 +28,7 @@ import {
   EmailTwoTone
 } from '@mui/icons-material';
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+
 import { blue } from '@mui/material/colors';
 import { Link, useNavigate } from "react-router-dom";
 import '../style/forms.css';
@@ -75,7 +76,7 @@ export default function LoginForm() {
           <Typography component='h1' sx={{marginTop: 2, textAlign: "center"}}>Login eTodo</Typography>
           <Box sx={{mt: 1}}>
             <TextField className="select"  placeholder= 'Enter login-name' label="Login-name" fullWidth autoFocus sx={{mb: 2}} value={email} onChange={(e) => setEmail(e.target.value)} required>
-                
+              
             </TextField>
             <TextField className="select" placeholder='Enter password' label="Password"  fullWidth type="password" value={password} onChange={(e) => setPassword(e.target.value)} required>
             </TextField>
