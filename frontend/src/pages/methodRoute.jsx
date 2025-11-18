@@ -14,7 +14,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { AccessAlarm, ThreeDRotation } from '@mui/icons-material';
+import { AccessAlarm, FireTruck, ThreeDRotation } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -37,6 +37,7 @@ import {
 
 } from '@mui/material';
 
+
 const StyledTextField = styled(TextField)(({ theme }) => ({
   marginLeft: theme.spacing(1),
   marginRight: theme.spacing(1),
@@ -55,106 +56,143 @@ function formatTimestamp(timestamp) {
 }
 
 
-export function MyTable() {
-  const [data, setData] = useState([]);
+export function MyTable({data_todos, onDelete}) {
+  
+  const [user_id, setUserId] = useState("");
+
+
+  const fetchDataUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:3001/user", {
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer "+token,
+          "Content-Type": "application/json",
+        }
+      });
+      const userData = await response.json();
+      setUserId(userData.id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
 
   useEffect(() => {
-    const fetchUserTodo = async () => {
-      const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:3001/user/todos", {
-          method: "GET",
-          headers: {
-            "Authorization": "Bearer "+ token,
-            "Content-Type": "application/json",
-          }
-        });
-        const Tododata = await response.json();
-        setData(Tododata);
-    }
-    fetchUserTodo();
+    fetchDataUser();
+   
   }, []);
-  console.log(data);
 
-  const update = (todo_id)=>{
-    return console.log("update todo_id : "+todo_id)
+
+  const update = async (todo_id) => {
+    console.log('update', todo_id)
   }
 
-  const delet = async(todo_id)=>{
+  const suppr = async (todo_id) => {
     const token = localStorage.getItem("token");
-      const connection = await fetch("http://localhost:3001/todos/"+todo_id,{
-                  method:"DELETE",
-                  headers: {
-                    "Authorization": "Bearer "+ token,
-                    "Content-Type": "application/json",
-                  },
-                });
-                const data = await connection.json();
-                console.log(data);
-                if (connection.ok){
-                  window.location.reload();
-                } else {
-                  alert("not delete")
-                }
-  }
-
-  if (data.length > 0 && Array.isArray(data)) return (
+    try {
+      const connection = await fetch("http://localhost:3001/todos/" +todo_id, {
+        method: "DELETE",
+        headers: {
+          "Authorization": "Bearer " +token,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await connection.json();
+      console.log(data);
+      onDelete(todo_id);
+    } catch (error) {
+      console.error(error);
       
-      <TableContainer component={Paper} sx={{}}>
-      <Table sx={{ minWidth: 450 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Title</TableCell>
-            <TableCell align="right">Description</TableCell>
-            <TableCell align="right">Due Time</TableCell>
-            <TableCell align="right">Status</TableCell>
-            <TableCell align="right">Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row) => (
-            <TableRow
-              key={row.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-              <TableCell component="th" scope="row">{row.title}</TableCell>
-              <TableCell align="right">{row.description}</TableCell>
-              <TableCell align="right">{formatTimestamp(row.due_time)}</TableCell>
-              <TableCell align="right">{row.status}</TableCell>
-              <TableCell align="right">
-                <Button onClick={()=>update(row.id)}><EditIcon></EditIcon></Button>
-                <Button onClick={()=>delet(row.id)}><DeleteIcon></DeleteIcon></Button>
-                </TableCell>
+    }
+  };
+
+  if (!Array.isArray(data_todos) || data_todos.length === 0  ) {
+    return ;
+  }
+    
+  return (
+      <TableContainer sx={{ minWidth: '100%' }} component={Paper}>
+        <Table  aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Title</TableCell>
+              <TableCell align="right">Description</TableCell>
+              <TableCell align="right">Due Time</TableCell>
+              <TableCell align="right">Status</TableCell>
+              <TableCell align="right">Action</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-  return (<Typography>No todos for you right now</Typography>)
+          </TableHead>
+          <TableBody>
+            {data_todos.map((row) => (
+              <TableRow
+                key={row.id}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableCell component="th" scope="row">{row.title}</TableCell>
+                <TableCell align="right">{row.description}</TableCell>
+                <TableCell align="right">{formatTimestamp(row.due_time)}</TableCell>
+                <TableCell align="right">{row.status}</TableCell>
+                <TableCell align="right">
+                  <Button onClick={() => update(row.id)}><EditIcon /></Button>
+                  <Button onClick={() => suppr(row.id)}><DeleteIcon /></Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+  
+
+
+
+  
 }   
+
+
+
+
 
 export function PopperPopupState() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [status, setStatus] = useState('not started');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [user_id,setUserId] = useState("");
+  const [user_id, setUserId] = useState("");
+  const [todos, setTodos] = useState([]);
+
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchTodos = async () => {
       const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:3001/user", {
-          method: "GET",
-          headers: {
-            "Authorization": "Bearer "+ token,
-            "Content-Type": "application/json",
-          }
-        });
-        const Userdata = await response.json();
-        setUserId(Userdata.id);
-    }
-    fetchUser();
+      const res = await fetch("http://localhost:3001/todos", {
+        headers: { "Authorization": "Bearer " +token }
+      });
+      const data = await res.json();
+      setTodos(Array.isArray(data) ? data : []); 
+    };
+    fetchTodos();
   }, []);
 
+  const fetchUser = async () => {
+    const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:3001/user", {
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer "+ token,
+          "Content-Type": "application/json",
+        }
+      });
+      const Userdata = await response.json();
+      setUserId(Userdata.id);
+    };
+
+    useEffect(() => {
+        fetchUser(); 
+    }, []);
+  
 
   const getMinDate = (selectedDate) => {
     const now = new Date();
@@ -174,8 +212,13 @@ export function PopperPopupState() {
     return formatDate;
    }
 
+
+
+
   return (
+    
     <PopupState variant="popper" popupId="demo-popup-popper">
+      
       {(popupState) => {
           const close =()=>{
             popupState.close();
@@ -185,51 +228,50 @@ export function PopperPopupState() {
             setStatus("not started");
             };
 
-            const create = async(e) =>{
-              e.preventDefault();
-              popupState.close();
-              console.log(formatDateTime(selectedDate),status,title,description,user_id);
-              const token = localStorage.getItem("token");
-              const connection = await fetch("http://localhost:3001/todos",{
-                  method:"POST",
-                  headers: {
-                    "Authorization": "Bearer "+ token,
-                    "Content-Type": "application/json",
-                  },
-                  body:JSON.stringify({
-                    title:title,
-                    description:description,
-                    due_time:formatDateTime(selectedDate),
-                    user_id:user_id,
-                    status:status
+          const create = async(e) =>{
+            e.preventDefault();
+            popupState.close();
+            console.log(formatDateTime(selectedDate),status,title,description,user_id);
+            const token = localStorage.getItem("token");
+            const response = await fetch("http://localhost:3001/todos",{
+              method:"POST",
+              headers: {
+                "Authorization": "Bearer "+ token,
+                "Content-Type": "application/json",
+              },
+              body:JSON.stringify({
+                title:title,
+                description:description,
+                due_time:formatDateTime(selectedDate),
+                user_id:user_id,
+                status:status
+              })
+            });
+            const data = await response.json();
+            console.log('data : ', data)
 
-                  })
-                });
-                const data = await connection.json();
-                console.log(data);
-                if (connection.ok){
-                  window.location.reload();
-                } else {
-                  alert("not create")
-                }
-              setTitle("");
-              setDescription("");
-              setSelectedDate(new Date());
-              setStatus("not started");
-              }
+            setTodos(prev => Array.isArray(prev) ? [...prev, data] : [data]);
+
+            setTitle("");
+            setDescription("");
+            setSelectedDate(new Date());
+            setStatus("not started");
+
+           }
+          
       return (
         <div>
-          <Button variant="contained" sx={{backgroundColor:"#147375",color:"white",margin:"10px",float:'left'}} 
+          <Container sx={{ overflowX: 'auto', width: '100vw' }}>
+          <Button variant="contained" sx={{backgroundColor:"#147375",color:"white",margin:"10px",float:'center'}} 
           {...bindToggle(popupState)}>
             Create a New Todo +
           </Button>
           <Popper {...bindPopper(popupState)} transition>
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
-                <Paper>
+                
                  <form onSubmit={create} > 
                      <Container maxWidth='xs'>
-                         <Box sx={{width:"300px", marginTop: 8, padding:2, position: "absolute", top: "40%" ,left: "50%", transform: 'translate(-50%, -50%)'}}>
                            <Paper elevation={15} sx={{marginTop: 8 , padding: 2}}>
                            <Typography component='h1' sx={{marginTop: 2, textAlign: "center"}}>Create a New Todo</Typography>
                            <Button onClick={close} sx={{color:"black",margin:"2px",float:'right'}}>
@@ -272,18 +314,30 @@ export function PopperPopupState() {
                              
                            </Box>
                          </Paper>
-                         </Box>
+                         
                        </Container>
                       
                      </form>
-                </Paper>
+                
               </Fade>
             )}
           </Popper>
+           {todos.length === 0 ? (
+            <Typography>No todos for you right now</Typography>
+           ) : (
+            <MyTable
+              data_todos={todos}
+              onDelete={(id) => setTodos(prev => prev.filter(todo => todo.id !== id))}
+            />
+          )}
+         </Container>
         </div>
+        
       );
       }}
     </PopupState>
+  
   );
+
 }
 

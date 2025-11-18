@@ -5,8 +5,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useState, useEffect } from 'react';
 
 import getRandomInt from '../utils/randomint';
-import { colors } from '@mui/material';
-import PopupEvents from '../utils/popupevents';
+
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -72,8 +71,7 @@ export function ETodoCalendar() {
         }
     };
 
-    useEffect(() => {
-        const fetchUserTodo = async () => {
+    const planning = async () => {
         const token = localStorage.getItem("token");
         try {
             const response = await fetch("http://localhost:3001/user/todos", {
@@ -107,12 +105,17 @@ export function ETodoCalendar() {
             } catch (error) {
                 console.error(error);
             }
+           
         };
-        fetchUserTodo();
-    }, []);   
+    
+    useEffect(() => {
+        planning(); 
+    }, []);
+   
 
     
     return (
+        
         <div style={{ height: '80vh', width: '80vw'}}>
             <Calendar
                 selectable
