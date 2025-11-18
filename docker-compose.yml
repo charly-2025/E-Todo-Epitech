@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   etodo:
     image: mysql:8
@@ -13,6 +15,12 @@ services:
       - etodo-data:/var/lib/mysql
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 60s
 
   backend:
     build: ./backend
@@ -24,12 +32,14 @@ services:
     environment : 
       MYSQL_HOST: etodo
     depends_on:
-      - etodo
+      etodo:
+        condition: service_healthy
     volumes:
       - ./backend:/app
       - /app/node_modules
     networks:
       - app-network
+    restart: on-failure
 
   frontend:
     build: ./frontend
