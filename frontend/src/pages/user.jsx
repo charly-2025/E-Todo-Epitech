@@ -94,6 +94,8 @@ const demoTheme = createTheme({
 
 function DemoPageContent({pathname}) {
   let content = ''
+  localStorage.setItem("lastPath",pathname);
+  console.log("local set item with : "+pathname);
   console.log(pathname)
   switch (pathname) {
         case '/planning':
@@ -176,6 +178,7 @@ function DashboardLayoutBasic(props) {
       signOut: () => {
         localStorage.removeItem("auth");
         localStorage.removeItem("token");
+        localStorage.removeItem("lastPath")
         setSession(null);
         navigate('/login')
       },
@@ -183,10 +186,10 @@ function DashboardLayoutBasic(props) {
   },);
 
   const demoWindow = window !== undefined ? window : undefined;
-  const router = useDemoRouter('/planning');
-
-
-
+  
+  let lastPath = localStorage.getItem("lastPath");
+  if(lastPath === "") lastPath = "/planning";
+  const router = useDemoRouter(lastPath);
 
   return (
 
@@ -216,3 +219,4 @@ DashboardLayoutBasic.propTypes = {
 };
 
 export default DashboardLayoutBasic;
+
