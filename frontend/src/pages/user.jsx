@@ -188,7 +188,9 @@ function DashboardLayoutBasic(props) {
   const demoWindow = window !== undefined ? window : undefined;
   
   let lastPath = localStorage.getItem("lastPath");
-  if(lastPath === "") lastPath = "/planning";
+  if(lastPath === ""){
+    localStorage.setItem("lastPath", '/planning')
+  }
   const router = useDemoRouter(lastPath);
 
   return (
