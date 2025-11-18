@@ -18,7 +18,7 @@ import { AccessAlarm, FireTruck, ThreeDRotation } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import SaveIcon from '@mui/icons-material/Save';
 import {
   Box,
   Container,
@@ -38,11 +38,6 @@ import {
 } from '@mui/material';
 
 
-const StyledTextField = styled(TextField)(({ theme }) => ({
-  marginLeft: theme.spacing(1),
-  marginRight: theme.spacing(1),
-  width: 200,
-}));
 
 
 function formatTimestamp(timestamp) {
@@ -57,8 +52,22 @@ function formatTimestamp(timestamp) {
 
 
 export function MyTable({data_todos, onDelete}) {
-  
+  const [editId,setEditId] = useState(null)
+  const [todos, setTodos] = useState([])
+  const [editTodo, setEditTodo] = useState({title:"",description:"",due_time:"",status:""})
   const [user_id, setUserId] = useState("");
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:3001/todos", {
+        headers: { "Authorization": "Bearer " +token }
+      });
+      const data = await res.json();
+      setTodos(Array.isArray(data) ? data : []); 
+    };
+    fetchTodos();
+  }, []);
 
 
   const fetchDataUser = async () => {
@@ -77,19 +86,69 @@ export function MyTable({data_todos, onDelete}) {
       console.error(error);
     }
   };
-
-
-
   useEffect(() => {
-    fetchDataUser();
-   
+    fetchDataUser();  
   }, []);
 
-
-  const update = async (todo_id) => {
-    console.log('update', todo_id)
+  const getMinDate = (selectedDate) => {
+    const now = new Date();
+    const isToday = selectedDate.toDateString() === now.toDateString();
+    if(isToday){
+      return now;
+    } else {
+      const newDate = new Date(selectedDate);
+      newDate.setHours(0,0,0,0);
+      return newDate;
+    }
   }
 
+  const formatDateTime = (date)=>{
+    let formatDate = "";
+    formatDate += date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":00";
+    return formatDate;
+   }
+
+  const update = async (todo_id) => {
+    setEditId(todo_id);
+    todos.forEach(todo=>{
+      if (todo.id === todo_id){
+        setEditTodo({
+          title:todo.title,
+          description:todo.description,
+          due_time:new Date(todo.due_time),
+          status:todo.status
+        })
+        console.log(editTodo)
+      }
+    })
+    }
+    
+  const close = () => {
+    setEditId(null);
+    console.log("close");
+  }
+
+  const save = async (todo_id) => {
+    setEditId(null);
+    console.log("save");
+    const token = localStorage.getItem("token");
+    const connection = await fetch("http://localhost:3001/todos/" +todo_id, {
+        method: "PUT",
+        headers: {
+          "Authorization": "Bearer " +token,
+          "Content-Type": "application/json",
+        },
+        body:JSON.stringify({
+                title:editTodo.title,
+                description:editTodo.description,
+                due_time:formatDateTime(editTodo.due_time),
+                user_id:user_id,
+                status:editTodo.status
+              })
+      });
+      const data = await connection.json();
+      console.log(data);
+  }
   const suppr = async (todo_id) => {
     const token = localStorage.getItem("token");
     try {
@@ -122,7 +181,7 @@ export function MyTable({data_todos, onDelete}) {
               <TableCell align="right">Description</TableCell>
               <TableCell align="right">Due Time</TableCell>
               <TableCell align="right">Status</TableCell>
-              <TableCell align="right">Action</TableCell>
+              <TableCell align="center">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -130,25 +189,66 @@ export function MyTable({data_todos, onDelete}) {
               <TableRow
                 key={row.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row">{row.title}</TableCell>
-                <TableCell align="right">{row.description}</TableCell>
-                <TableCell align="right">{formatTimestamp(row.due_time)}</TableCell>
-                <TableCell align="right">{row.status}</TableCell>
+                <TableCell component="th" scope="row">
+                  {editId === row.id ? (<TextField value={editTodo.title} onChange={(e)=>setEditTodo({...editTodo,title:e.target.value})}>
+                </TextField>):(row.title)}
+                </TableCell>
+                
                 <TableCell align="right">
-                  <Button onClick={() => update(row.id)}><EditIcon /></Button>
-                  <Button onClick={() => suppr(row.id)}><DeleteIcon /></Button>
+                  {editId === row.id ? (<TextField value={editTodo.description} onChange={(e)=>setEditTodo({...editTodo,description:e.target.value})}>
+                </TextField>):(row.description)}
+
+                </TableCell>
+                
+                <TableCell align="right">{editId === row.id ? (
+                                <DatePicker
+                                  selected={editTodo.due_time}
+                                  onChange={(date) => setEditTodo({...editTodo,due_time:date})}
+                                  showTimeSelect
+                                  timeFormat="HH:mm"
+                                  timeIntervals={5}
+                                  minDate={new Date()}
+                                  minTime={getMinDate(new Date(editTodo.due_time))}
+                                  maxTime={new Date().setHours(23, 59)}
+                                  dateFormat="dd/MM/yyyy HH:mm"
+                                  placeholderText="Choose Due Time"
+                                  customInput={<TextField fullWidth sx={{mb: 2}} disabled />}
+                                />
+                                ):(formatTimestamp(row.due_time))}
+                </TableCell>
+                  
+                
+                <TableCell align="right">
+                             {editId === row.id ? (   
+                                 <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={editTodo.status}
+                                    onChange={(e) => setEditTodo({...editTodo,status:e.target.value})}
+                                    fullWidth
+                                    sx={{mb: 2}}
+                                  >
+                                    <MenuItem value={"not started"}>Not Started</MenuItem>
+                                    <MenuItem value={"todo"}>To Do</MenuItem>
+                                    <MenuItem value={"in progress"}>In Progress</MenuItem>
+                                    <MenuItem value={"done"}>Done</MenuItem>
+                                  </Select>
+                                ):(row.status)}
+                </TableCell>
+                <TableCell align="right">
+                {editId === row.id ? (<>
+                    <Button onClick={() => save(row.id)}><SaveIcon></SaveIcon></Button>
+                    <Button onClick={() => close(row.id)}><CloseIcon></CloseIcon></Button></>
+                        ):(<>
+                    <Button onClick={() => update(row.id)}><EditIcon /></Button>
+                    <Button onClick={() => suppr(row.id)}><DeleteIcon /></Button></>)}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-    );
-  
-
-
-
-  
+    );  
 }   
 
 
@@ -162,7 +262,6 @@ export function PopperPopupState() {
   const [description, setDescription] = useState('');
   const [user_id, setUserId] = useState("");
   const [todos, setTodos] = useState([]);
-
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -192,7 +291,6 @@ export function PopperPopupState() {
     useEffect(() => {
         fetchUser(); 
     }, []);
-  
 
   const getMinDate = (selectedDate) => {
     const now = new Date();
@@ -211,9 +309,6 @@ export function PopperPopupState() {
     formatDate += date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":00";
     return formatDate;
    }
-
-
-
 
   return (
     
