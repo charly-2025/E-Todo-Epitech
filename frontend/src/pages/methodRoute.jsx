@@ -221,7 +221,7 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
                                   maxTime={new Date().setHours(23, 59)}
                                   dateFormat="dd/MM/yyyy HH:mm"
                                   placeholderText="Choose Due Time"
-                                  customInput={<TextField fullWidth disabled />}
+                                  customInput={<TextField fullWidth disabled InputProps={{ readOnly: true }}/>}
                                 />
                                 ):(formatTimestamp(row.due_time))}
                 </TableCell>
@@ -387,7 +387,7 @@ export function PopperPopupState() {
                 
                  <form onSubmit={create} > 
                      <Container maxWidth='xs'>
-                           <Paper elevation={15} sx={{position:"absolute",top:"-50%", left:"50%",marginTop: 8 , padding: 2}}>
+                           <Paper elevation={15} sx={{marginTop: 8 , padding: 2}}>
                            <Typography component='h1' sx={{marginTop: 2, textAlign: "center"}}>Create a New Todo</Typography>
                            <Button onClick={close} sx={{color:"black",margin:"2px",float:'right'}}>
                                 <CloseIcon></CloseIcon>
@@ -408,7 +408,7 @@ export function PopperPopupState() {
                                   maxTime={new Date().setHours(23, 59)}
                                   dateFormat="dd/MM/yyyy HH:mm"
                                   placeholderText="Choose Due Time"
-                                  customInput={<TextField label="Due Time" fullWidth sx={{mb: 2}} disabled />}
+                                  customInput={<TextField label="Due Time" fullWidth sx={{mb: 2}} disabled InputProps={{ readOnly: true }}/>}
                                 />
                                 <InputLabel id="demo-simple-select-label">Status : </InputLabel>
                                   <Select
