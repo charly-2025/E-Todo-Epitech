@@ -38,8 +38,6 @@ import {
 } from '@mui/material';
 
 
-
-
 function formatTimestamp(timestamp) {
   if (!timestamp) return "—";
   const date = new Date(timestamp);
@@ -50,8 +48,7 @@ function formatTimestamp(timestamp) {
   });
 }
 
-
-export function MyTable({data_todos, onDelete}) {
+export function MyTable({data_todos, onDelete, onUpdate}) {
   const [editId,setEditId] = useState(null)
   const [todos, setTodos] = useState([])
   const [editTodo, setEditTodo] = useState({title:"",description:"",due_time:"",status:""})
@@ -148,6 +145,7 @@ export function MyTable({data_todos, onDelete}) {
       });
       const data = await connection.json();
       console.log(data);
+      onUpdate(data);
   }
   const suppr = async (todo_id) => {
     const token = localStorage.getItem("token");
@@ -310,6 +308,14 @@ export function PopperPopupState() {
     return formatDate;
    }
 
+  const updateTodo = (editTodo) => {
+    setTodos(
+      prev=> prev.map(
+        todo =>(todo.id === editTodo.id ? editTodo : todo)
+      )
+    );
+  }
+
   return (
     
     <PopupState variant="popper" popupId="demo-popup-popper">
@@ -423,6 +429,7 @@ export function PopperPopupState() {
             <MyTable
               data_todos={todos}
               onDelete={(id) => setTodos(prev => prev.filter(todo => todo.id !== id))}
+              onUpdate={updateTodo}
             />
           )}
          </Container>
