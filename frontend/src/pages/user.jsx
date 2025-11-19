@@ -22,7 +22,7 @@ import { ETodoCalendar } from "./calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { MyTable,PopperPopupState } from './methodRoute';
 
-
+import { useMediaQuery } from '@mui/material';
 
   const NAVIGATION = [
   {
@@ -84,9 +84,6 @@ const demoTheme = createTheme({
   breakpoints: {
     values: {
       xs: 0,
-      sm: 600,
-      md: 600,
-      lg: 1200,
       xl: 1536,
     },
   },
@@ -117,12 +114,15 @@ function DemoPageContent({pathname}) {
   return (
     <Box
       sx={{
-        py: 4,
+        py: 5,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         textAlign: 'center',
+        width: '100vw',
+       
       }}>
+        
       {content}
     </Box>
   );
@@ -143,7 +143,7 @@ function CustomAppTitle() {
 
 function DashboardLayoutBasic(props) {
   const navigate = useNavigate();
-  const { window } = props;
+  const {window} = props;
   const [session, setSession] = useState(null);
 
 
@@ -193,6 +193,9 @@ function DashboardLayoutBasic(props) {
   }
   const router = useDemoRouter(lastPath);
 
+
+    
+
   return (
 
     <DemoProvider window={demoWindow}>
@@ -204,9 +207,9 @@ function DashboardLayoutBasic(props) {
         theme={demoTheme}
         window={demoWindow}
       >
-        <DashboardLayout
+        <DashboardLayout 
           slots={{
-            appTitle: CustomAppTitle,}}>
+            appTitle: CustomAppTitle,}} defaultSidebarCollapsed >
           <DemoPageContent pathname={router.pathname} />
         </DashboardLayout>
       </AppProvider>
