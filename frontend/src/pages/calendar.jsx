@@ -138,7 +138,7 @@ export function ETodoCalendar() {
                     return { style: { backgroundColor ,color} }
                 }}
             />
-            {selectedEvent && (
+            {selectedEvent  && (
                 <Modal open={isOpenEvent} onClose={() => setIsOpenEvent(false)}>
                     <Box sx={style}>
                         <Typography variant="h3" sx={{textAlign: "center"}}>{selectedEvent.title}</Typography>
