@@ -37,7 +37,6 @@ import {
 
 } from '@mui/material';
 
-
 function formatTimestamp(timestamp) {
   if (!timestamp) return "—";
   const date = new Date(timestamp);
@@ -48,8 +47,7 @@ function formatTimestamp(timestamp) {
   });
 }
 
-export function MyTable({data_todos, onDelete, onUpdate}) {
-  const [editId,setEditId] = useState(null)
+export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setEditId}) {
   const [todos, setTodos] = useState([])
   const [editTodo, setEditTodo] = useState({title:"",description:"",due_time:"",status:""})
   const [user_id, setUserId] = useState("");
@@ -248,11 +246,11 @@ export function MyTable({data_todos, onDelete, onUpdate}) {
                 </TableCell>
                 <TableCell align="center">
                 {editId === row.id ? (<>
-                    <Button onClick={() => save(row.id)}><SaveIcon></SaveIcon></Button>
-                    <Button onClick={() => close(row.id)}><CloseIcon></CloseIcon></Button></>
+                    <Button onClick={() => save(row.id)} disabled={onDisableAll}><SaveIcon></SaveIcon></Button>
+                    <Button onClick={() => close(row.id) } disabled={onDisableAll}><CloseIcon></CloseIcon></Button></>
                         ):(<>
-                    <Button onClick={() => update(row.id)}><EditIcon /></Button>
-                    <Button onClick={() => suppr(row.id)}><DeleteIcon /></Button></>)}
+                    <Button onClick={() => update(row.id)} disabled={onDisableAll}><EditIcon /></Button>
+                    <Button onClick={() => suppr(row.id)} disabled={onDisableAll}><DeleteIcon /></Button></>)}
                 </TableCell>
               </TableRow>
             ))}
@@ -265,12 +263,14 @@ export function MyTable({data_todos, onDelete, onUpdate}) {
 
 
 export function PopperPopupState() {
+  const [editId,setEditId] = useState(null)
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [status, setStatus] = useState('not started');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [user_id, setUserId] = useState("");
   const [todos, setTodos] = useState([]);
+  const [allDisable,setDisableAll] = useState(false);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -338,6 +338,7 @@ export function PopperPopupState() {
             setDescription("");
             setSelectedDate(new Date());
             setStatus("not started");
+            setDisableAll(false);
             };
 
           const create = async(e) =>{
@@ -368,14 +369,14 @@ export function PopperPopupState() {
             setDescription("");
             setSelectedDate(new Date());
             setStatus("not started");
-
+            setDisableAll(false);
            }
           
       return (
         <div>
           <Container sx={{ overflowX: 'auto', width: '100vw' }}>
-          <Button variant="contained" sx={{backgroundColor:"#147375",color:"white",margin:"10px",float:'center'}} 
-          {...bindToggle(popupState)}>
+          <Button disabled={allDisable || editId !== null } variant="contained" sx={{backgroundColor:"#147375",color:"white",margin:"10px",float:'center'}} 
+          onClick={()=>{setDisableAll(true); popupState.open()}}>
             Create a New Todo +
           </Button>
           <Popper {...bindPopper(popupState)} transition>
@@ -384,7 +385,7 @@ export function PopperPopupState() {
                 
                  <form onSubmit={create} > 
                      <Container maxWidth='xs'>
-                           <Paper elevation={15} sx={{marginTop: 8 , padding: 2}}>
+                           <Paper elevation={15} sx={{position:"absolute",top:"-50%", left:"50%",marginTop: 8 , padding: 2}}>
                            <Typography component='h1' sx={{marginTop: 2, textAlign: "center"}}>Create a New Todo</Typography>
                            <Button onClick={close} sx={{color:"black",margin:"2px",float:'right'}}>
                                 <CloseIcon></CloseIcon>
@@ -441,6 +442,9 @@ export function PopperPopupState() {
               data_todos={todos}
               onDelete={(id) => setTodos(prev => prev.filter(todo => todo.id !== id))}
               onUpdate={updateTodo}
+              onDisableAll={allDisable}
+              editId={editId}
+              setEditId={setEditId}
             />
           )}
          </Container>
