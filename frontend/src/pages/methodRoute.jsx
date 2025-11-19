@@ -353,11 +353,11 @@ export function PopperPopupState() {
                 "Content-Type": "application/json",
               },
               body:JSON.stringify({
-                title:title,
-                description:description,
+                title: title.charAt(0).toUpperCase() + title.slice(1),
+                description: description.charAt(0).toUpperCase() + description.slice(1),
                 due_time:formatDateTime(selectedDate),
                 user_id:user_id,
-                status:status
+                status: status,
               })
             });
             const data = await response.json();
@@ -418,9 +418,9 @@ export function PopperPopupState() {
                                     sx={{mb: 2}}
                                   >
                                     <MenuItem value={"not started"}>Not Started</MenuItem>
-                                    <MenuItem value={"todo"}>To Do</MenuItem>
-                                    <MenuItem value={"in progress"}>In Progress</MenuItem>
-                                    <MenuItem value={"done"}>Done</MenuItem>
+                                    <MenuItem value={"Todo"}>To Do</MenuItem>
+                                    <MenuItem value={"In progress"}>In Progress</MenuItem>
+                                    <MenuItem value={"Done"}>Done</MenuItem>
                                   </Select>
                                   
                              <Button className="select" type="submit" variant="contained" fullWidth sx={{mt: 1}}>Create New Todo</Button>

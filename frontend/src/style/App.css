@@ -2,7 +2,9 @@
   text-align: center;
 }
 
+.rbc-off-range {
+  background-color: transparent !important;
+  color: transparent !important;
+  pointer-events: none;
 
-
-
-
+}
