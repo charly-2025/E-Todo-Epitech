@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
-  etodo:
+  mysql:
     image: mysql:8
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_USER: etodo_user
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3307:3306"
@@ -16,23 +14,25 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
-      interval: 2s
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "etodo_user", "-p${MYSQL_PASSWORD}"]
+      interval: 5s
       timeout: 3s
       retries: 30
-      start_period: 90s
+      start_period: 30s
 
   backend:
     build: ./backend
-    container_name: backend
     ports:
       - "3001:3001"
-    env_file:
-      - ./.env
-    environment : 
-      MYSQL_HOST: etodo
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: etodo_user
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      PORT: ${PORT}
+      SECRET: ${SECRET}
     depends_on:
-      etodo:
+      mysql:
         condition: service_healthy
     volumes:
       - ./backend:/app
@@ -43,7 +43,6 @@ services:
 
   frontend:
     build: ./frontend
-    container_name: frontend
     ports:
       - "3000:3000"
     depends_on:
@@ -54,10 +53,9 @@ services:
     networks:
       - app-network
 
-  
-
 volumes:
   etodo-data:
+
 networks:
   app-network:
     driver: bridge
