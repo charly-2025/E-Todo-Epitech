@@ -379,17 +379,33 @@ export function PopperPopupState() {
           onClick={()=>{setDisableAll(true); popupState.open()}}>
             Create a New Todo +
           </Button>
-          <Popper {...bindPopper(popupState)} transition>
+          <Popper  {...bindPopper(popupState)} transition modifiers={[
+                              {
+                                name: "offset",
+                                options: {
+                                  offset: [0, 20],
+                                },
+                              },
+                              {
+                                name: "flip",
+                                enabled: false,
+                              }
+                            ]}
+                            sx={{
+                              left: "50% !important",
+                              top: "20px !important",
+                              transform: "translateX(-50%) !important"
+                            }}
+                          >
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
                 
                  <form onSubmit={create} > 
-                     <Container maxWidth='xs'>
-                           <Paper elevation={15} sx={{marginTop: 10 , padding: 2}}>
+                    < div style={{ minWidth:"250px",maxWidth:"420px"}}>  
+                           <Paper elevation={15} sx={{marginTop: 10 , padding: 2,position:"relative"}}>
+                            <Button onClick={close} sx={{color:"black",position:"absolute",top:10,right:10,fontWeight:"bold"}}>
+                                <CloseIcon></CloseIcon></Button>
                            <Typography component='h1' sx={{marginTop: 2, textAlign: "center"}}>Create a New Todo</Typography>
-                           <Button onClick={close} sx={{color:"black",margin:"2px",float:'right'}}>
-                                <CloseIcon></CloseIcon>
-                              </Button>
                            <Box sx={{mt: 1}}>
                              <TextField className="select"  placeholder= 'Enter Title' label="Title"  value={title} onChange={(e) => setTitle(e.target.value)} fullWidth autoFocus sx={{mb: 2}}required>  
                              </TextField>
@@ -427,9 +443,7 @@ export function PopperPopupState() {
                              
                            </Box>
                          </Paper>
-                         
-                       </Container>
-                      
+                        </div>
                      </form>
                 
               </Fade>
