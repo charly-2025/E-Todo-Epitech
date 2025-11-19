@@ -68,7 +68,7 @@ export default function LoginForm() {
     <form onSubmit={login}> 
      <div className="cercle1"></div>
     <Container sx={{}}>
-        <Box sx={{marginTop: 8, padding:2, position: "absolute", top: "40%" ,left: "50%", transform: 'translate(-50%, -50%)', width: '90vw',maxWidth: '800px'}}>
+        <Box sx={{marginTop: 8, padding:2, position: "absolute", top: "40%" ,left: "50%", transform: 'translate(-50%, -50%)', width: '90vw',maxWidth: '650px'}}>
           <Paper elevation={15} sx={{marginTop: 8 , padding: 2}}>
           <Avatar sx={{mx: 'auto', bgcolor: blue[500]}}>
             <LockOutlinedIcon/>

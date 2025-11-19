@@ -385,11 +385,7 @@ export function PopperPopupState() {
                 
                  <form onSubmit={create} > 
                      <Container maxWidth='xs'>
-<<<<<<< HEAD
                            <Paper elevation={15} sx={{marginTop: 10 , padding: 2}}>
-=======
-                           <Paper elevation={15} sx={{marginTop: 8 , padding: 2}}>
->>>>>>> 32f077921d87108c14782619c59f48f8e0070b56
                            <Typography component='h1' sx={{marginTop: 2, textAlign: "center"}}>Create a New Todo</Typography>
                            <Button onClick={close} sx={{color:"black",margin:"2px",float:'right'}}>
                                 <CloseIcon></CloseIcon>
