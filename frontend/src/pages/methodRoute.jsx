@@ -212,7 +212,7 @@ export function MyTable({data_todos, onDelete}) {
                                   maxTime={new Date().setHours(23, 59)}
                                   dateFormat="dd/MM/yyyy HH:mm"
                                   placeholderText="Choose Due Time"
-                                  customInput={<TextField fullWidth sx={{mb: 2}} disabled />}
+                                  customInput={<TextField fullWidth  disabled />}
                                 />
                                 ):(formatTimestamp(row.due_time))}
                 </TableCell>
@@ -226,7 +226,7 @@ export function MyTable({data_todos, onDelete}) {
                                     value={editTodo.status}
                                     onChange={(e) => setEditTodo({...editTodo,status:e.target.value})}
                                     fullWidth
-                                    sx={{mb: 2}}
+                                    
                                   >
                                     <MenuItem value={"not started"}>Not Started</MenuItem>
                                     <MenuItem value={"todo"}>To Do</MenuItem>
