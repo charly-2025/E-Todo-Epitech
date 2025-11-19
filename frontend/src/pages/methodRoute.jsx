@@ -246,7 +246,7 @@ export function MyTable({data_todos, onDelete, onUpdate}) {
                                   </Select>
                                 ):(row.status)}
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align="center">
                 {editId === row.id ? (<>
                     <Button onClick={() => save(row.id)}><SaveIcon></SaveIcon></Button>
                     <Button onClick={() => close(row.id)}><CloseIcon></CloseIcon></Button></>
@@ -261,8 +261,6 @@ export function MyTable({data_todos, onDelete, onUpdate}) {
       </TableContainer>
     );  
 }   
-
-
 
 
 
