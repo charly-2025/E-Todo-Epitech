@@ -54,6 +54,14 @@ export function MyTable({data_todos, onDelete, onUpdate}) {
   const [editTodo, setEditTodo] = useState({title:"",description:"",due_time:"",status:""})
   const [user_id, setUserId] = useState("");
 
+  const updateTodo = (editTodo) => {
+    setTodos(
+      prev=> prev.map(
+        todo =>(todo.id === editTodo.id ? editTodo : todo)
+      )
+    );
+  }
+
   useEffect(() => {
     const fetchTodos = async () => {
       const token = localStorage.getItem("token");
@@ -146,6 +154,7 @@ export function MyTable({data_todos, onDelete, onUpdate}) {
       const data = await connection.json();
       console.log(data);
       onUpdate(data);
+      updateTodo(data);
   }
   const suppr = async (todo_id) => {
     const token = localStorage.getItem("token");
