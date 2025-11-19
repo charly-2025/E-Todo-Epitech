@@ -51,7 +51,7 @@ function formatTimestamp(timestamp) {
 }
 
 
-export function MyTable({data_todos, onDelete}) {
+export function MyTable({data_todos, onDelete, onChange}) {
   const [editId,setEditId] = useState(null)
   const [todos, setTodos] = useState([])
   const [editTodo, setEditTodo] = useState({title:"",description:"",due_time:"",status:""})
@@ -139,16 +139,22 @@ export function MyTable({data_todos, onDelete}) {
           "Content-Type": "application/json",
         },
         body:JSON.stringify({
-                title:editTodo.title,
-                description:editTodo.description,
-                due_time:formatDateTime(editTodo.due_time),
-                user_id:user_id,
-                status:editTodo.status
-              })
+          id: editTodo.id,
+          title:editTodo.title,
+          description:editTodo.description,
+          due_time:formatDateTime(editTodo.due_time),
+          user_id:user_id,
+          status:editTodo.status
+        })
       });
       const data = await connection.json();
       console.log(data);
+      onChange(data)
+      console.log(todos)
   }
+
+
+
   const suppr = async (todo_id) => {
     const token = localStorage.getItem("token");
     try {
@@ -212,7 +218,7 @@ export function MyTable({data_todos, onDelete}) {
                                   maxTime={new Date().setHours(23, 59)}
                                   dateFormat="dd/MM/yyyy HH:mm"
                                   placeholderText="Choose Due Time"
-                                  customInput={<TextField fullWidth  disabled />}
+                                  customInput={<TextField fullWidth disabled />}
                                 />
                                 ):(formatTimestamp(row.due_time))}
                 </TableCell>
@@ -423,6 +429,7 @@ export function PopperPopupState() {
             <MyTable
               data_todos={todos}
               onDelete={(id) => setTodos(prev => prev.filter(todo => todo.id !== id))}
+              onChange={(data) => setTodos(prev => Array.isArray(prev) ? [...prev, data] : [data])}
             />
           )}
          </Container>
