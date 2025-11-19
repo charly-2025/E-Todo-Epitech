@@ -23,6 +23,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { MyTable,PopperPopupState } from './methodRoute';
 
 import { useMediaQuery } from '@mui/material';
+import ProfilePage from './Profilepage';
 
   const NAVIGATION = [
   {
@@ -96,7 +97,11 @@ function DemoPageContent({pathname}) {
   console.log(pathname)
   switch (pathname) {
         case '/planning':
-          content= <ETodoCalendar />
+          content= (
+            <>
+            <ETodoCalendar />
+            </>
+          )
           break;
         case '/todos':
           content = (
@@ -108,7 +113,11 @@ function DemoPageContent({pathname}) {
             )
           break;
         case '/profile/datas':
-          content = <Typography>datas</Typography>
+          content = (
+            <>
+            <ProfilePage />
+            </>
+          )
           break;
         }
   return (

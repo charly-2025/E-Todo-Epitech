@@ -244,7 +244,7 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
                                   </Select>
                                 ):(row.status)}
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align="center">
                 {editId === row.id ? (<>
                     <Button onClick={() => save(row.id)} disabled={onDisableAll}><SaveIcon></SaveIcon></Button>
                     <Button onClick={() => close(row.id) } disabled={onDisableAll}><CloseIcon></CloseIcon></Button></>
@@ -259,8 +259,6 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
       </TableContainer>
     );  
 }   
-
-
 
 
 
