@@ -37,7 +37,6 @@ import {
 
 } from '@mui/material';
 
-
 function formatTimestamp(timestamp) {
   if (!timestamp) return "—";
   const date = new Date(timestamp);
@@ -48,7 +47,7 @@ function formatTimestamp(timestamp) {
   });
 }
 
-export function MyTable({data_todos, onDelete, onUpdate}) {
+export function MyTable({data_todos, onDelete, onUpdate,onDisableAll}) {
   const [editId,setEditId] = useState(null)
   const [todos, setTodos] = useState([])
   const [editTodo, setEditTodo] = useState({title:"",description:"",due_time:"",status:""})
@@ -115,6 +114,7 @@ export function MyTable({data_todos, onDelete, onUpdate}) {
 
   const update = async (todo_id) => {
     setEditId(todo_id);
+    onDisableAll = true;
     todos.forEach(todo=>{
       if (todo.id === todo_id){
         setEditTodo({
@@ -248,11 +248,11 @@ export function MyTable({data_todos, onDelete, onUpdate}) {
                 </TableCell>
                 <TableCell align="right">
                 {editId === row.id ? (<>
-                    <Button onClick={() => save(row.id)}><SaveIcon></SaveIcon></Button>
-                    <Button onClick={() => close(row.id)}><CloseIcon></CloseIcon></Button></>
+                    <Button onClick={() => save(row.id)} disabled={onDisableAll}><SaveIcon></SaveIcon></Button>
+                    <Button onClick={() => close(row.id) } disabled={onDisableAll}><CloseIcon></CloseIcon></Button></>
                         ):(<>
-                    <Button onClick={() => update(row.id)}><EditIcon /></Button>
-                    <Button onClick={() => suppr(row.id)}><DeleteIcon /></Button></>)}
+                    <Button onClick={() => update(row.id)} disabled={onDisableAll}><EditIcon /></Button>
+                    <Button onClick={() => suppr(row.id)} disabled={onDisableAll}><DeleteIcon /></Button></>)}
                 </TableCell>
               </TableRow>
             ))}
@@ -273,6 +273,7 @@ export function PopperPopupState() {
   const [description, setDescription] = useState('');
   const [user_id, setUserId] = useState("");
   const [todos, setTodos] = useState([]);
+  const [allDisable,setDisableAll] = useState(false);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -340,6 +341,7 @@ export function PopperPopupState() {
             setDescription("");
             setSelectedDate(new Date());
             setStatus("not started");
+            setDisableAll(false);
             };
 
           const create = async(e) =>{
@@ -370,14 +372,14 @@ export function PopperPopupState() {
             setDescription("");
             setSelectedDate(new Date());
             setStatus("not started");
-
+            setDisableAll(false);
            }
           
       return (
         <div>
           <Container sx={{ overflowX: 'auto', width: '100vw' }}>
-          <Button variant="contained" sx={{backgroundColor:"#147375",color:"white",margin:"10px",float:'center'}} 
-          {...bindToggle(popupState)}>
+          <Button disabled={allDisable} variant="contained" sx={{backgroundColor:"#147375",color:"white",margin:"10px",float:'center'}} 
+          onClick={()=>{setDisableAll(true); popupState.open()}}>
             Create a New Todo +
           </Button>
           <Popper {...bindPopper(popupState)} transition>
@@ -443,6 +445,7 @@ export function PopperPopupState() {
               data_todos={todos}
               onDelete={(id) => setTodos(prev => prev.filter(todo => todo.id !== id))}
               onUpdate={updateTodo}
+              onDisableAll={allDisable}
             />
           )}
          </Container>
