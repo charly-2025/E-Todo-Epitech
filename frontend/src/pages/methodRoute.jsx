@@ -47,8 +47,7 @@ function formatTimestamp(timestamp) {
   });
 }
 
-export function MyTable({data_todos, onDelete, onUpdate,onDisableAll}) {
-  const [editId,setEditId] = useState(null)
+export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setEditId}) {
   const [todos, setTodos] = useState([])
   const [editTodo, setEditTodo] = useState({title:"",description:"",due_time:"",status:""})
   const [user_id, setUserId] = useState("");
@@ -114,7 +113,6 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll}) {
 
   const update = async (todo_id) => {
     setEditId(todo_id);
-    onDisableAll = true;
     todos.forEach(todo=>{
       if (todo.id === todo_id){
         setEditTodo({
@@ -267,6 +265,7 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll}) {
 
 
 export function PopperPopupState() {
+  const [editId,setEditId] = useState(null)
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [status, setStatus] = useState('not started');
   const [title, setTitle] = useState('');
@@ -378,7 +377,7 @@ export function PopperPopupState() {
       return (
         <div>
           <Container sx={{ overflowX: 'auto', width: '100vw' }}>
-          <Button disabled={allDisable} variant="contained" sx={{backgroundColor:"#147375",color:"white",margin:"10px",float:'center'}} 
+          <Button disabled={allDisable || editId !== null } variant="contained" sx={{backgroundColor:"#147375",color:"white",margin:"10px",float:'center'}} 
           onClick={()=>{setDisableAll(true); popupState.open()}}>
             Create a New Todo +
           </Button>
@@ -388,7 +387,7 @@ export function PopperPopupState() {
                 
                  <form onSubmit={create} > 
                      <Container maxWidth='xs'>
-                           <Paper elevation={15} sx={{marginTop: 8 , padding: 2}}>
+                           <Paper elevation={15} sx={{position:"absolute",top:"-50%", left:"50%",marginTop: 8 , padding: 2}}>
                            <Typography component='h1' sx={{marginTop: 2, textAlign: "center"}}>Create a New Todo</Typography>
                            <Button onClick={close} sx={{color:"black",margin:"2px",float:'right'}}>
                                 <CloseIcon></CloseIcon>
@@ -446,6 +445,8 @@ export function PopperPopupState() {
               onDelete={(id) => setTodos(prev => prev.filter(todo => todo.id !== id))}
               onUpdate={updateTodo}
               onDisableAll={allDisable}
+              editId={editId}
+              setEditId={setEditId}
             />
           )}
          </Container>
