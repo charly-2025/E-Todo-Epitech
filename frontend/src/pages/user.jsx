@@ -129,6 +129,7 @@ function DemoPageContent({pathname}) {
         alignItems: 'center',
         textAlign: 'center',
         width: '100vw',
+        overflowX:"hidden"
        
       }}>
         
