@@ -38,8 +38,6 @@ import {
 } from '@mui/material';
 
 
-
-
 function formatTimestamp(timestamp) {
   if (!timestamp) return "—";
   const date = new Date(timestamp);
@@ -50,8 +48,12 @@ function formatTimestamp(timestamp) {
   });
 }
 
+<<<<<<< HEAD
 
 export function MyTable({data_todos, onDelete, onChange}) {
+=======
+export function MyTable({data_todos, onDelete, onUpdate}) {
+>>>>>>> 34af75dc504dafeff28f9d1bacd43d224a731a77
   const [editId,setEditId] = useState(null)
   const [todos, setTodos] = useState([])
   const [editTodo, setEditTodo] = useState({title:"",description:"",due_time:"",status:""})
@@ -149,8 +151,12 @@ export function MyTable({data_todos, onDelete, onChange}) {
       });
       const data = await connection.json();
       console.log(data);
+<<<<<<< HEAD
       onChange(data)
       console.log(todos)
+=======
+      onUpdate(data);
+>>>>>>> 34af75dc504dafeff28f9d1bacd43d224a731a77
   }
 
 
@@ -316,6 +322,14 @@ export function PopperPopupState() {
     return formatDate;
    }
 
+  const updateTodo = (editTodo) => {
+    setTodos(
+      prev=> prev.map(
+        todo =>(todo.id === editTodo.id ? editTodo : todo)
+      )
+    );
+  }
+
   return (
     
     <PopupState variant="popper" popupId="demo-popup-popper">
@@ -429,7 +443,11 @@ export function PopperPopupState() {
             <MyTable
               data_todos={todos}
               onDelete={(id) => setTodos(prev => prev.filter(todo => todo.id !== id))}
+<<<<<<< HEAD
               onChange={(data) => setTodos(prev => Array.isArray(prev) ? [...prev, data] : [data])}
+=======
+              onUpdate={updateTodo}
+>>>>>>> 34af75dc504dafeff28f9d1bacd43d224a731a77
             />
           )}
          </Container>
