@@ -9,6 +9,7 @@
     "@mui/icons-material": "^7.3.5",
     "@mui/material": "^7.3.5",
     "@mui/styles": "^6.5.0",
+    "@mui/x-data-grid": "^8.19.0",
     "@mui/x-date-pickers": "^8.18.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",

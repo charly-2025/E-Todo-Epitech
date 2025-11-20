@@ -1,24 +1,16 @@
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Popper from '@mui/material/Popper';
 import PopupState, { bindToggle, bindPopper } from 'material-ui-popup-state';
 import Fade from '@mui/material/Fade';
 import { useState, useEffect } from 'react';
-import { styled } from '@mui/material/styles';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { AccessAlarm, FireTruck, ThreeDRotation } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
+
 import DeleteIcon from '@mui/icons-material/Delete';
-import SaveIcon from '@mui/icons-material/Save';
 import {
   Box,
   Container,
@@ -36,8 +28,23 @@ import {
   Card,
 
 } from '@mui/material';
+import Badge from '@mui/material/Badge';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import {
+  DataGrid,
+  Toolbar,
+  ToolbarButton,
+  ColumnsPanelTrigger,
+  FilterPanelTrigger,
+  ExportCsv,
+  ExportPrint,
+  QuickFilter,
+  QuickFilterControl,
+  QuickFilterClear,
+  QuickFilterTrigger,
+} from '@mui/x-data-grid';  
 
-
+import Tooltip from '@mui/material/Tooltip';
 import TableSortLabel from '@mui/material/TableSortLabel';
 
 import { visuallyHidden } from '@mui/utils';
@@ -56,6 +63,11 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
   const [todos, setTodos] = useState([])
   const [editTodo, setEditTodo] = useState({title:"",description:"",due_time:"",status:""})
   const [user_id, setUserId] = useState("");
+
+  const [selectedRows, setSelectedRows] = useState({
+    type: 'include',
+    ids: new Set(),
+  });
 
   const updateTodo = (editTodo) => {
     setTodos(
@@ -186,89 +198,100 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
     return ;
   }
 
+     const columns = [
+    { field: 'id', headerName: 'ID', width: 100 },
+    { field: 'title', headerName: 'Title', width: 200 },
+    { field: 'description', headerName: 'Description', width: 300 },
+    { field: 'due_time', headerName: 'Due_Time' , width: 230 },
+    { field: 'status', headerName: 'Status', width: 100 },
+  ];
+  
+  const rows = data_todos.map((row) => ({
+    id: row.id,
+    title: row.title,
+    description: row.description,
+    due_time: formatTimestamp(row.due_time),
+    status: row.status,
+    
+  }));   
+  
+  const paginationModel = { page: 0, pageSize: 20 };
+
+  const CustomToolbar = ({ selectedRows, onEdit, onDelete }) => (
+    <Toolbar>
+      {selectedRows.ids.size > 0 ? (
+        <>
+          
+          <ToolbarButton onClick={() => onEdit(selectedRows)   } >
+            <Badge>
+              <EditIcon />
+            </Badge>
+             
+          </ToolbarButton>
+        
+          <ToolbarButton onClick={() => onDelete(selectedRows)}>
+            <Badge>
+              <DeleteIcon />
+            </Badge>
+            
+          
+          </ToolbarButton>
+        
+        
+        </>
+      ) : (
+      <>
+      <FilterPanelTrigger
+        render={(props, state) => (
+          <ToolbarButton {...props} color="default">
+            <Badge badgeContent={state.filterCount} color="primary" variant="dot">
+              <FilterListIcon />
+            </Badge>
+          </ToolbarButton>
+        )}
+      />
+      </>
+    )}
+  </Toolbar>
+);
 
 
- 
+   const handleEdit = (ids) => {
+    console.log('Modifier les lignes:', ids);
 
+  };
 
+  const handleDelete = (ids) => {
+    console.log('Supprimer les lignes:', ids);
+
+  };
+
+  
   return (
-    
-      <TableContainer sx={{ minWidth: '100%' }} component={Paper}>
-        <Table  aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell align="right">Description</TableCell>
-              <TableCell align="right">Due Time</TableCell>
-              <TableCell align="right">Status</TableCell>
-              <TableCell align="center">Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data_todos.map((row) => (
-              <TableRow
-                key={row.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row">
-                  {editId === row.id ? (<TextField value={editTodo.title} onChange={(e)=>setEditTodo({...editTodo,title:e.target.value})}>
-                </TextField>):(row.title)}
-                </TableCell>
-                
-                <TableCell align="right">
-                  {editId === row.id ? (<TextField value={editTodo.description} onChange={(e)=>setEditTodo({...editTodo,description:e.target.value})}>
-                </TextField>):(row.description)}
 
-                </TableCell>
-                
-                <TableCell align="right">{editId === row.id ? (
-                                <DatePicker
-                                  selected={editTodo.due_time}
-                                  onChange={(date) => setEditTodo({...editTodo,due_time:date})}
-                                  showTimeSelect
-                                  timeFormat="HH:mm"
-                                  timeIntervals={5}
-                                  minDate={new Date()}
-                                  minTime={getMinDate(new Date(editTodo.due_time))}
-                                  maxTime={new Date().setHours(23, 59)}
-                                  dateFormat="dd/MM/yyyy HH:mm"
-                                  placeholderText="Choose Due Time"
-                                  customInput={<TextField fullWidth disabled InputProps={{ readOnly: true }}/>}
-                                />
-                                ):(formatTimestamp(row.due_time))}
-                </TableCell>
-                  
-                
-                <TableCell align="right">
-                             {editId === row.id ? (   
-                                 <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={editTodo.status}
-                                    onChange={(e) => setEditTodo({...editTodo,status:e.target.value})}
-                                    fullWidth
-                                    
-                                  >
-                                    <MenuItem value={"not started"}>Not Started</MenuItem>
-                                    <MenuItem value={"todo"}>To Do</MenuItem>
-                                    <MenuItem value={"in progress"}>In Progress</MenuItem>
-                                    <MenuItem value={"done"}>Done</MenuItem>
-                                  </Select>
-                                ):(row.status)}
-                </TableCell>
-                <TableCell align="center">
-                {editId === row.id ? (<>
-                    <Button onClick={() => save(row.id)} disabled={onDisableAll}><SaveIcon></SaveIcon></Button>
-                    <Button onClick={() => close(row.id) } disabled={onDisableAll}><CloseIcon></CloseIcon></Button></>
-                        ):(<>
-                    <Button onClick={() => update(row.id)} disabled={onDisableAll}><EditIcon /></Button>
-                    <Button onClick={() => suppr(row.id)} disabled={onDisableAll}><DeleteIcon /></Button></>)}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    
+    <Box>
+      <Paper sx={{ height: '70vh', width: '100%' }}>
+        <DataGrid
+        sx={{ border: 0 }}
+        rows={rows}
+        columns={columns}
+        initialState={{ pagination: { paginationModel } }}
+        checkboxSelection
+        pageSizeOptions={[5, 15]}
+        rowSelectionModel={selectedRows}
+        onRowSelectionModelChange={(newModel) => {
+          setSelectedRows(newModel ?? { type: 'include', ids: new Set() });
+        }}
+        slots={{
+          toolbar: CustomToolbar,
+        }}
+        slotProps={{
+           toolbar: { selectedRows, onEdit: handleEdit, onDelete: handleDelete },
+        }}
+        showToolbar
+      />
+      </Paper>
+    </Box>
     );  
   
   }
