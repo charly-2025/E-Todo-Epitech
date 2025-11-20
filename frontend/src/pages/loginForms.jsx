@@ -32,12 +32,13 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { blue } from '@mui/material/colors';
 import { Link, useNavigate } from "react-router-dom";
 import '../style/forms.css';
-
-
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 
 
 export default function LoginForm() {
+  const [showPassword,setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [valide, setinvalide] = useState(false);
@@ -63,6 +64,15 @@ export default function LoginForm() {
     }
   };
 
+
+  const changeShowPassword = () => {
+    if(showPassword){
+      setShowPassword(false)
+    } else {
+      setShowPassword(true)
+    }
+  }
+
   return (
 
     <form onSubmit={login}> 
@@ -78,8 +88,29 @@ export default function LoginForm() {
             <TextField className="select"  placeholder= 'Enter login-name' label="Login-name" fullWidth autoFocus sx={{mb: 2}} value={email} onChange={(e) => setEmail(e.target.value)} required>
               
             </TextField>
-            <TextField className="select" placeholder='Enter password' label="Password"  fullWidth type="password" value={password} onChange={(e) => setPassword(e.target.value)} required>
-            </TextField>
+            <TextField 
+                className="select" 
+                placeholder='Enter password' 
+                label="Password"  
+                fullWidth 
+                type={ showPassword ? "text" :"password"} 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                required 
+                slotProps={{
+                  input:{
+                    endAdornment:(
+                      <InputAdornment position="end">
+                        <Button onClick={changeShowPassword}>
+                            { showPassword ? (
+                              <VisibilityOffIcon></VisibilityOffIcon>
+                              ):(
+                              <VisibilityIcon></VisibilityIcon>)}
+                          </Button>
+                      </InputAdornment>
+                    )
+                  }
+                }}/>
             {valide && (
               <Alert severity="warning">Login name or password are incorrect.</Alert>
             )}

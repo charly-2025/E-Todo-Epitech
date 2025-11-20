@@ -30,9 +30,13 @@ import { blue } from '@mui/material/colors';
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import '../style/forms.css';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
 
 
 export default function RegisterForm() {
+  const [showPassword,setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [firstname, setfirstname] = useState('');
   const [name, setName] = useState('');
@@ -65,6 +69,14 @@ export default function RegisterForm() {
     
   };
 
+  const changeShowPassword = () => {
+    if(showPassword){
+      setShowPassword(false)
+    } else {
+      setShowPassword(true)
+    }
+  }
+
   return (
     <form onSubmit={Register} > 
       <div className="cercle1"></div>
@@ -85,8 +97,29 @@ export default function RegisterForm() {
                     <TextField className="select" placeholder= 'Email' label="Email" id="outlined-input" fullWidth autoFocus sx={{mb: 2}} value={email} onChange={(e) => setEmail(e.target.value)} required>
                     </TextField>
 
-                    <TextField className="select" placeholder='Enter password' label="Password" fullWidth type="password" value={password} onChange={(e) => setPassword(e.target.value)} required>
-                    </TextField>
+                    <TextField 
+                          className="select" 
+                          placeholder='Enter password'
+                          label="Password"  
+                          fullWidth 
+                          type={ showPassword ? "text" :"password"} 
+                          value={password} 
+                          onChange={(e) => setPassword(e.target.value)} 
+                          required 
+                          slotProps={{
+                          input:{
+                          endAdornment:(
+                          <InputAdornment position="end">
+                              <Button onClick={changeShowPassword}>
+                                { showPassword ? (
+                                    <VisibilityOffIcon></VisibilityOffIcon>
+                                    ):(
+                                    <VisibilityIcon></VisibilityIcon>)}
+                                </Button>
+                            </InputAdornment>
+                          )
+                         }
+                      }}/>
             
                     <Button className="select" type="submit" variant="contained" fullWidth sx={{mt: 1}}>Register</Button>
                 </Box>
