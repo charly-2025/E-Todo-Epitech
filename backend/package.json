@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend communicate with the database and manages each user who can create todos and manages them. ",
   "main": "index.js",
   "scripts": {
     "start": "cd script/src && node index.js",
