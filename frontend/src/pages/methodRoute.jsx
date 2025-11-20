@@ -203,10 +203,10 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
 
      const columns = [
     { field: 'id', headerName: 'ID', width: 150 },
-    { field: 'title', headerName: 'Title', width: 250 },
-    { field: 'description', headerName: 'Description', width: 350 },
-    { field: 'due_time', headerName: 'Due_Time' , width: 250 },
-    { field: 'status', headerName: 'Status', width: 200 },
+    { field: 'title', headerName: 'Title', width: 350 },
+    { field: 'description', headerName: 'Description', width: 400 },
+    { field: 'due_time', headerName: 'Due_Time' , width: 350 },
+    { field: 'status', headerName: 'Status', width: 300 },
   ];
   
   const rows = data_todos.map((row) => ({
