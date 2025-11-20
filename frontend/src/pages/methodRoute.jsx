@@ -7,10 +7,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { AccessAlarm, FireTruck, Search, ThreeDRotation } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 
 import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
+import Autocomplete from '@mui/material/Autocomplete';
 import {
   Box,
   Container,
@@ -80,7 +83,7 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
   useEffect(() => {
     const fetchTodos = async () => {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3001/todos", {
+      const res = await fetch("http://localhost:3000/todos", {
         headers: { "Authorization": "Bearer " +token }
       });
       const data = await res.json();
@@ -93,7 +96,7 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
   const fetchDataUser = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3001/user", {
+      const response = await fetch("http://localhost:3000/user", {
         method: "GET",
         headers: {
           "Authorization": "Bearer "+token,
@@ -152,7 +155,7 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
     setEditId(null);
     console.log("save");
     const token = localStorage.getItem("token");
-    const connection = await fetch("http://localhost:3001/todos/" +todo_id, {
+    const connection = await fetch("http://localhost:3000/todos/" +todo_id, {
         method: "PUT",
         headers: {
           "Authorization": "Bearer " +token,
@@ -178,7 +181,7 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
   const suppr = async (todo_id) => {
     const token = localStorage.getItem("token");
     try {
-      const connection = await fetch("http://localhost:3001/todos/" +todo_id, {
+      const connection = await fetch("http://localhost:3000/todos/" +todo_id, {
         method: "DELETE",
         headers: {
           "Authorization": "Bearer " +token,
@@ -298,6 +301,7 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
 
 
 export function PopperPopupState() {
+  const [searchTodo,setSearchTodo] = useState("")
   const [editId,setEditId] = useState(null)
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [status, setStatus] = useState('not started');
@@ -310,7 +314,7 @@ export function PopperPopupState() {
   useEffect(() => {
     const fetchTodos = async () => {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3001/todos", {
+      const res = await fetch("http://localhost:3000/todos", {
         headers: { "Authorization": "Bearer " +token }
       });
       const data = await res.json();
@@ -321,7 +325,7 @@ export function PopperPopupState() {
 
   const fetchUser = async () => {
     const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3001/user", {
+      const response = await fetch("http://localhost:3000/user", {
         method: "GET",
         headers: {
           "Authorization": "Bearer "+ token,
@@ -381,7 +385,7 @@ export function PopperPopupState() {
             popupState.close();
             console.log(formatDateTime(selectedDate),status,title,description,user_id);
             const token = localStorage.getItem("token");
-            const response = await fetch("http://localhost:3001/todos",{
+            const response = await fetch("http://localhost:3000/todos",{
               method:"POST",
               headers: {
                 "Authorization": "Bearer "+ token,
@@ -410,8 +414,8 @@ export function PopperPopupState() {
       return (
         <div>
           <Container sx={{ overflowX: 'auto', width: '100vw' }}>
-          <Button disabled={allDisable || editId !== null } variant="contained" sx={{backgroundColor:"#147375",color:"white",margin:"10px",float:'center'}} 
-          onClick={()=>{setDisableAll(true); popupState.open()}}>
+          <Button disabled={allDisable || editId !== null } variant="contained" sx={{backgroundColor:"#147375",color:"white",margin:"10px",float:'right'}} 
+          onClick={()=>{setDisableAll(true);popupState.open()}}>
             Create a New Todo +
           </Button>
           <Popper  {...bindPopper(popupState)} transition modifiers={[
@@ -486,7 +490,14 @@ export function PopperPopupState() {
           </Popper>
            {todos.length === 0 ? (
             <Typography>No todos for you right now</Typography>
-           ) : (
+           ) : (<>
+           <ComboBox 
+            Options={todos}
+            setSearchTodo={setSearchTodo}
+            searchTodo={searchTodo}
+            allDisable={allDisable}
+
+            />
             <MyTable
               data_todos={todos}
               onDelete={(id) => setTodos(prev => prev.filter(todo => todo.id !== id))}
@@ -494,7 +505,10 @@ export function PopperPopupState() {
               onDisableAll={allDisable}
               editId={editId}
               setEditId={setEditId}
+              sx={{marginTop:"20px"}}
+  
             />
+            </>
           )}
          </Container>
         </div>
@@ -507,3 +521,26 @@ export function PopperPopupState() {
 
 }
 
+export function ComboBox({Options, searchTodo, setSearchTodo,allDisable}) {
+  const SearchingTodo = (event, option) => {
+    if (option) {
+      setSearchTodo(option.id);
+    } else {
+      setSearchTodo("");
+  };
+  }
+  if(Options != undefined && !allDisable){
+      return (
+        <Autocomplete
+          disablePortal
+          options={Options}
+          getOptionLabel={(option)=>option.title+"; "+option.description+"; "+formatTimestamp(option.due_time)+"; "+option.status}
+          sx={{minWidth:350,maxWidth:650,marginTop:10,float:"center"}}
+          onChange={SearchingTodo}
+          renderInput={(params) => <TextField {...params} label="Search Todo"/>}
+        />
+      );
+    } else {
+      return <div>Aucune option n'est valide</div>
+    } 
+}

@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import '../style/user.css'
 import { ETodoCalendar } from "./calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { MyTable,PopperPopupState } from './methodRoute';
+import { MyTable,PopperPopupState,ComboBox } from './methodRoute';
 
 import { useMediaQuery } from '@mui/material';
 import ProfilePage from './Profilepage';
@@ -92,7 +92,6 @@ const demoTheme = createTheme({
 
 function DemoPageContent({pathname}) {
   let content = ''
-  localStorage.setItem("lastPath",pathname);
   console.log("local set item with : "+pathname);
   console.log(pathname)
   switch (pathname) {
@@ -106,9 +105,8 @@ function DemoPageContent({pathname}) {
         case '/todos':
           content = (
               <>
-              <Typography>Your Todos</Typography>
+              <Typography sx={{marginBottom:"20px",fontSize:"1.6em",fontWeight:"bold"}}>Your Todos</Typography>
               <PopperPopupState/>
-              <MyTable />
               </>
             )
           break;
@@ -161,7 +159,7 @@ function DashboardLayoutBasic(props) {
     const fetchUserData = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await fetch("http://localhost:3001/user", {
+        const response = await fetch("http://localhost:3000/user", {
           method: "GET",
           headers: {
             "Authorization": "Bearer "+ token,
@@ -188,7 +186,6 @@ function DashboardLayoutBasic(props) {
       signOut: () => {
         localStorage.removeItem("auth");
         localStorage.removeItem("token");
-        localStorage.removeItem("lastPath")
         setSession(null);
         navigate('/login')
       },
@@ -197,11 +194,8 @@ function DashboardLayoutBasic(props) {
 
   const demoWindow = window !== undefined ? window : undefined;
   
-  let lastPath = localStorage.getItem("lastPath");
-  if(lastPath === ""){
-    localStorage.setItem("lastPath", '/planning')
-  }
-  const router = useDemoRouter(lastPath);
+
+  const router = useDemoRouter("/planning");
 
 
     

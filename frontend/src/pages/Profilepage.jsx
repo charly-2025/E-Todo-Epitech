@@ -32,7 +32,7 @@ export default function ProfilePage(){
     const fetchUserData = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await fetch("http://localhost:3001/user", {
+        const response = await fetch("http://localhost:3000/user", {
           method: "GET",
           headers: {
             "Authorization": "Bearer "+ token,
