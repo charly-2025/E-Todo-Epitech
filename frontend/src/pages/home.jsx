@@ -28,7 +28,7 @@ import {
 } from '@mui/icons-material';
 import { Link, useNavigate } from "react-router-dom";
 import "../style/home.css"
-import Particles from '../utils/ghost';
+
 
 
 

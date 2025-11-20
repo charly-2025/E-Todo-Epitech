@@ -202,11 +202,11 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
   }
 
      const columns = [
-    { field: 'id', headerName: 'ID', width: 100 },
-    { field: 'title', headerName: 'Title', width: 200 },
-    { field: 'description', headerName: 'Description', width: 300 },
-    { field: 'due_time', headerName: 'Due_Time' , width: 230 },
-    { field: 'status', headerName: 'Status', width: 100 },
+    { field: 'id', headerName: 'ID', width: 150 },
+    { field: 'title', headerName: 'Title', width: 250 },
+    { field: 'description', headerName: 'Description', width: 350 },
+    { field: 'due_time', headerName: 'Due_Time' , width: 250 },
+    { field: 'status', headerName: 'Status', width: 200 },
   ];
   
   const rows = data_todos.map((row) => ({
@@ -301,7 +301,6 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
 
 
 export function PopperPopupState() {
-  const [searchTodo,setSearchTodo] = useState("")
   const [editId,setEditId] = useState(null)
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [status, setStatus] = useState('not started');
@@ -414,7 +413,7 @@ export function PopperPopupState() {
       return (
         <div>
           <Container sx={{ overflowX: 'auto', width: '100vw' }}>
-          <Button disabled={allDisable || editId !== null } variant="contained" sx={{backgroundColor:"#147375",color:"white",margin:"10px",float:'right'}} 
+          <Button disabled={allDisable || editId !== null } variant="contained" sx={{backgroundColor:"#147375",color:"white",margin:"10px",float:'center'}} 
           onClick={()=>{setDisableAll(true);popupState.open()}}>
             Create a New Todo +
           </Button>
@@ -491,13 +490,6 @@ export function PopperPopupState() {
            {todos.length === 0 ? (
             <Typography>No todos for you right now</Typography>
            ) : (<>
-           <ComboBox 
-            Options={todos}
-            setSearchTodo={setSearchTodo}
-            searchTodo={searchTodo}
-            allDisable={allDisable}
-
-            />
             <MyTable
               data_todos={todos}
               onDelete={(id) => setTodos(prev => prev.filter(todo => todo.id !== id))}
@@ -521,26 +513,4 @@ export function PopperPopupState() {
 
 }
 
-export function ComboBox({Options, searchTodo, setSearchTodo,allDisable}) {
-  const SearchingTodo = (event, option) => {
-    if (option) {
-      setSearchTodo(option.id);
-    } else {
-      setSearchTodo("");
-  };
-  }
-  if(Options != undefined && !allDisable){
-      return (
-        <Autocomplete
-          disablePortal
-          options={Options}
-          getOptionLabel={(option)=>option.title+"; "+option.description+"; "+formatTimestamp(option.due_time)+"; "+option.status}
-          sx={{minWidth:350,maxWidth:650,marginTop:10,float:"center"}}
-          onChange={SearchingTodo}
-          renderInput={(params) => <TextField {...params} label="Search Todo"/>}
-        />
-      );
-    } else {
-      return <div>Aucune option n'est valide</div>
-    } 
-}
+
