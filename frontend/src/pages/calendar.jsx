@@ -78,7 +78,7 @@ export function ETodoCalendar() {
     const planning = async () => {
         const token = localStorage.getItem("token");
         try {
-            const response = await fetch("http://localhost:3001/user/todos", {
+            const response = await fetch("http://localhost:3000/user/todos", {
                 method: "GET",
                 headers: {
                     "Authorization": "Bearer " +token,

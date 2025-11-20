@@ -28,6 +28,7 @@ import {
 } from '@mui/icons-material';
 import { Link, useNavigate } from "react-router-dom";
 import "../style/home.css"
+import Particles from '../utils/ghost';
 
 
 
@@ -35,8 +36,10 @@ export default function Home() {
     const [menu, setmenu] = useState(false);
     const navigate = useNavigate();
 
-    return (
+    return(
+    
         <div className="page">
+            
             <header>
                 <nav className='nav'>
                     <div className="inside-nav">

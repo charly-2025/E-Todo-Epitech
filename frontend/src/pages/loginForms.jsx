@@ -45,7 +45,7 @@ export default function LoginForm() {
 
   const login = async (e)=>{
     e.preventDefault();
-    const connection = await fetch("http://localhost:3001/login",{
+    const connection = await fetch("http://localhost:3000/login",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
