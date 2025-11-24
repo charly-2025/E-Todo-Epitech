@@ -39,7 +39,8 @@ app.get("/",(req,res) =>{
 	res.send("Welcome");
 });
 
-const PORT = process.env.PORT;
+let PORT = (process.env.PORT);
+if (!PORT) PORT = 3000;
 app.listen(PORT,()=>{
 	console.log("server launch on the port : "+PORT);
 });
