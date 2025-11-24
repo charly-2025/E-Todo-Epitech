@@ -16,7 +16,7 @@ router.post("/",async(req,res)=>{
 	
 	const [result] = await db.promise().query("INSERT INTO user (email,password,name,firstname) VALUES (?,?,?,?)",[email,hashedPassword,name,firstname]);
 	const token = jwt.sign({id:result.insertId},process.env.SECRET,{expiresIn:"360h"});
-	res.json({token});
+	res.json({token: "Token of the newly registered user"});
 });
 
 module.exports = router;

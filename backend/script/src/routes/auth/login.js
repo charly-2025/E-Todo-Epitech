@@ -16,7 +16,7 @@ router.post("/",async(req,res)=>{
 	const same = await bcrypt.compareSync(password,user.password);
 	if(!same) return res.status(400).json({msg:"Invalid Credentials"});
 	const token = jwt.sign({id:user.id},process.env.SECRET,{expiresIn:"360h"});
-	res.json({token});
+	res.json({token: "Token of the newly logged in user"});
 });
 
 module.exports = router;
