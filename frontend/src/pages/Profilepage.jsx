@@ -125,13 +125,13 @@ function BoxUserInfo(user_data,todos,isUpdate,setIsUpdate){
     
   
     return (
-        <Container>
+      <Container>
             <Box sx={{width: '100%', minHeight: '100px'}}>
               {user_data.id ? (<>
-              <Box sx={{ width: '100%'}}>
-                  <Grid sx={{alignContent:"stretch",display:{ md:"flex"}, flexDirection:{md:"column"}}} container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                        <Grid size={4} >
-                          <Item sx={{height:"100%",display:"flex",justifyContent:"center"}}>
+              <Box sx={{ width: '100%',flexGrow:1}}>
+                  <Grid sx={{alignContent:"stretch",width:"100%",backgroundColor:"red"}} container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                        <Grid size={{ xs:12, sm:4}} >
+                          <Item fullWidth sx={{height:"100%",display:"flex",justifyContent:"center",}}>
                             <Box sx={{maxWidth:300}}>
                               <AccountCircleIcon sx={{marginTop:1,width:"70%",height:"auto",borderRadius:50,backgroundColor:"white",border:"-15px solid white"}}></AccountCircleIcon>
                               <Button>Import photo</Button>
@@ -152,7 +152,7 @@ function BoxUserInfo(user_data,todos,isUpdate,setIsUpdate){
                             </Box>
                           </Item>
                         </Grid>
-                        <Grid size="grow">
+                        <Grid size={{xs:12, sm:8}}>
                           <Item sx={{height:"100%"}}>
                               <Box sx={{
                                 display:"flex",
@@ -202,10 +202,11 @@ function BoxUserInfo(user_data,todos,isUpdate,setIsUpdate){
                         </Grid>
                   </Grid>
             </Box>
+            
               </>):(
                 <Typography>No user data</Typography>)}
             </Box>
-        </Container>
+          </Container>
     )
 
 }
