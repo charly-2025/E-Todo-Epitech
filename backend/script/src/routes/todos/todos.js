@@ -5,7 +5,7 @@ const auth = require("../../middleware/auth");
 
 
 router.get("/",auth,async(req,res)=>{
-    const [data] = await db.promise().query("SELECT * FROM todo WHERE user_id = ?",[req.user.id]);
+    const [data] = await db.promise().query("SELECT * FROM todo;");
     if (data.length === 0 ) return res.status(404).json({msg:"Not found"});
     res.json(data);
 })
@@ -19,6 +19,7 @@ router.get("/:id",auth,async(req,res)=>{
 
 router.post("/",auth,async(req,res)=>{
     const {title,description,due_time,user_id,status} = req.body;
+    if(!title || !description || !due_time || !status) return res.status(400).json({msg:"bad parameter"});
     await db.promise().query("INSERT INTO todo (user_id,title,description,due_time,status) VALUES (?,?,?,?,?);",[user_id,title,description,due_time,status]);
     const [data] = await db.promise().query("SELECT * FROM todo ORDER BY id DESC LIMIT 1;")
     return res.json(data[0]);
