@@ -5,7 +5,7 @@ const auth = require("../../middleware/auth");
 
 
 router.get("/",auth,async(req,res)=>{
-    const [data] = await db.promise().query("SELECT * FROM todo WHERE user_id = ?",[req.user.id]);
+    const [data] = await db.promise().query("SELECT * FROM todo;");
     if (data.length === 0 ) return res.status(404).json({msg:"Not found"});
     res.json(data);
 })
