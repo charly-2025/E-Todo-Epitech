@@ -24,8 +24,9 @@ router.put("/:id",auth,async(req,res)=>{
     const user_id = req.params.id;
     if(req.user.id!=user_id) return res.status(401).json({msg:"No token, authorization denied"});
     const { email, password, name, firstname } = req.body;
+    if(!email || !password || !name || !firstname) return res.status(400).json({msg:"bad parameter"});
     let [user] = await db.promise().query("SELECT * FROM user WHERE id = ?",[user_id]);
-    if (user.length <= 0) return res.status(400).json({msg:"Not found"});
+    if (user.length <= 0) return res.status(404).json({msg:"Not found"});
 	user = user[0];
     const same = await bcrypt.compareSync(password,user.password);
     let newPassword;
@@ -43,6 +44,8 @@ router.put("/:id",auth,async(req,res)=>{
 router.delete("/:id",auth,async(req,res)=>{
     const user_id = req.params.id;
     if(req.user.id!=user_id) return res.status(401).json({msg:"No token, authorization denied"});
+    const [user] = await db.promise().query("SELECT * FROM todo WHERE id = ?;",[user_id]);
+    if (user.length <= 0) return res.status(404).json({msg:"Not found"});
     await db.promise().query("DELETE FROM user WHERE id = ?",[user_id]);
     return res.json({msg:"Successfully deleted record number: "+user_id});
 })

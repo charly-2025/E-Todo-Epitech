@@ -9,7 +9,7 @@ router.post("/",async(req,res)=>{
 	if(!email || !password || !name || !firstname) return res.status(400).json({msg:"bad parameter"});
 
 	const [existingUser] = await db.promise().query("SELECT * FROM user WHERE email = ?",[email]);
-	if (existingUser.length>0) return res.status(400).json({msg:"Account already exists"});
+	if (existingUser.length>0) return res.status(409).json({msg:"Account already exists"});
 
 	const salt = bcrypt.genSaltSync(10);
 	const hashedPassword = await bcrypt.hashSync(password, salt);
