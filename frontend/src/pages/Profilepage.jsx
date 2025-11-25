@@ -129,9 +129,9 @@ function BoxUserInfo(user_data,todos,isUpdate,setIsUpdate){
             <Box sx={{width: '100%', minHeight: '100px'}}>
               {user_data.id ? (<>
               <Box sx={{ width: '100%'}}>
-                  <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                  <Grid sx={{alignContent:"stretch",display:{ md:"flex"}, flexDirection:{md:"column"}}} container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                         <Grid size={4} >
-                          <Item sx={{display:"flex",justifyContent:"center"}}>
+                          <Item sx={{height:"100%",display:"flex",justifyContent:"center"}}>
                             <Box sx={{maxWidth:300}}>
                               <AccountCircleIcon sx={{marginTop:1,width:"70%",height:"auto",borderRadius:50,backgroundColor:"white",border:"-15px solid white"}}></AccountCircleIcon>
                               <Button>Import photo</Button>
@@ -153,7 +153,7 @@ function BoxUserInfo(user_data,todos,isUpdate,setIsUpdate){
                           </Item>
                         </Grid>
                         <Grid size="grow">
-                          <Item>
+                          <Item sx={{height:"100%"}}>
                               <Box sx={{
                                 display:"flex",
                                 flexDirection:"column",
