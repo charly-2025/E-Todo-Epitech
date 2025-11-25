@@ -1,7 +1,8 @@
+import React from 'react';
 import Popper from '@mui/material/Popper';
 import PopupState, { bindToggle, bindPopper } from 'material-ui-popup-state';
 import Fade from '@mui/material/Fade';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import InputLabel from '@mui/material/InputLabel';
@@ -10,6 +11,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { AccessAlarm, FireTruck, Search, ThreeDRotation } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
+import Snackbar from '@mui/material/Snackbar';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
@@ -38,6 +40,7 @@ import {
   Toolbar,
   ToolbarButton,
   ColumnsPanelTrigger,
+  GridCellModes,
   FilterPanelTrigger,
   ExportCsv,
   ExportPrint,
@@ -64,7 +67,8 @@ function formatTimestamp(timestamp) {
 
 export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setEditId}) {
   const [todos, setTodos] = useState([])
-  const [editTodo, setEditTodo] = useState({title:"",description:"",due_time:"",status:""})
+  const [editedTodos, setEditedTodos] = useState({});
+  const [editIds, setEditIds] = useState([]);
   const [user_id, setUserId] = useState("");
 
   const [selectedRows, setSelectedRows] = useState({
@@ -72,18 +76,31 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
     ids: new Set(),
   });
 
-  const updateTodo = (editTodo) => {
-    setTodos(
-      prev=> prev.map(
-        todo =>(todo.id === editTodo.id ? editTodo : todo)
-      )
+  const [snackbar, setSnackbar] = useState(null);
+
+  const handleCloseSnackbar = () => setSnackbar(null);
+
+  const useFakeMutation = () => {
+    return useCallback(
+      (user) =>
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            if (user.title?.trim() === '' && (user.status.toLowerCase() == 'not started' || user.status.toLowerCase() == 'in progress' || user.status.toLowerCase() == 'todo' || user.status.toLowerCase() == 'done')){
+              reject(new Error('Error while updating'));
+            } else {
+              resolve({ ...user, title: user.title?.toUpperCase() });
+            }
+          }, 200);
+        }),
+      [],
     );
-  }
+  };
+
 
   useEffect(() => {
     const fetchTodos = async () => {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3000/todos", {
+      const res = await fetch("http://localhost:3000/user/todos", {
         headers: { "Authorization": "Bearer " +token }
       });
       const data = await res.json();
@@ -113,72 +130,72 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
     fetchDataUser();  
   }, []);
 
-  const getMinDate = (selectedDate) => {
-    const now = new Date();
-    const isToday = selectedDate.toDateString() === now.toDateString();
-    if(isToday){
-      return now;
-    } else {
-      const newDate = new Date(selectedDate);
-      newDate.setHours(0,0,0,0);
-      return newDate;
-    }
-  }
+
 
   const formatDateTime = (date)=>{
     let formatDate = "";
-    formatDate += date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":00";
+    formatDate += date[6]+date[7]+date[8]+date[9]+'-'+date[3]+date[4]+'-'+date[0]+date[1]+date[10]+date[11]+date[12]+date[13]+date[14]+date[15]+':00'
     return formatDate;
    }
 
-  const update = async (todo_id) => {
-    setEditId(todo_id);
-    todos.forEach(todo=>{
-      if (todo.id === todo_id){
-        setEditTodo({
-          title:todo.title,
-          description:todo.description,
-          due_time:new Date(todo.due_time),
-          status:todo.status
-        })
-        console.log(editTodo)
+
+  const mutateRow = useFakeMutation();
+
+  const processRowUpdate = useCallback(
+    async (todoedit) => {
+      console.log('Edit todo: ', todoedit);
+      const token = localStorage.getItem("token");
+      try {
+        const response = await fetch("http://localhost:3000/todos/" + todoedit.id, {
+          method: "PUT",
+          headers: {
+            "Authorization": "Bearer " +token,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: todoedit.title,
+            description: todoedit.description,
+            due_time: todoedit.due_time,
+            user_id: todoedit.user_id,
+            status: todoedit.status,
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error(response.status)
+        }
+        
+        const Todoupdated = await response.json();
+        onUpdate(Todoupdated);
+        
+        const result = await mutateRow(Todoupdated);
+        setSnackbar({ children: "Todo updated and saved!", severity: "success" });
+        
+        return {
+          id: Todoupdated.id,
+          title: Todoupdated.title,
+          description: Todoupdated.description,
+          due_time: formatDateTime(formatTimestamp(Todoupdated.due_time)),
+          status: Todoupdated.status,
+          user_id: Todoupdated.user_id
+        };
+        
+      } catch (error) {
+        console.error(error);
+        setSnackbar({ children: 'Error during the update , check if text fields are all correct.', severity: 'error' });
+        return todoedit;
       }
-    })
-    }
-    
-  const close = () => {
-    setEditId(null);
-    console.log("close");
-  }
+    },
+    [mutateRow, onUpdate] 
+  );
 
-  const save = async (todo_id) => {
-    setEditId(null);
-    console.log("save");
-    const token = localStorage.getItem("token");
-    const connection = await fetch("http://localhost:3000/todos/" +todo_id, {
-        method: "PUT",
-        headers: {
-          "Authorization": "Bearer " +token,
-          "Content-Type": "application/json",
-        },
-        body:JSON.stringify({
-          id: editTodo.id,
-          title:editTodo.title,
-          description:editTodo.description,
-          due_time:formatDateTime(editTodo.due_time),
-          user_id:user_id,
-          status:editTodo.status
-        })
-      });
-      const data = await connection.json();
-      console.log(data);
-      onUpdate(data);
-      updateTodo(data);
-  }
-
+  const handleProcessRowUpdateError = React.useCallback((error) => {
+    setSnackbar({ children: error.message, severity: 'error' });
+  }, []);
 
 
   const suppr = async (todo_id) => {
+    console.log('delete '+ todo_id)
     const token = localStorage.getItem("token");
     try {
       const connection = await fetch("http://localhost:3000/todos/" +todo_id, {
@@ -201,46 +218,38 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
     return ;
   }
 
-     const columns = [
-    { field: 'id', headerName: 'ID', width: 150 },
-    { field: 'title', headerName: 'Title', width: 350 },
-    { field: 'description', headerName: 'Description', width: 400 },
-    { field: 'due_time', headerName: 'Due_Time' , width: 350 },
-    { field: 'status', headerName: 'Status', width: 300 },
+  const columns = [
+    { field: 'id', headerName: 'ID', type: 'number',  width: 150 ,editable: false},
+    { field: 'title', headerName: 'Title', width: 350 ,editable: true},
+    { field: 'description', headerName: 'Description', width: 400 ,editable: true},
+    { field: 'due_time', headerName: 'Due_Time' , width: 350 ,editable: true},
+    { field: 'status', headerName: 'Status', width: 300 ,type: 'singleSelect',
+      valueOptions: ['not started', 'todo', 'in progress', 'done'], editable: true},
   ];
-  
-  const rows = data_todos.map((row) => ({
-    id: row.id,
-    title: row.title,
-    description: row.description,
-    due_time: formatTimestamp(row.due_time),
-    status: row.status,
-    
-  }));   
+
+      const rows = data_todos.map((row) => ({
+        id: row.id,
+        title: row.title,
+        description: row.description,
+        due_time: formatDateTime(formatTimestamp(row.due_time)),
+        status: row.status,  
+        user_id: row.user_id,
+        create_at: formatDateTime(formatTimestamp(row.create_at))
+    })
+  ); 
+
   
   const paginationModel = { page: 0, pageSize: 20 };
 
-  const CustomToolbar = ({ selectedRows, onEdit, onDelete }) => (
+  const CustomToolbar = ({ selectedRows, onDelete }) => (
     <Toolbar>
       {selectedRows.ids.size > 0 ? (
-        <>
-          
-          <ToolbarButton onClick={() => onEdit(selectedRows)   } >
-            <Badge>
-              <EditIcon />
-            </Badge>
-             
-          </ToolbarButton>
-        
-          <ToolbarButton onClick={() => onDelete(selectedRows)}>
+        <>        
+          <ToolbarButton onClick={() => onDelete(selectedRows.ids)}>
             <Badge>
               <DeleteIcon />
             </Badge>
-            
-          
-          </ToolbarButton>
-        
-        
+          </ToolbarButton>   
         </>
       ) : (
       <>
@@ -260,13 +269,26 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
 
 
    const handleEdit = (ids) => {
-    console.log('Modifier les lignes:', ids);
-
+    const listid = Array.isArray(ids) ? ids : Array.from(ids);
+    setEditIds(listid);
+    const initial = {};
+    listid.forEach(id => {
+      const t = todos.find(todo => todo.id === id);
+      initial[id] = {
+        title: t.title,
+        description: t.description,
+        due_time: new Date(t.due_time),
+        status: t.status
+      };
+    });
+    setEditedTodos(initial);
   };
 
-  const handleDelete = (ids) => {
-    console.log('Supprimer les lignes:', ids);
+  
 
+  const handleDelete = (ids) => {
+    const idArray = Array.isArray(ids) ? ids : Array.from(ids);
+    idArray.forEach(id => suppr(id));
   };
 
   
@@ -280,19 +302,33 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
         columns={columns}
         initialState={{ pagination: { paginationModel } }}
         checkboxSelection
-        pageSizeOptions={[5, 15]}
+        pageSizeOptions={[5, 20]}
         rowSelectionModel={selectedRows}
-        onRowSelectionModelChange={(newModel) => {
-          setSelectedRows(newModel ?? { type: 'include', ids: new Set() });
+        processRowUpdate={processRowUpdate}
+        onProcessRowUpdateError={handleProcessRowUpdateError}
+        editMode="row"
+        onRowSelectionModelChange={(selection) => {
+          console.log(selection)
+          setSelectedRows(selection ?? { type: 'include', ids: new Set() });
         }}
         slots={{
           toolbar: CustomToolbar,
         }}
         slotProps={{
-           toolbar: { selectedRows, onEdit: handleEdit, onDelete: handleDelete },
+           toolbar: { selectedRows, onDelete: handleDelete },
         }}
         showToolbar
       />
+      {!!snackbar && (
+        <Snackbar
+          open
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          onClose={handleCloseSnackbar}
+          autoHideDuration={6000}
+        >
+          <Alert {...snackbar} onClose={handleCloseSnackbar} />
+        </Snackbar>
+      )}
       </Paper>
     </Box>
     );  
@@ -494,11 +530,6 @@ export function PopperPopupState() {
               data_todos={todos}
               onDelete={(id) => setTodos(prev => prev.filter(todo => todo.id !== id))}
               onUpdate={updateTodo}
-              onDisableAll={allDisable}
-              editId={editId}
-              setEditId={setEditId}
-              sx={{marginTop:"20px"}}
-  
             />
             </>
           )}
