@@ -14,6 +14,7 @@ import {
   Avatar,
   Grid,
   colors,
+  Grow,
 } from '@mui/material';
 import {
   Lock,
@@ -23,10 +24,44 @@ import {
   Bluetooth,
   Check,
   Login,
-  EmailTwoTone
+  EmailTwoTone,
+  ContentPasteOffSharp,
+  Password
 } from '@mui/icons-material';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import { styled } from '@mui/material/styles';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: '#E7E7E7',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: (theme.vars ?? theme).palette.text.secondary,
+  ...theme.applyStyles('dark', {
+    backgroundColor: '#1A2027',
+  }),
+}));
+
+
+function formatTimestamp(timestamp) {
+  if (!timestamp) return "—";
+  const date = new Date(timestamp);
+  return date.toLocaleString("fr-FR", {
+    timeZone:"Europe/Paris", 
+    dateStyle: "short",
+    timeStyle: "short",
+  });
+}
+
 
 export default function ProfilePage(){
+    const[isUpdate,setIsUpdate] = useState(false);
+    const[user_data,setUser_data] = useState("");
+    const[todos,setTodos] = useState([]);
 
     useEffect(() => {
     const fetchUserData = async () => {
@@ -39,7 +74,8 @@ export default function ProfilePage(){
             "Content-Type": "application/json",
           },
         });
-        const userdata = await response.json();  
+        const userdata = await response.json();
+        setUser_data(userdata);
       } catch (error) {
         console.error(error);
       }
@@ -47,15 +83,149 @@ export default function ProfilePage(){
     fetchUserData();
     }, []);
 
-    return (
+    useEffect(() => {
+      const fetchTodos = async () => {
+        const token = localStorage.getItem("token");
+        const res = await fetch("http://localhost:3000/user/todos", {
+          headers: { "Authorization": "Bearer " +token }
+        });
+        const data = await res.json();
+        setTodos(Array.isArray(data) ? data : []); 
+      };
+      fetchTodos();
+    }, []);
+    return(
+      <>
+        {BoxUserInfo(user_data,todos,isUpdate,setIsUpdate)}
+      </>
+    )
+}
 
+
+
+
+function BoxUserInfo(user_data,todos,isUpdate,setIsUpdate){
+    
+    const [value,setValue] = useState({
+      email:user_data.email,
+      password:"",
+      name:user_data.name,
+      firstname:user_data.firstname
+    });
+  
+
+    const changeUpdate = () =>{
+      if (isUpdate === true){
+        setIsUpdate(false);
+      } else {
+        setIsUpdate(true)
+      }
+      }
+    
+    
+  
+    return (
         <Container>
-            <Box sx={{width: '100vw', height: '100px', bgcolor: 'grey'}}>
+            <Box sx={{width: '100%', minHeight: '100px'}}>
+              {user_data.id ? (<>
+              <Box sx={{ width: '100%'}}>
+                  <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                        <Grid size={4} >
+                          <Item sx={{display:"flex",justifyContent:"center"}}>
+                            <Box sx={{maxWidth:300}}>
+                              <AccountCircleIcon sx={{marginTop:1,width:"70%",height:"auto",borderRadius:50,backgroundColor:"white",border:"-15px solid white"}}></AccountCircleIcon>
+                              <Button>Import photo</Button>
+                              <Typography>Total number of Todo : {todos.length}</Typography>
+                              <Typography sx={{marginTop:2,
+                                width:"70%",
+                                backgroundColor:"#B6B6B6",
+                                borderRadius:10,
+                                textTransform:"uppercase",
+                                textAlign:"center",
+                                marginLeft:"auto",
+                                marginRight:"auto",
+                                padding:1,
+                                textSizeAdjust:1
+                                }}>
+                                {user_data.name+" "+user_data.firstname}
+                              </Typography>
+                            </Box>
+                          </Item>
+                        </Grid>
+                        <Grid size="grow">
+                          <Item>
+                              <Box sx={{
+                                display:"flex",
+                                flexDirection:"column",
+                                alignItems:"flex-start",
+                                padding:1.5
+                                }}>
+                                  {!isUpdate ? (<>
+                                      <Typography sx={{fontSize:"2em",fontWeight:"bold",marginBottom:2}} >User Information : Read</Typography>
+
+                                      <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Account created on : </Typography>
+                                      <Typography>{formatTimestamp(user_data.created_at)}</Typography>
+
+                                      <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Email :</Typography>
+                                      <Typography> {user_data.email}</Typography>
+
+                                      <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Name : </Typography>
+                                      <Typography>{user_data.name}</Typography>
+
+                                      <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Firstname : </Typography>
+                                      <Typography>{user_data.firstname}</Typography>
+                                      <Button sx={{marginTop:2,fontSize:"1.3em"}} onClick={changeUpdate}>Modify</Button>
+                                    </>):(<>
+                                      <Typography sx={{fontSize:"2em",fontWeight:"bold",marginBottom:2}} >User Information : Edit</Typography>
+
+                                      <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Email :</Typography>
+                                      <TextField className="select" value={value.email} onChange={(e) => setValue(e.target.value)}  sx={{mb: 2}} fullWidth required/>
+
+                                      <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Name : </Typography>
+                                      <TextField className="select" value={value.name} onChange={(e) => setValue(e.target.value)}  sx={{mb: 2}} fullWidth required/>
+
+                                      <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Firstname : </Typography>
+                                      <TextField className="select" value={value.firstname} onChange={(e) => setValue(e.target.value)}  sx={{mb: 2}} fullWidth required/>
+
+                                      <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>New Password : </Typography>
+                                      <TextField className="select" value={value.password} onChange={(e) => setValue(e.target.value)}  sx={{mb: 2}} fullWidth required/>
+
+                                      <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Actually Password : </Typography>
+                                      <TextField className="select" sx={{mb: 2}} fullWidth required/>
+
+                                      <Button sx={{marginTop:2,fontSize:"1.3em"}} onClick={changeUpdate}>Cancel</Button>
+                                      <Button sx={{marginTop:2,fontSize:"1.3em"}} >Confirm</Button>
+
+                                </>)}
+                              </Box>
+                          </Item>
+                        </Grid>
+                  </Grid>
             </Box>
-            <Box>
-                
+              </>):(
+                <Typography>No user data</Typography>)}
             </Box>
         </Container>
     )
 
 }
+
+   {/*<Box>
+              <Select
+                  fullWidth
+                  sx={{mb: 2,width:300,float:"center"}}
+                  value={isUpdate}
+                  onChange={(e)=>setIsUpdate(e.target.value)}
+                  
+                  >
+                  <MenuItem value={"none"}>None</MenuItem>
+                  <MenuItem value={"email"}>Email</MenuItem>
+                  <MenuItem value={"name"}>Name</MenuItem>
+                  <MenuItem value={"firstname"}>Firstname</MenuItem>
+                  <MenuItem value={"password"}>Password</MenuItem>
+        </Select>
+        <TextField className='select'  value={valueUpdate} onChange={(e)=>setValueUpdate(e.target.value)} required/>
+      <Button>
+
+      </Button>
+    </Box>*/}

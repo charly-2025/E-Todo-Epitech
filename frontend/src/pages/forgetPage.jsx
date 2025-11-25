@@ -38,50 +38,16 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 
 
-function sendEmail(){
-    Email.send({
-        Host:"smtp.gmail.com",
-        Username:"E-Todo",
-        Password:"Epitech***REMOVED***",
-        To:"charly.richardfromont@gmail.com",
-        From:"etodo.project@gmail.com",
-        Subject:"Forgot Password",
-        Body:"Hello customers you have forgot your password"
-    })
-    .then(function(message){
-        alert("email envoyé ave succès")
-    })
+function sendMail(email) {
+    alert("Email send : " +email);
 }
 
-
-
-export default function LoginForm() {
+export default function ForogotForm() {
   const [showPassword,setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [valide, setinvalide] = useState(false);
   const navigate = useNavigate();
-
-
-  const login = async (e)=>{
-    e.preventDefault();
-    const connection = await fetch("http://localhost:3000/login",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        email:email,
-        password:password
-      })
-    });
-    const data = await connection.json();
-    if (connection.ok){
-      localStorage.setItem('auth' , true);
-      localStorage.setItem("token",data.token);
-      navigate('/user')
-    } else {
-      setinvalide(true)
-    }
-  };
 
 
   const changeShowPassword = () => {
@@ -94,7 +60,7 @@ export default function LoginForm() {
 
   return (
 
-    <form onSubmit={sendEmail}> 
+    <form onSubmit={sendMail}> 
      <div className="cercle1"></div>
     <Container sx={{}}>
         <Box sx={{marginTop: 8, padding:2, position: "absolute", top: "40%" ,left: "50%", transform: 'translate(-50%, -50%)', width: '90vw',maxWidth: '650px'}}>
