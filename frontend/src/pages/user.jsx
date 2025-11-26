@@ -87,7 +87,7 @@ const demoTheme = createTheme({
   },
 });
 
-function DemoPageContent({pathname}) {
+function DemoPageContent({pathname, userdata,setUserData}) {
   let content = ''
   console.log("local set item with : "+pathname);
   console.log(pathname)
@@ -110,7 +110,9 @@ function DemoPageContent({pathname}) {
         case '/profile/datas':
           content = (
             <>
-            <ProfilePage />
+            <ProfilePage 
+                user_data={userdata}
+                setUser_data={setUserData}/>
             </>
           )
           break;
@@ -197,7 +199,10 @@ function CustomAppTitle() {
         <DashboardLayout 
           slots={{
             appTitle: CustomAppTitle,}} defaultSidebarCollapsed >
-          <DemoPageContent pathname={router.pathname} />
+          <DemoPageContent 
+                pathname={router.pathname} 
+                userdata={userdata} 
+                setUserData={setUserData}/>
         </DashboardLayout>
       </AppProvider>
       

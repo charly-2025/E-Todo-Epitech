@@ -37,11 +37,9 @@ function formatTimestamp(timestamp) {
 }
 
 
-export default function ProfilePage(){
+export default function ProfilePage({user_data,setUser_data}){
     const[isUpdate,setIsUpdate] = useState(false);
     const[todos,setTodos] = useState([]);
-    const[user_data,setUser_data] = useUserData();
-
     useEffect(() => {
       const fetchTodos = async () => {
         const token = localStorage.getItem("token");
