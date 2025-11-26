@@ -1,0 +1,86 @@
+
+.Container{
+    width: 100%;
+    display:flex;
+    gap: 15px;
+}
+
+.Container>*{
+    background-color:#6E6E6E;
+    border-radius: 20px ;
+}
+
+.item-left{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+.item-left>.content{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.AccountIcon{
+    border-radius: 50%;
+    background-color: white;
+    border: -15px solid white;
+    color:grey;
+    width: 200px;
+    height: auto;
+}
+
+
+.item-right{
+    padding: 10px;
+    flex-grow: 1;
+}
+
+@media screen and (max-width: 992px) {
+  .Container{
+    flex-direction: column;
+  }
+
+  .item-left {
+    width: 100%;
+    height: 150px;
+    padding: 25px;
+  }
+
+  .content{
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .AccountIcon{
+    width: 100px;
+  }
+}
+
+
+
+@media screen and (min-width: 992px) {
+  .Container{
+    flex-direction: row;
+  }
+
+  .item-left {
+      width: 25%;
+  }
+
+  .content{
+      flex-direction: column;
+    }
+
+  .AccountIcon{
+    width: 200px;
+    font-size: large;
+  }
+}
