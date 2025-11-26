@@ -143,7 +143,11 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
 
   const processRowUpdate = useCallback(
     async (todoedit) => {
-      console.log('Edit todo: ', todoedit);
+      if (new Date(todoedit.due_time) < new Date() === true ) {
+        setSnackbar({ children: "Error during the update , The date cannot be earlier than the date the todo was created.", severity: 'info'});
+        return todoedit;
+      }
+      console.log('Editing todo:', todoedit);
       const token = localStorage.getItem("token");
       try {
         const response = await fetch("http://localhost:3000/todos/" + todoedit.id, {
