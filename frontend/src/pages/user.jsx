@@ -19,8 +19,8 @@ import '../style/user.css'
 import { ETodoCalendar } from "./calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { PopperPopupState } from './methodRoute';
-
 import ProfilePage from './Profilepage';
+import useUserData from '../utils/getUserData';
 
   const NAVIGATION = [
   {
@@ -145,38 +145,24 @@ function CustomAppTitle() {
   );
 }
   
+  function DashboardLayoutBasic(props) {
+    const navigate = useNavigate();
+    const {window} = props;
+    const [session, setSession] = useState(null);
+    const[userdata,setUserData] = useUserData();
 
-function DashboardLayoutBasic(props) {
-  const navigate = useNavigate();
-  const {window} = props;
-  const [session, setSession] = useState(null);
-
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem("token");
-      try {
-        const response = await fetch("http://localhost:3000/user", {
-          method: "GET",
-          headers: {
-            "Authorization": "Bearer "+ token,
-            "Content-Type": "application/json",
-          },
-        });
-        const userdata = await response.json();
+    useEffect(() => {
+      if(userdata){
         setSession({
-          user: {
-            name: userdata.name + ' '+ userdata.firstname,
-            email: userdata.email,
-            image: <AccountCircleSharpIcon />,
-          },
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchUserData();
-  }, []);
+            user: {
+              name: userdata.name + ' '+ userdata.firstname,
+              email: userdata.email,
+              image: <AccountCircleSharpIcon />,
+            },
+          });
+        }
+    
+    },[userdata]);
 
   const authentication = useMemo(() => {
     return {

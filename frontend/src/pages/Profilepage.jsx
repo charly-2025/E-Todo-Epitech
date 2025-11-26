@@ -6,35 +6,12 @@ import {
   Button,
   Typography,
   Paper,
-  InputAdornment,
-  IconButton,
-  Checkbox,
-  FormControlLabel,
   Alert,
-  Avatar,
-  Grid,
-  colors,
-  Grow,
 } from '@mui/material';
-import {
-  Lock,
-  Visibility,
-  VisibilityOff,
-  Email,
-  Bluetooth,
-  Check,
-  Login,
-  EmailTwoTone,
-  ContentPasteOffSharp,
-  Password,
-  Co2Sharp
-} from '@mui/icons-material';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
 import { styled } from '@mui/material/styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import '../style/profilePage.css';
+import useUserData from '../utils/getUserData';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -62,28 +39,8 @@ function formatTimestamp(timestamp) {
 
 export default function ProfilePage(){
     const[isUpdate,setIsUpdate] = useState(false);
-    const[user_data,setUser_data] = useState("");
     const[todos,setTodos] = useState([]);
-
-    useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem("token");
-      try {
-        const response = await fetch("http://localhost:3000/user", {
-          method: "GET",
-          headers: {
-            "Authorization": "Bearer "+ token,
-            "Content-Type": "application/json",
-          },
-        });
-        const userdata = await response.json();
-        setUser_data(userdata);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchUserData();
-    }, []);
+    const[user_data,setUser_data] = useUserData();
 
     useEffect(() => {
       const fetchTodos = async () => {
@@ -109,7 +66,6 @@ export default function ProfilePage(){
 function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
     const [newMdp,setNewMdp] = useState(false);
     const [invalide,setInvalide] = useState(false);
-    const [connect, setConnect] = useState(false);
     const [value, setValue] = useState({
       email: "",
       newPassword: "",
