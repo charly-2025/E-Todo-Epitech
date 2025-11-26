@@ -5,6 +5,7 @@ import './style/App.css';
 
 
 import PrivateRoute from './utils/protectedpaths';
+import IsLogged from './utils/Islogged'
 import LoginForm from './pages/loginForms';
 import RegisterForm from './pages/registerform';
 import User from './pages/user';
@@ -19,12 +20,23 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Home/>}/>
-          <Route path='/forgot' element={<ForgetPage/>}/>
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/register" element={<RegisterForm />} />
+            <Route path='/forgot' element={
+              <IsLogged>
+                <ForgetPage />
+              </IsLogged>
+            } />
+            <Route path="/login" element={
+              <IsLogged>
+                <LoginForm />
+              </IsLogged>
+              } />
+            <Route path="/register" element={
+                <IsLogged>
+                  <RegisterForm />
+                </IsLogged>
+              } />
           <Route element={<PrivateRoute/>}>
               <Route path='/user' element={<User/>} exact/>
-
           </Route>
         </Routes>
       </BrowserRouter>

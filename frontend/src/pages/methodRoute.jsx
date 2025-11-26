@@ -1,6 +1,6 @@
 import React from 'react';
 import Popper from '@mui/material/Popper';
-import PopupState, { bindToggle, bindPopper } from 'material-ui-popup-state';
+import PopupState, { bindPopper } from 'material-ui-popup-state';
 import Fade from '@mui/material/Fade';
 import { useState, useEffect, useCallback } from 'react';
 import DatePicker from "react-datepicker";
@@ -8,14 +8,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { AccessAlarm, FireTruck, Search, ThreeDRotation } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
-import EditIcon from '@mui/icons-material/Edit';
+
 import Snackbar from '@mui/material/Snackbar';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import SaveIcon from '@mui/icons-material/Save';
-import Autocomplete from '@mui/material/Autocomplete';
+
 import {
   Box,
   Container,
@@ -23,14 +21,8 @@ import {
   Button,
   Typography,
   Paper,
-  InputAdornment,
-  IconButton,
-  Checkbox,
-  FormControlLabel,
   Alert,
-  Avatar,
-  Grid,
-  Card,
+
 
 } from '@mui/material';
 import Badge from '@mui/material/Badge';
@@ -39,21 +31,11 @@ import {
   DataGrid,
   Toolbar,
   ToolbarButton,
-  ColumnsPanelTrigger,
-  GridCellModes,
   FilterPanelTrigger,
-  ExportCsv,
-  ExportPrint,
-  QuickFilter,
-  QuickFilterControl,
-  QuickFilterClear,
-  QuickFilterTrigger,
+
 } from '@mui/x-data-grid';  
 
-import Tooltip from '@mui/material/Tooltip';
-import TableSortLabel from '@mui/material/TableSortLabel';
 
-import { visuallyHidden } from '@mui/utils';
 
 function formatTimestamp(timestamp) {
   if (!timestamp) return "—";
@@ -223,11 +205,11 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
   }
 
   const columns = [
-    { field: 'id', headerName: 'ID', type: 'number',  width: 150 ,editable: false},
-    { field: 'title', headerName: 'Title', width: 350 ,editable: true},
-    { field: 'description', headerName: 'Description', width: 400 ,editable: true},
-    { field: 'due_time', headerName: 'Due_Time' , width: 350 ,editable: true},
-    { field: 'status', headerName: 'Status', width: 300 ,type: 'singleSelect',
+    { field: 'id', headerName: 'ID', type: 'number',flex: 0.3,  minWidth: 70,editable: false},
+    { field: 'title', headerName: 'Title', flex: 1,  minWidth: 150 ,editable: true},
+    { field: 'description', headerName: 'Description', flex: 1.5,  minWidth: 200 ,editable: true},
+    { field: 'due_time', headerName: 'Due_Time' , flex: 1.5,  minWidth: 160 ,editable: true},
+    { field: 'status', headerName: 'Status', flex: 1,  minWidth: 150 ,type: 'singleSelect',
       valueOptions: ['not started', 'todo', 'in progress', 'done'], editable: true},
   ];
 
@@ -243,7 +225,7 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
   ); 
 
   
-  const paginationModel = { page: 0, pageSize: 20 };
+  const paginationModel = { page: 0, pageSize: 10 };
 
   const CustomToolbar = ({ selectedRows, onDelete }) => (
     <Toolbar>
@@ -266,28 +248,11 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
           </ToolbarButton>
         )}
       />
+      
       </>
     )}
   </Toolbar>
 );
-
-
-   const handleEdit = (ids) => {
-    const listid = Array.isArray(ids) ? ids : Array.from(ids);
-    setEditIds(listid);
-    const initial = {};
-    listid.forEach(id => {
-      const t = todos.find(todo => todo.id === id);
-      initial[id] = {
-        title: t.title,
-        description: t.description,
-        due_time: new Date(t.due_time),
-        status: t.status
-      };
-    });
-    setEditedTodos(initial);
-  };
-
   
 
   const handleDelete = (ids) => {
@@ -299,20 +264,27 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
   return (
 
     <Box>
-      <Paper sx={{ height: '70vh', width: '100%' }}>
+      <Paper sx={{ height: '70vh', width: '100%'}}>
         <DataGrid
-        sx={{ border: 0 }}
+          sx={{
+            boxShadow: 2,
+            border: 1,
+            borderColor: 'light',
+              '& .MuiDataGrid-cell:hover': {
+                color: 'primary.main',
+              },
+          }}
         rows={rows}
         columns={columns}
         initialState={{ pagination: { paginationModel } }}
         checkboxSelection
-        pageSizeOptions={[5, 20]}
+        pageSizeOptions={[0, 10]}
         rowSelectionModel={selectedRows}
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={handleProcessRowUpdateError}
         editMode="row"
+        disableRowSelectionOnClick 
         onRowSelectionModelChange={(selection) => {
-          console.log(selection)
           setSelectedRows(selection ?? { type: 'include', ids: new Set() });
         }}
         slots={{

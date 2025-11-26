@@ -10,7 +10,7 @@ import getRandomInt from '../utils/randomint';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { Opacity } from '@mui/icons-material';
+
 
 
 
@@ -164,7 +164,7 @@ export function ETodoCalendar() {
                 onView={setCurrentView}
                 onNavigate={setCurrentDate}
                 views={['month', 'week', 'day', 'agenda']} 
-                style={{ height: '100%', width: '100%' }}
+                style={{ height: '100%', width: '100%'}}
                 BackgroundWrapper = "red"
                 eventPropGetter={(events) => {
                     const backgroundColor = events.colorEvento ;

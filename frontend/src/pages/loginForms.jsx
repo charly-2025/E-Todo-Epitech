@@ -1,4 +1,3 @@
-import React from "react";
 import { useState } from 'react';
 import {
   Box,
@@ -8,25 +7,12 @@ import {
   Typography,
   Paper,
   InputAdornment,
-  IconButton,
-  Checkbox,
-  FormControlLabel,
   Alert,
   Avatar,
   Grid,
-  Card,
+  
 
 } from '@mui/material';
-import {
-  Lock,
-  Visibility,
-  VisibilityOff,
-  Email,
-  Bluetooth,
-  Check,
-  Login,
-  EmailTwoTone
-} from '@mui/icons-material';
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 import { blue } from '@mui/material/colors';

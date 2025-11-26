@@ -1,9 +1,8 @@
-import * as React from 'react';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Stack, Chip, createChainedFunction } from '@mui/material';
+import { Stack } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { useState, useMemo, useEffect } from 'react';
 
@@ -12,17 +11,15 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import AccountCircleSharpIcon from '@mui/icons-material/AccountCircleSharp';
-import Button from '@mui/material/Button';
-import { AppProvider , useLocation} from '@toolpad/core/AppProvider';
+import { AppProvider} from '@toolpad/core/AppProvider';
 import { DemoProvider, useDemoRouter } from '@toolpad/core/internal'; 
 import { useNavigate } from 'react-router-dom';
 
 import '../style/user.css'
 import { ETodoCalendar } from "./calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { MyTable,PopperPopupState,ComboBox } from './methodRoute';
+import { PopperPopupState } from './methodRoute';
 
-import { useMediaQuery } from '@mui/material';
 import ProfilePage from './Profilepage';
 
   const NAVIGATION = [
@@ -68,11 +65,11 @@ const demoTheme = createTheme({
     dark: {
       palette: {
         background: {
-          default: '#0a192f',
-          paper: '#112240',
+          default: '#15376aff',
+          paper: '#183c7aff',
         },
         primary: {
-          main: '#fff', 
+          main: '#000000ff', 
           contrastText: '#fff',
         },
         text: {
