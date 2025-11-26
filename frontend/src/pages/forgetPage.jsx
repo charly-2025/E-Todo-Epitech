@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useState } from 'react';
 import {
   Box,
@@ -7,34 +7,19 @@ import {
   Button,
   Typography,
   Paper,
-  InputAdornment,
-  IconButton,
-  Checkbox,
-  FormControlLabel,
   Alert,
   Avatar,
   Grid,
-  Card,
+  
 
 } from '@mui/material';
-import {
-  Lock,
-  Visibility,
-  VisibilityOff,
-  Email,
-  Bluetooth,
-  Check,
-  Login,
-  EmailTwoTone,
-  Password
-} from '@mui/icons-material';
+
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 import { blue } from '@mui/material/colors';
 import { Link, useNavigate } from "react-router-dom";
 import '../style/forms.css';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
 
 
 

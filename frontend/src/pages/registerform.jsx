@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useState } from 'react';
 import {
   Box,
@@ -8,23 +8,11 @@ import {
   Typography,
   Paper,
   InputAdornment,
-  IconButton,
-  Checkbox,
-  FormControlLabel,
   Alert,
   Avatar,
   Grid,
 } from '@mui/material';
-import {
-  Lock,
-  Visibility,
-  VisibilityOff,
-  Email,
-  Bluetooth,
-  Check,
-  Login,
-  EmailTwoTone
-} from '@mui/icons-material';
+
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import { blue } from '@mui/material/colors';
 import { Link } from "react-router-dom";
