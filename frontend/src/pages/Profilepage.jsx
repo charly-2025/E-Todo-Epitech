@@ -108,19 +108,43 @@ export default function ProfilePage(){
 function BoxUserInfo(user_data,todos,isUpdate,setIsUpdate){
     const [newMdp,setNewMdp] = useState(false);
 
-    const [value,setValue] = useState({
-      email:user_data.email,
-      newPassword:"",
-      currentPassword:"",
-      name:user_data.name,
-      firstname:user_data.firstname
+    const [value, setValue] = useState({
+      email: "",
+      newPassword: "",
+      currentPassword: "",
+      name: "",
+      firstname: ""
     });
-  
 
+    useEffect(() => {
+      if (user_data && user_data.id) {
+        setValue({
+          email: user_data.email,
+          newPassword: "",
+          currentPassword: "",
+          name: user_data.name,
+          firstname: user_data.firstname
+        });
+      }
+    }, [user_data]);
+    
+
+
+    console.log(user_data.email)
+    console.log(value)
     const changeUpdate = () =>{
       if (isUpdate === true){
         setIsUpdate(false);
         if (newMdp) {setNewMdp(false);}
+        if (user_data && user_data.id) {
+        setValue({
+          email: user_data.email,
+          newPassword: "",
+          currentPassword: "",
+          name: user_data.name,
+          firstname: user_data.firstname
+        });
+      }
       } else {
         setIsUpdate(true)
       }
@@ -133,6 +157,11 @@ function BoxUserInfo(user_data,todos,isUpdate,setIsUpdate){
         setNewMdp(true)
       }
       }
+
+    const Confirm = () => {
+      const token = localStorage.getItem("token");
+      
+    }
   
     return (
       <Container>
@@ -181,31 +210,31 @@ function BoxUserInfo(user_data,todos,isUpdate,setIsUpdate){
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Firstname : </Typography>
                                       <Typography>{user_data.firstname}</Typography>
                                       <Button sx={{marginTop:2,fontSize:"1.3em"}} onClick={changeUpdate}>Modify</Button>
-                                    </>):(<>
+                                    </>):(<><form onSubmit={Confirm}>
                                       <Typography sx={{fontSize:"2em",fontWeight:"bold",marginBottom:2}} >User Information : Edit</Typography>
 
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Email :</Typography>
-                                      <TextField className="select" value={value.email} onChange={(e) => setValue(e.target.value)}  sx={{mb: 2}} fullWidth required/>
+                                      <TextField className="select" value={value.email} onChange={(e) => setValue(prev => ({...prev, email: e.target.value}))}  sx={{mb: 2}} fullWidth required/>
 
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Name : </Typography>
-                                      <TextField className="select" value={value.name} onChange={(e) => setValue(e.target.value)}  sx={{mb: 2}} fullWidth required/>
+                                      <TextField className="select" value={value.name} onChange={(e) => setValue(prev => ({...prev, name: e.target.value}))}  sx={{mb: 2}} fullWidth required/>
 
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Firstname : </Typography>
-                                      <TextField className="select" value={value.firstname} onChange={(e) => setValue(e.target.value)}  sx={{mb: 2}} fullWidth required/>
+                                      <TextField className="select" value={value.firstname} onChange={(e) => setValue(prev => ({...prev, firstname: e.target.value}))}  sx={{mb: 2}} fullWidth required/>
                                       {newMdp ? (<>
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>New Password : {<Button onClick={changeNewMdp}>
                                         not new password
                                       </Button>}</Typography>
-                                      <TextField className="select" value={value.newPassword} onChange={(e) => setValue(e.target.value)}  sx={{mb: 2}} fullWidth required/>
+                                      <TextField className="select" value={value.newPassword} onChange={(e) => setValue(prev => ({...prev, newPassword: e.target.value}))}  sx={{mb: 2}} fullWidth required/>
                                         </>
                                       ):(<Button onClick={changeNewMdp}>
                                         New Password
                                       </Button>)}
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Actually Password : </Typography>
-                                      <TextField className="select" value={value.currentPassword} onChange={(e) => setValue(e.target.value)} sx={{mb: 2}} fullWidth required/>
+                                      <TextField className="select" value={value.currentPassword} onChange={(e) => setValue(prev => ({...prev, currentPassword: e.target.value}))} sx={{mb: 2}} fullWidth required/>
 
                                       <Button sx={{marginTop:2,fontSize:"1.3em"}} onClick={changeUpdate}>Cancel</Button>
-                                      <Button sx={{marginTop:2,fontSize:"1.3em"}} >Confirm</Button>
+                                      <Button type='submit' sx={{marginTop:2,fontSize:"1.3em"}} >Confirm</Button></form>
 
                                 </>)}
                             </Box>
