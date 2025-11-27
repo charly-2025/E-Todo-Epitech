@@ -6,34 +6,12 @@ import {
   Button,
   Typography,
   Paper,
-  InputAdornment,
-  IconButton,
-  Checkbox,
-  FormControlLabel,
   Alert,
-  Avatar,
-  Grid,
-  colors,
-  Grow,
 } from '@mui/material';
-import {
-  Lock,
-  Visibility,
-  VisibilityOff,
-  Email,
-  Bluetooth,
-  Check,
-  Login,
-  EmailTwoTone,
-  ContentPasteOffSharp,
-  Password
-} from '@mui/icons-material';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
 import { styled } from '@mui/material/styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import '../style/profilePage.css';
+import useUserData from '../utils/getUserData';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -70,31 +48,9 @@ function formatTimestamp(timestamp) {
 }
 
 
-export default function ProfilePage(){
+export default function ProfilePage({user_data,setUser_data}){
     const[isUpdate,setIsUpdate] = useState(false);
-    const[user_data,setUser_data] = useState("");
     const[todos,setTodos] = useState([]);
-
-    useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem("token");
-      try {
-        const response = await fetch("http://localhost:3000/user", {
-          method: "GET",
-          headers: {
-            "Authorization": "Bearer "+ token,
-            "Content-Type": "application/json",
-          },
-        });
-        const userdata = await response.json();
-        setUser_data(userdata);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchUserData();
-    }, []);
-
     useEffect(() => {
       const fetchTodos = async () => {
         const token = localStorage.getItem("token");
@@ -108,7 +64,7 @@ export default function ProfilePage(){
     }, []);
     return(
       <>
-        {BoxUserInfo(user_data,todos,isUpdate,setIsUpdate)}
+        {BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate)}
       </>
     )
 }
@@ -116,22 +72,42 @@ export default function ProfilePage(){
 
 
 
-function BoxUserInfo(user_data,todos,isUpdate,setIsUpdate){
+function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
     const [newMdp,setNewMdp] = useState(false);
-
-    const [value,setValue] = useState({
-      email:user_data.email,
-      newPassword:"",
-      currentPassword:"",
-      name:user_data.name,
-      firstname:user_data.firstname
+    const [invalide,setInvalide] = useState(false);
+    const [value, setValue] = useState({
+      email: "",
+      newPassword: "",
+      currentPassword: "",
+      name: "",
+      firstname: ""
     });
-  
 
+    useEffect(() => {
+      if (user_data && user_data.id) {
+        setValue({
+          email: user_data.email,
+          newPassword: "",
+          currentPassword: "",
+          name: user_data.name,
+          firstname: user_data.firstname
+        });
+      }
+    }, [user_data]);
+    
     const changeUpdate = () =>{
       if (isUpdate === true){
         setIsUpdate(false);
         if (newMdp) {setNewMdp(false);}
+        if (user_data && user_data.id) {
+        setValue({
+          email: user_data.email,
+          newPassword: "",
+          currentPassword: "",
+          name: user_data.name,
+          firstname: user_data.firstname
+        });
+      }
       } else {
         setIsUpdate(true)
       }
@@ -140,11 +116,61 @@ function BoxUserInfo(user_data,todos,isUpdate,setIsUpdate){
     const changeNewMdp = () =>{
       if (newMdp === true){
         setNewMdp(false);
+        setValue(prev => ({...prev, newPassword: ""}));
       } else {
         setNewMdp(true)
       }
-      }
+    }
+
+
   
+
+    const Confirm = async(e) => {
+      e.preventDefault();
+      const token = localStorage.getItem("token");
+      const connection = await fetch("http://localhost:3000/login",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        email:user_data.email,
+        password:value.currentPassword})
+      })
+      if (connection.ok) {
+          const response = await fetch("http://localhost:3000/users/" + user_data.id, {
+            method: "PUT",
+            headers: {
+              "Authorization": "Bearer " +token,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: value.email,
+              password: newMdp ? value.newPassword : value.currentPassword,
+              name: value.name,
+              firstname: value.firstname,
+            })
+          });
+          
+          if (!response.ok) {
+            throw new Error(response.status)
+          }
+          const data = await response.json();
+          setUser_data(data);
+          setIsUpdate(false);
+          setNewMdp(false);
+          setInvalide(false);
+          setValue({
+            email: data.email,
+            newPassword: "",
+            currentPassword: "",
+            name: data.name,
+            firstname: data.firstname
+          });
+      } else {
+        changeUpdate();
+        setInvalide(false);
+      }
+    }
+
     return (
       <Container>
             <Box sx={{width: '100%', minHeight: '100px'}}>
@@ -193,32 +219,37 @@ function BoxUserInfo(user_data,todos,isUpdate,setIsUpdate){
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Firstname : </Typography>
                                       <Typography>{user_data.firstname}</Typography>
                                       <Button sx={{marginTop:2,fontSize:"1.3em"}} onClick={changeUpdate}>Modify</Button>
-                                    </>):(<>
+                                    </>):(<><form onSubmit={Confirm}>
                                       <Typography sx={{fontSize:"2em",fontWeight:"bold",marginBottom:2}} >User Information : Edit</Typography>
 
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Email :</Typography>
-                                      <TextField className="select" value={value.email} onChange={(e) => setValue(e.target.value)}  sx={{mb: 2}} fullWidth required/>
+                                      <TextField className="select" value={value.email} onChange={(e) => setValue(prev => ({...prev, email: e.target.value}))}  sx={{mb: 2}} fullWidth required/>
 
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Name : </Typography>
-                                      <TextField className="select" value={value.name} onChange={(e) => setValue(e.target.value)}  sx={{mb: 2}} fullWidth required/>
+                                      <TextField className="select" value={value.name} onChange={(e) => setValue(prev => ({...prev, name: e.target.value}))}  sx={{mb: 2}} fullWidth required/>
 
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Firstname : </Typography>
-                                      <TextField className="select" value={value.firstname} onChange={(e) => setValue(e.target.value)}  sx={{mb: 2}} fullWidth required/>
+                                      <TextField className="select" value={value.firstname} onChange={(e) => setValue(prev => ({...prev, firstname: e.target.value}))}  sx={{mb: 2}} fullWidth required/>
                                       {newMdp ? (<>
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>New Password : {<Button onClick={changeNewMdp}>
                                         not new password
                                       </Button>}</Typography>
-                                      <TextField className="select" value={value.newPassword} onChange={(e) => setValue(e.target.value)}  sx={{mb: 2}} fullWidth required/>
+                                      <TextField className="select" type="password" value={value.newPassword} onChange={(e) => setValue(prev => ({...prev, newPassword: e.target.value}))}  sx={{mb: 2}} fullWidth required/>
                                         </>
                                       ):(<Button onClick={changeNewMdp}>
                                         New Password
                                       </Button>)}
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Actually Password : </Typography>
-                                      <TextField className="select" value={value.currentPassword} onChange={(e) => setValue(e.target.value)} sx={{mb: 2}} fullWidth required/>
-
+                                      <TextField className="select" type="password" value={value.currentPassword} onChange={(e) => setValue(prev => ({...prev, currentPassword: e.target.value}))} sx={{mb: 2}} fullWidth required/>
+                                        {invalide && (
+                                                      <Alert severity="warning">Login name or password are incorrect.</Alert>
+                                                    )}
+                                      <div>
                                       <Button sx={{marginTop:2,fontSize:"1.3em"}} onClick={changeUpdate}>Cancel</Button>
-                                      <Button sx={{marginTop:2,fontSize:"1.3em"}} >Confirm</Button>
-
+                                      <Button type='submit' sx={{marginTop:2,fontSize:"1.3em"}} >Confirm</Button>
+                                      </div>
+                                      </form>
+                                      
                                 </>)}
                             </Box>
                     </Box>
@@ -232,22 +263,3 @@ function BoxUserInfo(user_data,todos,isUpdate,setIsUpdate){
 
 }
 
-   {/*<Box>
-              <Select
-                  fullWidth
-                  sx={{mb: 2,width:300,float:"center"}}
-                  value={isUpdate}
-                  onChange={(e)=>setIsUpdate(e.target.value)}
-                  
-                  >
-                  <MenuItem value={"none"}>None</MenuItem>
-                  <MenuItem value={"email"}>Email</MenuItem>
-                  <MenuItem value={"name"}>Name</MenuItem>
-                  <MenuItem value={"firstname"}>Firstname</MenuItem>
-                  <MenuItem value={"password"}>Password</MenuItem>
-        </Select>
-        <TextField className='select'  value={valueUpdate} onChange={(e)=>setValueUpdate(e.target.value)} required/>
-      <Button>
-
-      </Button>
-    </Box>*/}
