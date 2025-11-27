@@ -124,8 +124,8 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
   const mutateRow = useFakeMutation();
 
   const processRowUpdate = useCallback(
-    async (todoedit) => {
-      if (new Date(todoedit.due_time) < new Date() === true ) {
+    async (todoedit, data_todos) => {
+      if (new Date(todoedit.due_time) < new Date() === true && todoedit.due_time != data_todos.due_time) {
         setSnackbar({ children: "Error during the update , The date cannot be earlier than the date the todo was created.", severity: 'info'});
         return todoedit;
       }
