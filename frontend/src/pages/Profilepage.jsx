@@ -10,17 +10,6 @@ import {
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import '../style/profilePage.css';
 
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1,
-});
 
 
 function formatTimestamp(timestamp) {
@@ -163,7 +152,7 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
               {user_data.id ? (<>
               <Box className="Container">
                         <Box className="item-left" >
-                            <Box className="content">
+                            <Box className="contenti">
                               <AccountCircleIcon className='AccountIcon' ></AccountCircleIcon>
                               <Typography 
                                 className='Name'
@@ -171,11 +160,11 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
                                 {user_data.name+" "+user_data.firstname}
                               </Typography>
 
-                              <Typography>{todos.length} Todos</Typography>
+                              <Typography className='todo'>{todos.length} Todos</Typography>
                             </Box>
                       </Box>   
                       <Box className="item-right">
-                            <Box className="content">
+                            <Box className="contenti">
                                   {!isUpdate ? (<>
                                       <Typography sx={{fontSize:"2em",fontWeight:"bold",marginBottom:2}} >User Information : Read</Typography>
 
