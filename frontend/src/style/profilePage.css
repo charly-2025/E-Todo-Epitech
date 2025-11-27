@@ -3,38 +3,49 @@
     width: 100%;
     display:flex;
     gap: 15px;
+    color :black
 }
 
+
 .Container>*{
-    background-color:#6E6E6E;
+    background-color:#9E9E9E;
     border-radius: 20px ;
 }
+
+.contenti{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 15px;
+    background-color: #CFCFCF;
+    border-radius: 20px;
+}
+
 
 .item-left{
     display:flex;
     justify-content: center;
     align-items: center;
-
+    padding: 10px;
+    flex-wrap: wrap;
 }
 
 
-.item-left>.content{
-    height: 100%;
-    width: 100%;
-    display: flex;
-    padding: 10px;
+.item-left>.contenti{
+    flex-direction: row;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
 
 .AccountIcon{
-    border-radius: 50%;
+    border-radius: 100px;
     background-color: white;
     border: -15px solid white;
     color:grey;
-    width: 200px;
-    height: auto;
+    height: auto !important;
+    width: 100px !important;
 }
 
 
@@ -43,7 +54,17 @@
     flex-grow: 1;
 }
 
-@media screen and (max-width: 992px) {
+.item-right>.contenti{
+    
+    flex-direction: column;
+    align-items: start;
+  
+}
+
+
+
+
+@media screen and (max-width: 991px) {
   .Container{
     flex-direction: column;
   }
@@ -51,17 +72,20 @@
   .item-left {
     width: 100%;
     height: 150px;
-    padding: 25px;
   }
 
-  .content{
+  .contenti{
     flex-direction: row;
     gap: 10px;
   }
 
   .AccountIcon{
-    width: 100px;
+    width: 100px !important;
+    align-self: flex-start;
+    margin-right: auto;
   }
+
+  
 }
 
 
@@ -75,13 +99,13 @@
       width: 25%;
   }
 
-  .content{
+  .item-left>.contenti{
       flex-direction: column;
+      gap: 10px;
     }
 
   .AccountIcon{
-    width: 200px;
-    font-size: large;
+    width: 200px !important;
   }
 }
 
@@ -99,4 +123,37 @@ form>div{
     justify-content: space-between;
     align-items: center;
     width: 100%;
+}
+
+.Name{
+    margin-top: 20px;
+    background-color: #B6B6B6 ;
+    border-radius:100px;
+    text-transform: uppercase;
+    text-align: center;
+    
+    padding: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.todo{
+  margin-top: 20px;
+    background-color: #c7c7c7 ;
+    border-radius:100px;
+    text-transform: uppercase;
+    text-align: center;
+    
+    padding: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.MuiTextField-root {
+  background-color: white;
+  width: 80%;
+  border-radius: 5px;
+}
+
+.MuiInputBase-root {
+  color: black !important;   
 }

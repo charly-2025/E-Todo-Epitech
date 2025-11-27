@@ -5,36 +5,16 @@ import {
   TextField,
   Button,
   Typography,
-  Paper,
+  InputAdornment,
   Alert,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import '../style/profilePage.css';
-import useUserData from '../utils/getUserData';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1,
-});
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#E7E7E7',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: (theme.vars ?? theme).palette.text.secondary,
-  ...theme.applyStyles('dark', {
-    backgroundColor: '#1A2027',
-  }),
-}));
+
 
 
 function formatTimestamp(timestamp) {
@@ -74,6 +54,8 @@ export default function ProfilePage({user_data,setUser_data}){
 
 function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
     const [newMdp,setNewMdp] = useState(false);
+    const [showPassword1,setShowPassword1] = useState(false);
+    const [showPassword2,setShowPassword2] = useState(false);
     const [invalide,setInvalide] = useState(false);
     const [value, setValue] = useState({
       email: "",
@@ -107,23 +89,43 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
           name: user_data.name,
           firstname: user_data.firstname
         });
+        HidePass();
       }
       } else {
         setIsUpdate(true)
       }
       }
     
-    const changeNewMdp = () =>{
-      if (newMdp === true){
-        setNewMdp(false);
-        setValue(prev => ({...prev, newPassword: ""}));
+      const changeNewMdp = () =>{
+        if (newMdp === true){
+          setNewMdp(false);
+          setValue(prev => ({...prev, newPassword: ""}));
+        } else {
+          setNewMdp(true)
+        }
+      }
+
+      const changeShowPassword1 = () => {
+      if(showPassword1){
+        setShowPassword1(false)
       } else {
-        setNewMdp(true)
+        setShowPassword1(true)
       }
     }
 
+    const changeShowPassword2 = () => {
+      if(showPassword2){
+        setShowPassword2(false)
+      } else {
+        setShowPassword2(true)
+      }
+    }
+    
+    const HidePass = () => {
+      setShowPassword1(false);
+      setShowPassword2(false);
+    }
 
-  
 
     const Confirm = async(e) => {
       e.preventDefault();
@@ -165,6 +167,7 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
             name: data.name,
             firstname: data.firstname
           });
+          HidePass();
       } else {
         changeUpdate();
         setInvalide(false);
@@ -177,33 +180,19 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
               {user_data.id ? (<>
               <Box className="Container">
                         <Box className="item-left" >
-                            <Box className="content">
-                              <AccountCircleIcon className='AccountIcon' sx={{minWidth:"100px",maxWidth:"200px",height:"auto"}}></AccountCircleIcon>
-                              <Typography sx={{marginTop:2,
-                                backgroundColor:"#B6B6B6",
-                                borderRadius:10,
-                                textTransform:"uppercase",
-                                textAlign:"center",
-                                marginLeft:"auto",
-                                marginRight:"auto",
-                                padding:1,
-                                textSizeAdjust:1
-                                }}>
+                            <Box className="contenti">
+                              <AccountCircleIcon className='AccountIcon' ></AccountCircleIcon>
+                              <Typography 
+                                className='Name'
+                              >
                                 {user_data.name+" "+user_data.firstname}
                               </Typography>
 
-                              <Typography>Total number of Todo : {todos.length}</Typography>
+                              <Typography className='todo'>{todos.length} Todos</Typography>
                             </Box>
                       </Box>   
                       <Box className="item-right">
-                            <Box sx={{
-                                display:"flex",
-                                flexDirection:"column",
-                                alignItems:"flex-start",
-                                padding:1.5,
-                                backgroundColor:"#CFCFCF",
-                                borderRadius:"20px"
-                                }}>
+                            <Box className="contenti">
                                   {!isUpdate ? (<>
                                       <Typography sx={{fontSize:"2em",fontWeight:"bold",marginBottom:2}} >User Information : Read</Typography>
 
@@ -218,7 +207,7 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
 
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Firstname : </Typography>
                                       <Typography>{user_data.firstname}</Typography>
-                                      <Button sx={{marginTop:2,fontSize:"1.3em"}} onClick={changeUpdate}>Modify</Button>
+                                      <Button variant="contained" sx={{marginTop:2,fontSize:"1.3em"}} onClick={changeUpdate}>Modify</Button>
                                     </>):(<><form onSubmit={Confirm}>
                                       <Typography sx={{fontSize:"2em",fontWeight:"bold",marginBottom:2}} >User Information : Edit</Typography>
 
@@ -231,22 +220,48 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Firstname : </Typography>
                                       <TextField className="select" value={value.firstname} onChange={(e) => setValue(prev => ({...prev, firstname: e.target.value}))}  sx={{mb: 2}} fullWidth required/>
                                       {newMdp ? (<>
-                                      <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>New Password : {<Button onClick={changeNewMdp}>
+                                      <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>New Password : {<Button variant="contained" onClick={changeNewMdp}>
                                         not new password
                                       </Button>}</Typography>
-                                      <TextField className="select" type="password" value={value.newPassword} onChange={(e) => setValue(prev => ({...prev, newPassword: e.target.value}))}  sx={{mb: 2}} fullWidth required/>
+                                      <TextField className="select" type={ showPassword1 ? "text" :"password"} value={value.newPassword} onChange={(e) => setValue(prev => ({...prev, newPassword: e.target.value}))}  sx={{mb: 2}} fullWidth required slotProps={{
+                                                        input:{
+                                                          endAdornment:(
+                                                            <InputAdornment position="end">
+                                                              <Button onClick={changeShowPassword1}>
+                                                                  { showPassword1 ? (
+                                                                    <VisibilityOffIcon></VisibilityOffIcon>
+                                                                    ):(
+                                                                    <VisibilityIcon></VisibilityIcon>)}
+                                                                </Button>
+                                                            </InputAdornment>
+                                                          )
+                                                        }
+                                                      }}/>
                                         </>
-                                      ):(<Button onClick={changeNewMdp}>
+                                      ):(<Button variant="contained" onClick={changeNewMdp}>
                                         New Password
                                       </Button>)}
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Actually Password : </Typography>
-                                      <TextField className="select" type="password" value={value.currentPassword} onChange={(e) => setValue(prev => ({...prev, currentPassword: e.target.value}))} sx={{mb: 2}} fullWidth required/>
+                                      <TextField className="select" type={ showPassword2 ? "text" :"password"} value={value.currentPassword} onChange={(e) => setValue(prev => ({...prev, currentPassword: e.target.value}))} sx={{mb: 2}} fullWidth required slotProps={{
+                                                        input:{
+                                                          endAdornment:(
+                                                            <InputAdornment position="end">
+                                                              <Button onClick={changeShowPassword2}>
+                                                                  { showPassword2 ? (
+                                                                    <VisibilityOffIcon></VisibilityOffIcon>
+                                                                    ):(
+                                                                    <VisibilityIcon></VisibilityIcon>)}
+                                                                </Button>
+                                                            </InputAdornment>
+                                                          )
+                                                        }
+                                                      }}/>
                                         {invalide && (
                                                       <Alert severity="warning">Login name or password are incorrect.</Alert>
                                                     )}
                                       <div>
-                                      <Button sx={{marginTop:2,fontSize:"1.3em"}} onClick={changeUpdate}>Cancel</Button>
-                                      <Button type='submit' sx={{marginTop:2,fontSize:"1.3em"}} >Confirm</Button>
+                                      <Button variant="contained" sx={{marginTop:2,fontSize:"1.3em"}} onClick={changeUpdate}>Cancel</Button>
+                                      <Button variant="contained"type='submit' sx={{marginTop:2,fontSize:"1.3em"}} >Confirm</Button>
                                       </div>
                                       </form>
                                       
