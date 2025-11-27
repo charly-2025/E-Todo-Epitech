@@ -89,6 +89,7 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
           name: user_data.name,
           firstname: user_data.firstname
         });
+        setInvalide(false);
         HidePass();
       }
       } else {
@@ -168,9 +169,9 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
             firstname: data.firstname
           });
           HidePass();
+          setInvalide(false);
       } else {
-        changeUpdate();
-        setInvalide(false);
+        setInvalide(true);
       }
     }
 
