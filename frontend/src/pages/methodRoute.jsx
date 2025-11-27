@@ -300,7 +300,7 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
           open
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           onClose={handleCloseSnackbar}
-          autoHideDuration={6000}
+          autoHideDuration={2000}
         >
           <Alert {...snackbar} onClose={handleCloseSnackbar} />
         </Snackbar>
