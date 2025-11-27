@@ -35,6 +35,17 @@ import { styled } from '@mui/material/styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import '../style/profilePage.css';
 
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#E7E7E7',
@@ -154,6 +165,7 @@ function BoxUserInfo(user_data,todos,isUpdate,setIsUpdate){
                                 }}>
                                 {user_data.name+" "+user_data.firstname}
                               </Typography>
+
                               <Typography>Total number of Todo : {todos.length}</Typography>
                             </Box>
                       </Box>   
