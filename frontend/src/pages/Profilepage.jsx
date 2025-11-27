@@ -12,8 +12,8 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import '../style/profilePage.css';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-
-
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 
@@ -182,7 +182,12 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
               <Box className="Container">
                         <Box className="item-left" >
                             <Box className="contenti">
-                              <AccountCircleIcon className='AccountIcon' ></AccountCircleIcon>
+                              <AccountCircleIcon className='AccountIcon' >
+                                <form className='editImage'>
+                                  <label for="imageUplaod" ><EditIcon></EditIcon></label>
+                                  <input type='file' id="imageUpload" name="image" accept='image/*' required />
+                                </form>
+                              </AccountCircleIcon>
                               <Typography 
                                 className='Name'
                               >
@@ -208,12 +213,13 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
 
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Firstname : </Typography>
                                       <Typography>{user_data.firstname}</Typography>
+                
                                       <Button variant="contained" sx={{marginTop:2,fontSize:"1.3em"}} onClick={changeUpdate}>Modify</Button>
-                                    </>):(<><form onSubmit={Confirm}>
+                                    </>):(<><form className="updateForm" onSubmit={Confirm}>
                                       <Typography sx={{fontSize:"2em",fontWeight:"bold",marginBottom:2}} >User Information : Edit</Typography>
 
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Email :</Typography>
-                                      <TextField className="select" value={value.email} onChange={(e) => setValue(prev => ({...prev, email: e.target.value}))}  sx={{mb: 2}} fullWidth required/>
+                                      <TextField className="select" type='email' value={value.email} onChange={(e) => setValue(prev => ({...prev, email: e.target.value}))}  sx={{mb: 2}} fullWidth required/>
 
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Name : </Typography>
                                       <TextField className="select" value={value.name} onChange={(e) => setValue(prev => ({...prev, name: e.target.value}))}  sx={{mb: 2}} fullWidth required/>
