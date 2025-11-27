@@ -129,7 +129,7 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
         setSnackbar({ children: "Error during the update , The date cannot be earlier than the date the todo was created.", severity: 'info'});
         return todoedit;
       }
-      console.log('Editing todo:', todoedit);
+      
       const token = localStorage.getItem("token");
       try {
         const response = await fetch("http://localhost:3000/todos/" + todoedit.id, {
@@ -181,7 +181,7 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
 
 
   const suppr = async (todo_id) => {
-    console.log('delete '+ todo_id)
+    
     const token = localStorage.getItem("token");
     try {
       const connection = await fetch("http://localhost:3000/todos/" +todo_id, {
@@ -192,7 +192,7 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
         },
       });
       const data = await connection.json();
-      console.log(data);
+      
       onDelete(todo_id);
     } catch (error) {
       console.error(error);
@@ -394,7 +394,7 @@ export function PopperPopupState() {
           const create = async(e) =>{
             e.preventDefault();
             popupState.close();
-            console.log(formatDateTime(selectedDate),status,title,description,user_id);
+
             const token = localStorage.getItem("token");
             const response = await fetch("http://localhost:3000/todos",{
               method:"POST",
@@ -411,7 +411,7 @@ export function PopperPopupState() {
               })
             });
             const data = await response.json();
-            console.log('data : ', data)
+            
 
             setTodos(prev => Array.isArray(prev) ? [...prev, data] : [data]);
 

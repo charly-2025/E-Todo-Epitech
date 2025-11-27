@@ -46,14 +46,14 @@ export function ETodoCalendar() {
     };
 
     const handleSelectSlot = (infos) => {
-        console.log(infos)
+        
         setSelectedDate(infos.start);
         setSelectedEvent(null);
     
     }
 
     const handleSelectEvent = (event) => {
-        console.log(event)
+        
         setSelectedDate(null);
         setSelectedEvent(event);
         setIsOpenEvent(true);
@@ -105,7 +105,7 @@ export function ETodoCalendar() {
             });
             setEvents(Events);
 
-            console.log(Events)
+            
             } catch (error) {
                 console.error(error);
             }
