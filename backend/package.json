@@ -4,7 +4,7 @@
   "description": "Backend communicate with the database and manages each user who can create todos and manages them. ",
   "main": "index.js",
   "scripts": {
-    "start": "PORT=3000 cd script/src && node index.js",
+    "start": "PORT=3000 cd src && node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
