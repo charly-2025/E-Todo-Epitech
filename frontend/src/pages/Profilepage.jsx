@@ -5,25 +5,11 @@ import {
   TextField,
   Button,
   Typography,
-  Paper,
   Alert,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import '../style/profilePage.css';
-import useUserData from '../utils/getUserData';
 
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#E7E7E7',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: (theme.vars ?? theme).palette.text.secondary,
-  ...theme.applyStyles('dark', {
-    backgroundColor: '#1A2027',
-  }),
-}));
 
 
 function formatTimestamp(timestamp) {
@@ -167,31 +153,17 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
               <Box className="Container">
                         <Box className="item-left" >
                             <Box className="content">
-                              <AccountCircleIcon className='AccountIcon' sx={{minWidth:"100px",maxWidth:"200px",height:"auto"}}></AccountCircleIcon>
-                              <Typography sx={{marginTop:2,
-                                backgroundColor:"#B6B6B6",
-                                borderRadius:10,
-                                textTransform:"uppercase",
-                                textAlign:"center",
-                                marginLeft:"auto",
-                                marginRight:"auto",
-                                padding:1,
-                                textSizeAdjust:1
-                                }}>
+                              <AccountCircleIcon className='AccountIcon' ></AccountCircleIcon>
+                              <Typography 
+                                className='Name'
+                              >
                                 {user_data.name+" "+user_data.firstname}
                               </Typography>
-                              <Typography>Total number of Todo : {todos.length}</Typography>
+                              <Typography className='todo'>{todos.length} Todos </Typography>
                             </Box>
                       </Box>   
                       <Box className="item-right">
-                            <Box sx={{
-                                display:"flex",
-                                flexDirection:"column",
-                                alignItems:"flex-start",
-                                padding:1.5,
-                                backgroundColor:"#CFCFCF",
-                                borderRadius:"20px"
-                                }}>
+                            <Box className="content">
                                   {!isUpdate ? (<>
                                       <Typography sx={{fontSize:"2em",fontWeight:"bold",marginBottom:2}} >User Information : Read</Typography>
 
@@ -206,7 +178,7 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
 
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Firstname : </Typography>
                                       <Typography>{user_data.firstname}</Typography>
-                                      <Button sx={{marginTop:2,fontSize:"1.3em"}} onClick={changeUpdate}>Modify</Button>
+                                      <Button variant="contained" sx={{marginTop:2,fontSize:"1.3em"}} onClick={changeUpdate}>Modify</Button>
                                     </>):(<><form onSubmit={Confirm}>
                                       <Typography sx={{fontSize:"2em",fontWeight:"bold",marginBottom:2}} >User Information : Edit</Typography>
 
@@ -219,12 +191,12 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Firstname : </Typography>
                                       <TextField className="select" value={value.firstname} onChange={(e) => setValue(prev => ({...prev, firstname: e.target.value}))}  sx={{mb: 2}} fullWidth required/>
                                       {newMdp ? (<>
-                                      <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>New Password : {<Button onClick={changeNewMdp}>
+                                      <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>New Password : {<Button variant="contained" onClick={changeNewMdp}>
                                         not new password
                                       </Button>}</Typography>
                                       <TextField className="select" type="password" value={value.newPassword} onChange={(e) => setValue(prev => ({...prev, newPassword: e.target.value}))}  sx={{mb: 2}} fullWidth required/>
                                         </>
-                                      ):(<Button onClick={changeNewMdp}>
+                                      ):(<Button variant="contained" onClick={changeNewMdp}>
                                         New Password
                                       </Button>)}
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Actually Password : </Typography>
@@ -233,8 +205,8 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
                                                       <Alert severity="warning">Login name or password are incorrect.</Alert>
                                                     )}
                                       <div>
-                                      <Button sx={{marginTop:2,fontSize:"1.3em"}} onClick={changeUpdate}>Cancel</Button>
-                                      <Button type='submit' sx={{marginTop:2,fontSize:"1.3em"}} >Confirm</Button>
+                                      <Button variant="contained" sx={{marginTop:2,fontSize:"1.3em"}} onClick={changeUpdate}>Cancel</Button>
+                                      <Button variant="contained"type='submit' sx={{marginTop:2,fontSize:"1.3em"}} >Confirm</Button>
                                       </div>
                                       </form>
                                       

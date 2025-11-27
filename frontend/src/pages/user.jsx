@@ -65,16 +65,20 @@ const demoTheme = createTheme({
     dark: {
       palette: {
         background: {
-          default: '#15376aff',
-          paper: '#183c7aff',
+          default: '#121212',
+          paper: '#1e1e1e',
         },
         primary: {
-          main: '#000000ff', 
-          contrastText: '#fff',
+          main: '#03DAC6',
+          contrastText: '#000000',
+        },
+        secondary: {
+          main: '#03DAC6',
+          contrastText: '#000000',
         },
         text: {
-          primary: '#fff',
-          secondary: '#fff',
+          primary: '#E1E1E1',
+          secondary: '#B0B0B0',
         },
       },
     }
