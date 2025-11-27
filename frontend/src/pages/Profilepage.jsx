@@ -12,6 +12,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import '../style/profilePage.css';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import Snackbar from '@mui/material/Snackbar';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -64,6 +65,9 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
       name: "",
       firstname: ""
     });
+
+    const [snackbar, setSnackbar] = useState(null);
+    const handleCloseSnackbar = () => setSnackbar(null);
 
     useEffect(() => {
       if (user_data && user_data.id) {
@@ -156,6 +160,7 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
           if (!response.ok) {
             throw new Error(response.status)
           }
+          setSnackbar({ children: "Your datas has been updated and saved", severity: 'success'})
           const data = await response.json();
           setUser_data(data);
           setIsUpdate(false);
@@ -172,11 +177,22 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
           setInvalide(false);
       } else {
         setInvalide(true);
+        setSnackbar({ children: "Password Incorrect. Try again.", severity: 'error'})
       }
     }
 
     return (
       <Container>
+          {!!snackbar && (
+            <Snackbar
+              open
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+              onClose={handleCloseSnackbar}
+              autoHideDuration={2000}
+            >
+              <Alert {...snackbar} onClose={handleCloseSnackbar} />
+            </Snackbar>
+          )}
             <Box sx={{width: '100%', minHeight: '100px'}}>
               {user_data.id ? (<>
               <Box className="Container">
@@ -263,9 +279,7 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
                                                           )
                                                         }
                                                       }}/>
-                                        {invalide && (
-                                                      <Alert severity="warning">Login name or password are incorrect.</Alert>
-                                                    )}
+
                                       <div>
                                       <Button variant="contained" sx={{marginTop:2,fontSize:"1.3em"}} onClick={changeUpdate}>Cancel</Button>
                                       <Button variant="contained"type='submit' sx={{marginTop:2,fontSize:"1.3em"}} >Confirm</Button>
@@ -280,7 +294,9 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
               </>):(
                 <Typography>No user data</Typography>)}
             </Box>
+
           </Container>
+          
     )
 
 }

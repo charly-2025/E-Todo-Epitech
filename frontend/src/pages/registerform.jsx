@@ -35,7 +35,7 @@ export default function RegisterForm() {
 
   const Register = async (e)=>{
     e.preventDefault();
-    console.log(email, password)
+
     const connection = await fetch("http://localhost:3000/register",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
@@ -49,7 +49,7 @@ export default function RegisterForm() {
     const data = await connection.json();
     if (connection.ok){
       localStorage.setItem("token",data.token);
-      console.log(localStorage.getItem("token"));
+
       navigate('/login')
     } else {
       setregisterinvalid(true)

@@ -93,8 +93,7 @@ const demoTheme = createTheme({
 
 function DemoPageContent({pathname, userdata,setUserData}) {
   let content = ''
-  console.log("local set item with : "+pathname);
-  console.log(pathname)
+
   switch (pathname) {
         case '/planning':
           content= (
