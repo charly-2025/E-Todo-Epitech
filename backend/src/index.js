@@ -1,7 +1,11 @@
 const dotenv = require("dotenv");
 const path = require("path");
 const express = require("express");
+<<<<<<< HEAD
 dotenv.config({path: path.resolve(__dirname,"../.env")});
+=======
+dotenv.config({path: path.resolve(__dirname,"../../.env")});
+>>>>>>> 47b14ef ([merge])
 
 
 console.log('MYSQL_USER =', process.env.MYSQL_USER);
