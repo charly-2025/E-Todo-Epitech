@@ -241,7 +241,7 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
                                       ):(<Button variant="contained" onClick={changeNewMdp}>
                                         New Password
                                       </Button>)}
-                                      <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Actually Password : </Typography>
+                                      <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Actual Password : </Typography>
                                       <TextField className="select" type={ showPassword2 ? "text" :"password"} value={value.currentPassword} onChange={(e) => setValue(prev => ({...prev, currentPassword: e.target.value}))} sx={{mb: 2}} fullWidth required slotProps={{
                                                         input:{
                                                           endAdornment:(
