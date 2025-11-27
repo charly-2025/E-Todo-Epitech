@@ -133,16 +133,7 @@ export function ETodoCalendar() {
             }
         }
         
-        if (allDate === currentDate){
-            return {
-                style: {
-                backgroundColor: 'blue',
-                opacity: '10%',
-                margin: 0,
-                padding: 0
-                }
-            }
-        }
+        
     }   
     
    
@@ -165,7 +156,7 @@ export function ETodoCalendar() {
                 onNavigate={setCurrentDate}
                 views={['month', 'week', 'day', 'agenda']} 
                 style={{ height: '100%', width: '100%'}}
-                BackgroundWrapper = "red"
+                
                 eventPropGetter={(events) => {
                     const backgroundColor = events.colorEvento ;
                     const color = events.color;

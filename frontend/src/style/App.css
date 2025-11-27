@@ -9,6 +9,23 @@
 
 }
 
-.rbc-events {
-  opacity: 100%;
+.rbc-toolbar button {
+
+  color: rgb(132, 126, 126) !important;
+}
+
+.rbc-off-range-bg {
+  background-color: rgb(129, 129, 133) !important;
+  opacity: 20% !important;
+}
+
+.rbc-today {
+
+  background-color: #a8dbff !important;
+
+}
+
+button.rbc-active {
+
+  background-color: #f9f9f9 !important;
 }

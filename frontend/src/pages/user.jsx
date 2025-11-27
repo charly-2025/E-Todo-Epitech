@@ -69,8 +69,7 @@ const demoTheme = createTheme({
           paper: '#183c7aff',
         },
         primary: {
-          main: '#000000ff', 
-          contrastText: '#fff',
+          main: '#00bfffff', 
         },
         text: {
           primary: '#fff',
