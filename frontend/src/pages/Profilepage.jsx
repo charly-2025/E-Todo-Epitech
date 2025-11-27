@@ -5,10 +5,15 @@ import {
   TextField,
   Button,
   Typography,
+  InputAdornment,
   Alert,
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import '../style/profilePage.css';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
+
 
 
 
@@ -49,6 +54,8 @@ export default function ProfilePage({user_data,setUser_data}){
 
 function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
     const [newMdp,setNewMdp] = useState(false);
+    const [showPassword1,setShowPassword1] = useState(false);
+    const [showPassword2,setShowPassword2] = useState(false);
     const [invalide,setInvalide] = useState(false);
     const [value, setValue] = useState({
       email: "",
@@ -82,23 +89,43 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
           name: user_data.name,
           firstname: user_data.firstname
         });
+        HidePass();
       }
       } else {
         setIsUpdate(true)
       }
       }
     
-    const changeNewMdp = () =>{
-      if (newMdp === true){
-        setNewMdp(false);
-        setValue(prev => ({...prev, newPassword: ""}));
+      const changeNewMdp = () =>{
+        if (newMdp === true){
+          setNewMdp(false);
+          setValue(prev => ({...prev, newPassword: ""}));
+        } else {
+          setNewMdp(true)
+        }
+      }
+
+      const changeShowPassword1 = () => {
+      if(showPassword1){
+        setShowPassword1(false)
       } else {
-        setNewMdp(true)
+        setShowPassword1(true)
       }
     }
 
+    const changeShowPassword2 = () => {
+      if(showPassword2){
+        setShowPassword2(false)
+      } else {
+        setShowPassword2(true)
+      }
+    }
+    
+    const HidePass = () => {
+      setShowPassword1(false);
+      setShowPassword2(false);
+    }
 
-  
 
     const Confirm = async(e) => {
       e.preventDefault();
@@ -140,6 +167,7 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
             name: data.name,
             firstname: data.firstname
           });
+          HidePass();
       } else {
         changeUpdate();
         setInvalide(false);
@@ -195,13 +223,39 @@ function BoxUserInfo(user_data,setUser_data,todos,isUpdate,setIsUpdate){
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>New Password : {<Button variant="contained" onClick={changeNewMdp}>
                                         not new password
                                       </Button>}</Typography>
-                                      <TextField className="select" type="password" value={value.newPassword} onChange={(e) => setValue(prev => ({...prev, newPassword: e.target.value}))}  sx={{mb: 2}} fullWidth required/>
+                                      <TextField className="select" type={ showPassword1 ? "text" :"password"} value={value.newPassword} onChange={(e) => setValue(prev => ({...prev, newPassword: e.target.value}))}  sx={{mb: 2}} fullWidth required slotProps={{
+                                                        input:{
+                                                          endAdornment:(
+                                                            <InputAdornment position="end">
+                                                              <Button onClick={changeShowPassword1}>
+                                                                  { showPassword1 ? (
+                                                                    <VisibilityOffIcon></VisibilityOffIcon>
+                                                                    ):(
+                                                                    <VisibilityIcon></VisibilityIcon>)}
+                                                                </Button>
+                                                            </InputAdornment>
+                                                          )
+                                                        }
+                                                      }}/>
                                         </>
                                       ):(<Button variant="contained" onClick={changeNewMdp}>
                                         New Password
                                       </Button>)}
                                       <Typography sx={{fontSize:"1.5em",fontWeight:"bold"}}>Actually Password : </Typography>
-                                      <TextField className="select" type="password" value={value.currentPassword} onChange={(e) => setValue(prev => ({...prev, currentPassword: e.target.value}))} sx={{mb: 2}} fullWidth required/>
+                                      <TextField className="select" type={ showPassword2 ? "text" :"password"} value={value.currentPassword} onChange={(e) => setValue(prev => ({...prev, currentPassword: e.target.value}))} sx={{mb: 2}} fullWidth required slotProps={{
+                                                        input:{
+                                                          endAdornment:(
+                                                            <InputAdornment position="end">
+                                                              <Button onClick={changeShowPassword2}>
+                                                                  { showPassword2 ? (
+                                                                    <VisibilityOffIcon></VisibilityOffIcon>
+                                                                    ):(
+                                                                    <VisibilityIcon></VisibilityIcon>)}
+                                                                </Button>
+                                                            </InputAdornment>
+                                                          )
+                                                        }
+                                                      }}/>
                                         {invalide && (
                                                       <Alert severity="warning">Login name or password are incorrect.</Alert>
                                                     )}
