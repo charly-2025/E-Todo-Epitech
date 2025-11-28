@@ -41,7 +41,7 @@ router.delete("/:id",auth,async(req,res)=>{
     const [todo] = await db.promise().query("SELECT * FROM todo WHERE id = ?;",[todo_id]);
     if (todo.length <= 0) return res.status(404).json({msg:"Not found"});
     await db.promise().query("DELETE FROM todo WHERE id = ?;",[todo_id]);
-    return res.json({msg:"Succesfully deleted record number: "+todo_id});
+    return res.json({msg:"Successfully deleted record number: "+todo_id});
 })
 
 module.exports = router;
