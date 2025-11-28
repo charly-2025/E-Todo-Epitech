@@ -48,9 +48,7 @@ export default function RegisterForm() {
     });
     const data = await connection.json();
     if (connection.ok){
-      localStorage.setItem("token",data.token);
-
-      navigate('/login')
+      navigate('/login')  
     } else {
       setregisterinvalid(true)
     }

@@ -10,6 +10,7 @@ import getRandomInt from '../utils/randomint';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import { Button } from '@mui/material';
 
 
 
@@ -42,7 +43,9 @@ export function ETodoCalendar() {
         boxShadow: 24,
         p: 3,
         borderRadius: 2,
-        maxHeight: '90vh'
+        maxHeight: '90vh',
+        textAlign: 'center',
+        overflowY: 'scroll'
     };
 
     const handleSelectSlot = (infos) => {
@@ -165,7 +168,7 @@ export function ETodoCalendar() {
                 dayPropGetter={calendarStyle}       
             />
             {selectedEvent  && (
-                <Modal  open={isOpenEvent} onClose={() => setIsOpenEvent(false)}>
+                <Modal open={isOpenEvent} onClose={() => setIsOpenEvent(false)}>
                     <Box sx={style}>
                         <Typography variant="h3" sx={{textAlign: "center"}}>{selectedEvent.title}</Typography>
                         <Typography variant="h6" sx={{textAlign: "center"}}>{selectedEvent.description}</Typography>
@@ -174,6 +177,7 @@ export function ETodoCalendar() {
                         <Typography>End : {selectedEvent.end.toLocaleString()}</Typography>
                         <hr></hr>
                         <Typography variant="h6" sx={{textAlign: "center"}}>Status : {selectedEvent.progress}</Typography>
+                        <Button onClick={() => setIsOpenEvent(false)}>Close</Button>
                     </Box>   
                 </Modal>
             )}

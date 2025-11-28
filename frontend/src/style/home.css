@@ -1,7 +1,49 @@
 .page {
     min-height: 100vh;
-    background: white;
+    background: rgb(0, 0, 0);
 }
+
+.buttonhome {
+    width: 130px;
+    height: 40px;
+    background-color: rgb(15, 15, 15);
+    border: none;
+    color: white;
+    font-weight: 600;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.103);
+    position: relative;
+    overflow: hidden;
+    transition-duration: .3s;
+   
+}
+
+.buttonhome::before {
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    content: "";
+    background-color: white;
+    border-radius: 50%;
+    left: -100%;
+    top: 0;
+    transition-duration: .3s;
+    mix-blend-mode: difference;
+  
+}
+
+.buttonhome:hover::before {
+    transition-duration: .3s;
+    transform: translate(100%,-50%);
+    border-radius: 0;
+}
+
+.buttonhome:active {
+  transform: translate(5px,5px);
+  transition-duration: .3s;
+}
+
 
 .nav {
     width: 100%;
@@ -19,7 +61,7 @@
 .name {
     font-size: 35px;
     font-weight: bold;
-    color: white;
+    color: rgb(255, 255, 255);
 }
 
 .buttonsSign {
@@ -44,8 +86,8 @@
 
 .btn-signup {
     padding: 8px 16px;
-    background: black;
-    color: white;
+    background: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -96,8 +138,9 @@
     padding-top: 50px;
     padding-left: 16px;
     padding-right: 16px;
-    text-align: center;
+    color: white;
 }
+
 
 @media (min-width: 768px) {
     .nav-links {

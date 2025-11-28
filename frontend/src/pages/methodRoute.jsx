@@ -9,11 +9,11 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import CloseIcon from '@mui/icons-material/Close';
-
+import Modal from '@mui/material/Modal';
 import Snackbar from '@mui/material/Snackbar';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import HelpIcon from '@mui/icons-material/Help';
 import {
   Box,
   Container,
@@ -59,8 +59,9 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
   });
 
   const [snackbar, setSnackbar] = useState(null);
-
   const handleCloseSnackbar = () => setSnackbar(null);
+
+  const [isOpenEvent, setIsOpenEvent] = useState(false);
 
   const useFakeMutation = () => {
     return useCallback(
@@ -260,10 +261,41 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
     idArray.forEach(id => suppr(id));
   };
 
+  const stylemodal = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '85vw',
+    maxWidth: '500px',
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 3,
+    borderRadius: 2,
+    maxHeight: '90vh',
+    textAlign: 'center',
+    overflowY: 'scroll'
+  };
   
   return (
 
     <Box>
+      <Button onClick={() => setIsOpenEvent(true)}>
+        <Badge>
+          <HelpIcon />
+        </Badge>
+      </Button>
+                <Modal open={isOpenEvent} onClose={() => setIsOpenEvent(false)}>
+                    <Box sx={stylemodal}>
+                        <Typography variant="h5" sx={{textAlign: "center"}}>1. You can filter all todos with the filter button on the toolbar at the right top of todos' list.</Typography>
+                        <Typography variant="h5" sx={{textAlign: "center"}}>2. You can delete todos in selecting them ( one or several ) with checkboxes and delete it / them at the same place of filter button.</Typography>
+                        <Typography variant="h5" sx={{textAlign: "center"}}>3. For editing todos, You must double click on a row and edit what you want to edit and then press 'enter' or click elsewhere.</Typography>
+                        <hr></hr>
+                        <Typography variant="h6" sx={{textAlign: "center"}}>Tips. Be careful of alerts , if you have errors in doing something read them , it will be useful for you what is your mistake. Read again this note if you didn't understand a thing.</Typography>
+                        <Button onClick={() => setIsOpenEvent(false)}>Close</Button>
+                    </Box>   
+                </Modal>
+            
       <Paper sx={{ height: '70vh', width: '100%'}}>
         <DataGrid
           sx={{
@@ -306,7 +338,9 @@ export function MyTable({data_todos, onDelete, onUpdate,onDisableAll,editId,setE
         </Snackbar>
       )}
       </Paper>
+      
     </Box>
+    
     );  
   
   }
