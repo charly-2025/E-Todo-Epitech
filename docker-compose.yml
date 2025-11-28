@@ -2,10 +2,10 @@ services:
   mysql:
     image: mysql:8
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: etodo_user
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}  # <=== ici, identique au root
     ports:
       - "3307:3306"
     volumes:
@@ -14,11 +14,12 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "etodo_user", "-p${MYSQL_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "etodo_user", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 5s
       timeout: 3s
       retries: 30
       start_period: 30s
+
 
   backend:
     build: ./backend
@@ -27,8 +28,9 @@ services:
     environment:
       MYSQL_HOST: mysql
       MYSQL_USER: etodo_user
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_PASSWORD: etodo_pass
       PORT: ${PORT}
       SECRET: ${SECRET}
     depends_on:
@@ -40,7 +42,9 @@ services:
     networks:
       - app-network
     restart: on-failure
-
+    command: >
+      sh -c "until mysqladmin ping -h mysql --silent; do echo 'wait mysql';
+          sleep 2; done; npm start"
   frontend:
     build: ./frontend
     ports:
