@@ -50,7 +50,3 @@ E-Todo is a web application for managing your to-do tasks efficiently. You can c
 From the root of the project:
 ```bash
 docker compose up -d
-
----
-
-More of my work on my [portfolio](https://charly-2025.github.io/myPortfolio/).
