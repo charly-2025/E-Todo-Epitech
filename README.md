@@ -18,12 +18,6 @@ A complete to-do list application: a Node.js/Express REST API backed by MySQL, a
 
 `React` · `Node.js` · `Express` · `MySQL` · `Docker`
 
-## Team
-
-- Charly Richard-Fromont
-- Baptiste Mesnager
-- Fourchet
-
 ---
 
 ## Technical documentation
